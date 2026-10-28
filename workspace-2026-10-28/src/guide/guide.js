@@ -59,7 +59,7 @@ function mountGuideMap(){
     const hub=(n[2].x+n[2].w+n[4].x)/2;
     line(`M${n[2].x+n[2].w} ${n[2].cy} H${hub} V${n[4].cy} H${n[4].x-3}`);
     line(`M${n[2].x+n[2].w} ${n[2].cy} H${hub} V${n[5].cy} H${n[5].x-3}`);
-    const left=7,ry=(n[2].cy+n[6].cy)/2;
+    const left=Math.max(7,Math.min(n[2].x,n[3].x,n[6].x)-20),ry=(n[2].cy+n[6].cy)/2;
     line(`M${n[2].x} ${n[2].cy} H${left} V${n[6].cy} H${n[6].x-3}`);
     label('Revenue',left-4,ry,{transform:`rotate(-90 ${left-4} ${ry})`,'text-anchor':'middle'});
     const down=n[3].cx-9,up=n[3].cx+9,middle=(n[3].y+n[3].h+n[6].y)/2;

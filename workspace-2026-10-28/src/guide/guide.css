@@ -18,7 +18,7 @@
 .guide-map-panel .guide-card-head{min-height:0}
 .guide-map-canvas{position:relative;flex:1 0 405px;min-height:405px;width:100%}
 .guide-map-edges{position:absolute;inset:0;overflow:visible;pointer-events:none}
-.guide-map-node{position:absolute;left:9%;width:45%;height:56px;padding:8px 13px;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:4px;text-decoration:none;color:var(--ink)}
+.guide-map-node{position:absolute;left:calc(50% - 42px);width:max-content;min-width:110px;max-width:160px;transform:translateX(-50%);height:56px;padding:8px 13px;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:4px;text-decoration:none;color:var(--ink)}
 .guide-map-node>span{font-family:var(--f);font-size:11px;line-height:1.3;font-weight:500;color:var(--accent)}
 .guide-map-meta{display:flex;align-items:center;gap:6px}
 .guide-map-icon{display:block;flex:none;color:var(--ink-3)}
@@ -29,7 +29,7 @@
 .guide-map-node[data-node="2"]{top:25%}
 .guide-map-node[data-node="3"]{top:58%;height:60px}
 .guide-map-node[data-node="6"]{top:86%}
-.guide-map-branch{left:66%;width:34%;padding:10px 9px;background:none;border:0;border-left:1px solid var(--rule-2);border-radius:0}
+.guide-map-branch{left:calc(50% + 42px);width:max-content;min-width:0;max-width:calc(50% - 42px);transform:none;padding:10px 9px;background:none;border:0;border-left:1px solid var(--rule-2);border-radius:0}
 .guide-map-branch[data-node="4"]{top:20%;height:62px}
 .guide-map-branch[data-node="5"]{top:43%;height:56px}
 .guide-map-branch>b{font-size:13px}
@@ -54,3 +54,5 @@
 .chart-guide-grid .keys-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:1050px){.chart-guide-grid{grid-template-columns:minmax(0,1fr)}.chart-guide-grid .lay-r{flex:none}}
 @media(max-width:560px){#main-content .chart-guide-grid>.s-panel{padding:17px}.chart-guide-grid .keys-2{grid-template-columns:minmax(0,1fr)}}
+
+@media(max-width:560px){.guide-map-branch[data-node="4"]{height:84px}.guide-map-branch[data-node="5"]{height:74px}}
