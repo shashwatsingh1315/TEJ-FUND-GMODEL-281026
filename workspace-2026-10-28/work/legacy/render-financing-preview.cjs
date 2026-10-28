@@ -1,3 +1,4 @@
+console.error('Retired: render-financing-preview.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 /* Standalone vector preview from the model. Not a browser screenshot. */
 const fs=require('node:fs'),{run}=require('./load-dashboard.cjs')(),sharp=require('/Users/shashwat/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
 run("setFinanceMode('both',50)");const {chart,R}=JSON.parse(JSON.stringify(run('(()=>{const D=capData();return {chart:cxMoney(1120,D),R:D.R};})()')));

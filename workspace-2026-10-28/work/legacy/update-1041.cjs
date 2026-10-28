@@ -1,3 +1,4 @@
+console.error('Retired: update-1041.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const input='/Users/shashwat/Downloads/tejas-revenue-dashboard-1041.html',output='/Users/shashwat/Documents/Codex/2026-10-28/c/outputs/Tejas_Revenue_Dashboard_1041_Updated.html';
 const original=fs.readFileSync(input,'utf8'),confirmed=fs.readFileSync('/Users/shashwat/Documents/Codex/2026-10-28/c/outputs/Tejas_Revenue_Dashboard_Corrected.html','utf8'),revision=fs.readFileSync(__dirname+'/operating-revision.js','utf8');

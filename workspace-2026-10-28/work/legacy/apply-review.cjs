@@ -1,3 +1,4 @@
+console.error('Retired: apply-review.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const root='/Users/shashwat/Documents/Codex/2026-10-28/c',target=root+'/outputs/Tejas_Revenue_Dashboard_1041_Updated.html';
 let html=fs.readFileSync(__dirname+'/annotation-review/baseline.html','utf8');

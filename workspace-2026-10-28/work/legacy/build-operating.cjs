@@ -1,3 +1,4 @@
+console.error('Retired: build-operating.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 const fs=require('node:fs');
 const src='/Users/shashwat/Downloads/tejas-revenue-dashboard9-27.html';
 let html=fs.readFileSync(src,'utf8');

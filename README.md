@@ -2,19 +2,20 @@
 
 Working material for turning page 03 of the Tejas investor dashboard into a funding story for Indian VCs: revenue growth, the capital it consumes, the business's own cash, the gap, the raises, the price of each round, and what the first investor gets.
 
-**Status:** designed and specified, not built. `dashboard/` holds the original dashboard, unmodified. The new page is described in `docs/BUILD-BRIEF.md`.
+**Status:** built. The current dashboard is `workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html`. Page 03 is now "Funding & returns". `dashboard/` keeps the original dashboard, unmodified, for reference.
 
 ## Start here
 
-1. Read `docs/BUILD-BRIEF.md`, Parts 1 to 5. It is written for a builder who has never seen the project.
-2. Open `dashboard/tejas-revenue-dashboard.html` in a browser and click through all seven pages.
-3. Part 5 lists eleven open decisions (D1 to D11) that need a founder's answer. D2, the cost-plan units, should be confirmed before anyone builds.
+1. Read `workspace-2026-10-28/WORKING-ON-THE-DASHBOARD.md`. It explains where each part comes from, how to rebuild (`python3 src/build.py`) and check (`./check-all.sh`), and the design rules.
+2. Open the current dashboard in a browser on a laptop and click through all seven pages.
+3. For background on why page 03 is built the way it is, read `docs/BUILD-BRIEF.md`. Its open decisions (D1 to D11) and reference numbers describe the plan before it was built, so the live numbers now differ.
 
 ## What is in this repo
 
 | Path | What it is |
 |---|---|
-| `dashboard/tejas-revenue-dashboard.html` | The live dashboard: one file, seven pages, fonts embedded. Unmodified. |
+| `workspace-2026-10-28/` | The current dashboard, its sources (`src/`), checks (`check-all.sh`, `work/`) and exports. See its `WORKING-ON-THE-DASHBOARD.md`. |
+| `dashboard/tejas-revenue-dashboard.html` | The original dashboard before this work: one file, seven pages, fonts embedded. Unmodified. |
 | `docs/BUILD-BRIEF.md` | The five-part build brief for the new page 03, with reference numbers. |
 | `docs/REVIEW-working-capital-and-capex.md` | Review of how the latest dashboard (`workspace-2026-10-28/`) models working capital and capex: what holds, what doesn't, and what each fix does to the equity needed. |
 | `docs/spec-cash-burn-capex-fundraising.md` | The original spec: two-column layout, step-by-step beats, cost-plan table. Still the source for the left/right principles. |
@@ -23,6 +24,8 @@ Working material for turning page 03 of the Tejas investor dashboard into a fund
 | `tools/` | Helper scripts behind the brief's reference numbers (below). |
 
 ## Running the checks
+
+For the current dashboard, run `./check-all.sh` from `workspace-2026-10-28/` (see its `WORKING-ON-THE-DASHBOARD.md`). The scripts below check the original dashboard in `dashboard/` and the build brief's reference numbers.
 
 The `.js` files need Node.js with Playwright and Chromium. The `.py` files need Python 3. Pass the dashboard's absolute path to the `.js` files.
 

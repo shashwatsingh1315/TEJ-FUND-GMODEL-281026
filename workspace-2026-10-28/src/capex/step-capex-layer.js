@@ -83,11 +83,11 @@ CX.spend=D=>{
 
 const stepPrevCapitalInputs=capitalInputs;
 capitalInputs=function(fld){
- const html=stepPrevCapitalInputs(fld),C=INP.capital,Df=INPUT_DEFAULT.capital,K=capModel(),mark='<div class="s-panel"><h3>Cost of revenue · capex',at=html.indexOf(mark),next=at<0?-1:html.indexOf('<div class="s-panel">',at+mark.length);
+ const html=stepPrevCapitalInputs(fld),C=INP.capital,Df=INPUT_DEFAULT.capital,K=capModel(),mark='<div class="s-panel"><h3>Growth investment',at=html.indexOf(mark),next=at<0?-1:html.indexOf('<div class="s-panel">',at+mark.length);
  const cell=(path,v,d,step='any')=>`<td class="r"><input type="number" step="${step}" min="0" data-input="${path}" value="${v}" class="${v!==d?'changed':''}" title="plan ${d}"></td>`;
  const bucket=bk=>({factory:'Capex',misc:'Capex',pp:'Intangibles'})[bk];
  const rows=CAPEX_ITEMS.map(([k,l,bk])=>`<tr><td>${l}</td><td>${bucket(bk)}</td><td>${STEP_ITEMS[k].driver}</td>${k==='centres'?cell('capital.centresN',C.centresN,Df.centresN,1):cell('capital.phases.'+k,C.phases[k],Df.phases[k],1)}<td>${stepCostText(K.steps[k].costs)}</td>${cell('capital.capex.'+k,C.capex[k],Df.capex[k])}</tr>`).join('');
- const panel=`<div class="s-panel"><h3>Cost of revenue · capex</h3><p class="meta">Spend to Q16, ₹ Cr, is fixed. Each item is bought in whole phases. A phase adds capacity in proportion to its cost and is paid ${K.leadQ} quarter${K.leadQ===1?'':'s'} before demand would pass the capacity already built. Labs follow the plant phases.</p>
+ const panel=`<div class="s-panel"><h3>Growth investment</h3><p class="meta">Capex and other investment required for the expansion plan.</p>
   <div class="s-tw"><table class="s-table s-intable"><thead><tr><th>Item</th><th>Bucket</th><th>Sized on</th><th class="r">Phases</th><th>Phase costs</th><th class="r">₹ Cr to Q16</th></tr></thead><tbody>${rows}</tbody></table></div>
   <div class="s-ingrid">${fld(['capital.firstPhase','First phase of wood and uPVC','% of the plant, paid before launch'])}${fld(['capital.leadQ','Paid ahead of need','quarters before demand passes capacity'])}${fld(['capital.wcDays','Working-capital days','working capital target = days ÷ 365 × annualised revenue; cash uses changes'])}</div></div>`;
  return at<0?html+panel:html.slice(0,at)+panel+(next<0?'':html.slice(next));

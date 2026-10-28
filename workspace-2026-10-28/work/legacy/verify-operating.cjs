@@ -1,3 +1,4 @@
+console.error('Retired: verify-operating.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const path='/Users/shashwat/Documents/Codex/2026-10-28/c/outputs/Tejas_Revenue_Dashboard_Corrected.html';
 const html=fs.readFileSync(path,'utf8'),original=fs.readFileSync('/Users/shashwat/Downloads/tejas-revenue-dashboard9-27.html','utf8');

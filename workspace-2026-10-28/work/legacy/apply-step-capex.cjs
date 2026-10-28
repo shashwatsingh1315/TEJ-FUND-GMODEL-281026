@@ -1,3 +1,4 @@
+console.error('Retired: apply-step-capex.cjs belongs to the old way of building the dashboard and would overwrite it. See WORKING-ON-THE-DASHBOARD.md.');process.exit(1);
 /* Adds whole-phase capex to the dashboard: phase inputs in the plan defaults, and the
    step-capex layer (work/step-capex-layer.js) as the last code layer, between markers so
    re-running replaces it. Run from workspace-2026-10-28: node work/apply-step-capex.cjs */
