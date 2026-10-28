@@ -1,0 +1,127 @@
+/* Page 03, right-hand panels for steps 3, 4 and 6: two or three plain cards, bigger text, one fold each.
+   Every class starts pnc- so nothing here touches the other panels. */
+.pc-card.pnc-card{display:block;padding:9px 14px 10px;border-radius:8px}
+.cx-side-p>.pc-cards.pnc-cards{gap:6px;margin-top:6px}
+.pc-card.pnc-card .pnc-t{margin:0 0 5px;font-family:var(--fd);font-size:15px;font-weight:600;line-height:1.25;letter-spacing:0;color:var(--ink)}
+.pnc-card .pnc-th{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 6px}
+.pc-card.pnc-card .pnc-th .pnc-t{margin:0}
+.pc-card.pnc-card p.pnc-x{margin:7px 0 0;font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+.pnc-card .pnc-x b{font-weight:600;color:var(--ink)}
+.pnc-big{font-family:var(--fd);font-weight:500;font-size:26px;line-height:1.1;letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnc-big small,.pnc-part b small{font-family:var(--f);font-size:13.5px;font-weight:500;letter-spacing:0;color:var(--ink-2)}
+.pnc-tot{margin:0}
+.pnc-to{font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+.pnc-sw{display:inline-block;width:10px;height:10px;border-radius:2px;flex:none;box-shadow:inset 0 0 0 1px rgba(20,20,19,.14)}
+
+/* a stacked bar: segments in proportion. A label shows in a segment only when the segment is wide enough for it:
+   the full label from its own width, else the short one, else nothing (container queries on each segment) */
+.pnc-bar{display:flex;gap:2px;height:22px;margin:7px 0 6px;border-radius:4px;overflow:hidden}
+.pnc-bar i{display:flex;align-items:center;justify-content:center;flex:1 1 0;min-width:2px;overflow:hidden;white-space:nowrap;font-style:normal;font-size:12px;font-weight:600;line-height:1;border-radius:2px;container-type:inline-size}
+.pnc-f,.pnc-s{display:none}
+@container (min-width:8px){.pnc-s1{display:inline}.pnc-f1{display:inline}.pnc-f1+.pnc-s{display:none}}
+@container (min-width:16px){.pnc-s2{display:inline}.pnc-f2{display:inline}.pnc-f2+.pnc-s{display:none}}
+@container (min-width:24px){.pnc-s3{display:inline}.pnc-f3{display:inline}.pnc-f3+.pnc-s{display:none}}
+@container (min-width:32px){.pnc-s4{display:inline}.pnc-f4{display:inline}.pnc-f4+.pnc-s{display:none}}
+@container (min-width:40px){.pnc-s5{display:inline}.pnc-f5{display:inline}.pnc-f5+.pnc-s{display:none}}
+@container (min-width:48px){.pnc-s6{display:inline}.pnc-f6{display:inline}.pnc-f6+.pnc-s{display:none}}
+@container (min-width:56px){.pnc-s7{display:inline}.pnc-f7{display:inline}.pnc-f7+.pnc-s{display:none}}
+@container (min-width:64px){.pnc-s8{display:inline}.pnc-f8{display:inline}.pnc-f8+.pnc-s{display:none}}
+@container (min-width:72px){.pnc-s9{display:inline}.pnc-f9{display:inline}.pnc-f9+.pnc-s{display:none}}
+@container (min-width:80px){.pnc-s10{display:inline}.pnc-f10{display:inline}.pnc-f10+.pnc-s{display:none}}
+@container (min-width:88px){.pnc-s11{display:inline}.pnc-f11{display:inline}.pnc-f11+.pnc-s{display:none}}
+@container (min-width:96px){.pnc-s12{display:inline}.pnc-f12{display:inline}.pnc-f12+.pnc-s{display:none}}
+@container (min-width:104px){.pnc-s13{display:inline}.pnc-f13{display:inline}.pnc-f13+.pnc-s{display:none}}
+@container (min-width:112px){.pnc-s14{display:inline}.pnc-f14{display:inline}.pnc-f14+.pnc-s{display:none}}
+@container (min-width:120px){.pnc-s15{display:inline}.pnc-f15{display:inline}.pnc-f15+.pnc-s{display:none}}
+@container (min-width:128px){.pnc-s16{display:inline}.pnc-f16{display:inline}.pnc-f16+.pnc-s{display:none}}
+@container (min-width:136px){.pnc-s17{display:inline}.pnc-f17{display:inline}.pnc-f17+.pnc-s{display:none}}
+@container (min-width:144px){.pnc-s18{display:inline}.pnc-f18{display:inline}.pnc-f18+.pnc-s{display:none}}
+@container (min-width:152px){.pnc-s19{display:inline}.pnc-f19{display:inline}.pnc-f19+.pnc-s{display:none}}
+@container (min-width:160px){.pnc-s20{display:inline}.pnc-f20{display:inline}.pnc-f20+.pnc-s{display:none}}
+@container (min-width:168px){.pnc-s21{display:inline}.pnc-f21{display:inline}.pnc-f21+.pnc-s{display:none}}
+@container (min-width:176px){.pnc-s22{display:inline}.pnc-f22{display:inline}.pnc-f22+.pnc-s{display:none}}
+@container (min-width:184px){.pnc-s23{display:inline}.pnc-f23{display:inline}.pnc-f23+.pnc-s{display:none}}
+@container (min-width:192px){.pnc-s24{display:inline}.pnc-f24{display:inline}.pnc-f24+.pnc-s{display:none}}
+@container (min-width:200px){.pnc-s25{display:inline}.pnc-f25{display:inline}.pnc-f25+.pnc-s{display:none}}
+@container (min-width:208px){.pnc-s26{display:inline}.pnc-f26{display:inline}.pnc-f26+.pnc-s{display:none}}
+@container (min-width:216px){.pnc-s27{display:inline}.pnc-f27{display:inline}.pnc-f27+.pnc-s{display:none}}
+@container (min-width:224px){.pnc-s28{display:inline}.pnc-f28{display:inline}.pnc-f28+.pnc-s{display:none}}
+@container (min-width:232px){.pnc-s29{display:inline}.pnc-f29{display:inline}.pnc-f29+.pnc-s{display:none}}
+@container (min-width:240px){.pnc-s30{display:inline}.pnc-f30{display:inline}.pnc-f30+.pnc-s{display:none}}
+@container (min-width:248px){.pnc-s31{display:inline}.pnc-f31{display:inline}.pnc-f31+.pnc-s{display:none}}
+@container (min-width:256px){.pnc-s32{display:inline}.pnc-f32{display:inline}.pnc-f32+.pnc-s{display:none}}
+
+/* the two strips of round 2: a row label, then a bar of one length */
+.pnc-st{display:grid;grid-template-columns:46px minmax(0,1fr);align-items:center;gap:0 6px;margin:6px 0 0}
+.pnc-st>span{font-size:12px;font-weight:600;line-height:1.2;color:var(--ink-3)}
+.pnc-st .pnc-bar{margin:0;height:22px}
+.pnc-st+.pnc-st{margin-top:5px}
+
+/* three part figures under a bar */
+.pnc-parts{display:flex;justify-content:space-between;gap:8px;margin:2px 0 0}
+.pnc-part{min-width:0}
+.pnc-part b{display:block;font-family:var(--fd);font-weight:500;font-size:22px;line-height:1.15;letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnc-part span{display:flex;align-items:center;gap:5px;margin-top:2px;font-size:12.5px;line-height:1.25;color:var(--ink-2);white-space:nowrap}
+
+/* how each is timed: a swatch, a bold name, a short phrase */
+.pnc-rows{display:flex;flex-direction:column;gap:5px}
+.pnc-row{display:grid;grid-template-columns:10px minmax(0,1fr);gap:0 8px;align-items:start;font-size:13.5px;line-height:1.38;color:var(--ink-2)}
+.pnc-row .pnc-sw{margin-top:5px}
+.pnc-row b{font-weight:600;color:var(--ink)}
+
+/* round 2: two strips of one length, what was spent and what paid for it */
+.pnc-nw{white-space:nowrap}
+.pnc-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0;background:var(--d)}
+
+/* a timeline of 16 quarters, drawn in HTML so its labels keep a readable size */
+.pnc-tl{position:relative;height:48px;margin:0}
+.pnc-tl-l{position:absolute;left:3%;right:3%;top:25px;height:0;border-top:1.5px solid #C9C6BC}
+.pnc-tl-k{position:absolute;top:22px;width:0;height:6px;border-left:1px solid #C9C6BC}
+.pnc-dm{position:absolute;top:19px;width:11px;height:11px;margin-left:-5.5px;transform:rotate(45deg);box-sizing:border-box;border:2px solid var(--c)}
+.pnc-dm.on{background:var(--c);width:13px;height:13px;margin-left:-6.5px;top:18px}
+.pnc-dm.off{background:#fff}
+.pnc-tl-a,.pnc-tl-b{position:absolute;transform:translateX(-50%);font-size:12px;line-height:1;white-space:nowrap}
+.pnc-tl-a{top:2px;font-weight:700;color:var(--ct)}
+.pnc-tl-b{top:36px;font-weight:500;color:var(--ink-3)}
+.pnc-tl-b.on{color:var(--ct);font-weight:700}
+
+/* return on capital: the equation as three chips */
+.pnc-eq{display:flex;flex-direction:column;gap:5px}
+.pnc-er{display:grid;grid-template-columns:14px auto minmax(0,1fr);align-items:baseline;gap:0 8px;padding:4px 10px 5px 9px;border:1px solid #DDDACF;border-left:3px solid var(--c);border-radius:6px;background:#fff}
+.pnc-er i{font-style:normal;font-weight:600;font-size:15px;line-height:1;color:var(--ink-3);text-align:center}
+.pnc-er b{font-family:var(--fd);font-weight:500;font-size:22px;line-height:1.15;letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnc-er b small{font-family:var(--f);font-size:13.5px;font-weight:500;letter-spacing:0;color:var(--ink-2)}
+.pnc-er span{font-size:12.5px;line-height:1.25;color:var(--ink-2);text-align:right}
+.pnc-er.res{background:var(--ct);border-color:var(--c)}
+.pnc-er.res b{font-size:28px;color:var(--c)}
+
+/* the fold: bigger type than the base fold, and the same neutral pill. The fold sits right after .pnc-cards. */
+.cx-side-p .pnc-cards+.whyd>summary{font-size:13.5px}
+.pnc-cards+.whyd .whyd-b{font-family:var(--f);font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+.pnc-cards+.whyd .cx-lev .lv{font-size:13.5px}
+.pnc-cards+.whyd .cx-lev .lv span small{font-size:12px}
+.pnc-cards+.whyd .cx-lev .lv em{font-size:12.5px}
+.pnc-cards+.whyd .cx-sub{font-size:12px}
+.pnc-cards+.whyd .cx-note{font-size:13.5px;color:var(--ink-2)}
+.pnc-ph{padding:5px 0 6px;border-bottom:1px solid var(--rule)}
+.pnc-ph:first-child{padding-top:0}
+.pnc-ph-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;color:var(--ink)}
+.pnc-ph-h span{display:flex;align-items:baseline;gap:7px;font-weight:500}
+.pnc-ph-h b{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnc-ph small{display:block;margin:1px 0 0 17px;font-size:12px;line-height:1.35;color:var(--ink-3)}
+
+/* from 1400 px the panel box is 620 px tall, so the cards can breathe a little more */
+@media(min-width:1400px){
+ .pc-card.pnc-card{padding:11px 16px 12px}
+ .pc-card.pnc-card .pnc-t{margin-bottom:7px}
+ .cx-side-p>.pc-cards.pnc-cards{gap:9px;margin-top:10px}
+ .pc-card.pnc-card p.pnc-x{margin-top:8px}
+ .pnc-bar,.pnc-st .pnc-bar{height:24px}
+ .pnc-rows{gap:8px}
+ /* steps 4 and 6 are shorter than their box: a little more air */
+ .pnc-c4 .pc-card.pnc-card{padding:15px 16px 16px}
+ .pnc-c4 .pnc-st .pnc-bar{height:28px}
+ .pnc-c4 .pnc-tl{height:54px}
+ .pnc-c6 .pc-card.pnc-card{padding:14px 16px 15px}
+ .pnc-c6 .pnc-er{padding:6px 10px 7px 9px}
+}
