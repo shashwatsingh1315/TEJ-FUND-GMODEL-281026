@@ -16,6 +16,7 @@ Working material for turning page 03 of the Tejas investor dashboard into a fund
 |---|---|
 | `dashboard/tejas-revenue-dashboard.html` | The live dashboard: one file, seven pages, fonts embedded. Unmodified. |
 | `docs/BUILD-BRIEF.md` | The five-part build brief for the new page 03, with reference numbers. |
+| `docs/REVIEW-working-capital-and-capex.md` | Review of how the latest dashboard (`workspace-2026-10-28/`) models working capital and capex: what holds, what doesn't, and what each fix does to the equity needed. |
 | `docs/spec-cash-burn-capex-fundraising.md` | The original spec: two-column layout, step-by-step beats, cost-plan table. Still the source for the left/right principles. |
 | `docs/context/codex-grill-me-transcript.txt` | An earlier question-and-answer session. Background only. It contains an account email and local file paths, so keep this repo private. |
 | `design-reference/rejected-concepts-A-D/` | Four concept previews that were rejected because they did not match the dashboard's design and used invented figures. Kept for reference. Do not reuse them. |
@@ -32,6 +33,9 @@ NODE_PATH=$(npm root -g) node tools/verify-funding-numbers.js "$PWD/dashboard/te
 # The cost-plan table as the dashboard reads it: burn at a given MRR, break-even MRR,
 # fixed-cost scale (used to spot the unit question in decision D2)
 NODE_PATH=$(npm root -g) node tools/check-burn-table-units.js "$PWD/dashboard/tejas-revenue-dashboard.html"
+
+# Working-capital and capex review of the latest dashboard (no browser needed; compare with docs/REVIEW-working-capital-and-capex.md)
+node tools/audit-wc-capex.cjs
 
 # Design tokens, functions and classes in the dashboard
 python3 -I tools/inspect-dashboard.py dashboard/tejas-revenue-dashboard.html
