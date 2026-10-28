@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "independentArithmeticComparisons": 937,
+  "capitalTargetsOnce": {
+    "capex": 140,
+    "pp": 30,
+    "wc": 248.6268493150685
+  },
+  "sumOfQuarterlyChanges": {
+    "capex": 140,
+    "labsSystems": 30,
+    "workingCapital": 248.62684931506837
+  },
+  "quarter11": {
+    "workingCapitalOpening": 83.10575342465754,
+    "workingCapitalClosing": 107.2504109589041,
+    "workingCapitalCash": 24.144657534246562,
+    "capexCash": 11.19008109923719
+  },
+  "operatingEarningsOver48Months": 241.4540910369863,
+  "peakFundingGap": 187.34007120511026,
+  "peakQuarter": 15,
+  "equity": 200,
+  "closingCash": 22.82724172191797,
+  "roceProxy": {
+    "before": 58.69185400084452,
+    "after": 53.71299062371365
+  },
+  "exit10ARR": {
+    "stake": 10.11951154831478,
+    "value": 1552.2953501944887,
+    "multiple": 38.807383754862215,
+    "irr": 1.4959081048719591
+  }
+}

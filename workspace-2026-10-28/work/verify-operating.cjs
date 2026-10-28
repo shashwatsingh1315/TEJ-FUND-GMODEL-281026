@@ -1,0 +1,30 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const path='/Users/shashwat/Documents/Codex/2026-10-28/c/outputs/Tejas_Revenue_Dashboard_Corrected.html';
+const html=fs.readFileSync(path,'utf8'),original=fs.readFileSync('/Users/shashwat/Downloads/tejas-revenue-dashboard9-27.html','utf8');
+const defaults=html.match(/<script type="application\/json" id="inputs-default">([\s\S]*?)<\/script>/)[1],noop=()=>{},el={classList:{add:noop,remove:noop},querySelectorAll:()=>[],style:{},dataset:{}};
+const ctx=vm.createContext({structuredClone,document:{getElementById:id=>id==='inputs-default'?{textContent:defaults}:el,addEventListener:noop},localStorage:{getItem:()=>null,setItem:noop},innerWidth:1280,addEventListener:noop,window:{},MutationObserver:class{observe(){}}});
+for(const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(m[1].replace(/^routeApp\(\);$/m,''),ctx,{timeout:1500});
+const run=code=>vm.runInContext(code,ctx,{timeout:5000});
+const d=run(`(()=>{const O=operatingModel(),R=raisePlan(),V=view(SCOPE.core),C=view(SCOPE.core,'city'),D=view(SCOPE.core,'dist');return {snap:O.S,quarters:O.Q,months:O.months,initial:O.initial,R,forecast:MODEL.forecast,channels:P.flatMap(p=>V.M[p].map((v,q)=>v-C.M[p][q]-D.M[p][q])),rates:{tileDD0:opRates('tile','dist',0),tileDD15:opRates('tile','dist',15),tileRT15:opRates('tile','city',15),woodRT15:opRates('wood','city',15),upvcDD15:opRates('upvc','dist',15)},anchorTotals:INP.operating.anchors.map(x=>opOverheads(x/100).total*100),low:opOverheads(1.77),high:opOverheads(127.64),return:investorReturn(R,capX()),cap:capFin()};})()`);
+const close=(a,b,label)=>assert.ok(Math.abs(a-b)<1e-8,`${label}: ${a} != ${b}`);
+const originalModel=original.match(/  forecast:\{([\s\S]*?)\}\n\};/)[1];
+const correctedModel=html.match(/  forecast:\{([\s\S]*?)\}\n\};/)[1];assert.equal(correctedModel,originalModel,'Revenue forecast preserved');
+assert.equal(d.snap.length,16);assert.equal(d.months.length,48);d.channels.forEach(v=>close(v,0,'Channel reconciliation'));
+close(d.rates.tileDD0.cm2,16.5,'Tile DD initial unrounded');close(d.rates.tileDD15.cm2,26.5,'Tile DD final');close(d.rates.tileRT15.cm2,30.5,'Tile RT final');close(d.rates.woodRT15.cm2,35.5,'Wood RT final');close(d.rates.upvcDD15.cm2,19,'uPVC DD copied rates');
+[61,77.5,100.5,128,163,195,217,253,279,296,328].forEach((v,i)=>close(d.anchorTotals[i],v,'Overhead anchor '+i));close(d.low.total,.61,'Cost floor');close(d.high.total,17.59612,'Upper marginal extension');
+for(let q=0;q<16;q++){
+ const s=d.snap[q],r=d.quarters[q],m=d.months.slice(q*3,q*3+3);
+ close(s.revenue,Object.values(d.forecast).reduce((a,x)=>a+x[q],0),'Snapshot MRR');
+ close(s.cm2,s.rows.reduce((a,x)=>a+x.cm2,0),'Weighted CM2 amount');close(s.cm2P,s.cm2/s.revenue*100,'Weighted CM2 percentage');close(s.pat,s.cm2-s.fixed,'Overheads deducted once');
+ close(s.fixed,Object.values(s.overhead.by).reduce((a,x)=>a+x,0),'Overhead line sum');
+ close(r.pat,m.reduce((a,x)=>a+x.pat,0),'Quarter cash earnings sum');close(r.burn,m.reduce((a,x)=>a+Math.max(0,-x.pat),0),'Burn from same monthly earnings');
+ close(m[2].revenue,s.revenue,'Monthly endpoint revenue');close(m[2].pat,s.pat,'Monthly endpoint profit');
+ close(d.R.cash[q],d.R.eq(q)-d.R.G.gap[q]+d.R.D.bal[q]-d.R.D.cumInt[q],'Funding cash reconciliation');
+}
+assert.ok(Math.abs(d.quarters[4].pat-3*d.snap[4].pat)>.01,'Cash estimates differ from 3 x closing month');
+const mutation=run(`(()=>{const a=raisePlan(),old=INP.operating.costs.salary[5];INP.operating.costs.salary[5]+=100;const b=raisePlan();INP.operating.costs.salary[5]=old;return {cashA:a.cash[5],cashB:b.cash[5],profitA:a.G.pat[5],profitB:b.G.pat[5],gapA:a.G.gap[5],gapB:b.G.gap[5]};})()`);
+assert.ok(Math.abs(mutation.profitA-mutation.profitB)>.001,'Expense input changes earnings');assert.ok(Math.abs(mutation.gapA-mutation.gapB)>.001,'Expense input changes funding gap');
+const renders=run(`(()=>{const D=capData();return Object.keys(CAP_RENDER).map(k=>{const x=CAP_RENDER[k](D);return {k,title:x.title,ok:!!x.chart&&!String(x.chart+x.cards).includes('NaN')};});})()`);renders.forEach(r=>assert.ok(r.ok,'Render descriptor '+r.k));
+const csv=run('sheetCSV()');assert.ok(csv.includes('Operating profit / month'));fs.writeFileSync('/Users/shashwat/Documents/Codex/2026-10-28/c/outputs/Tejas_Quarter_End_Financials.csv','\ufeff'+csv);
+const summary={checks:'passed',q1:{mrr:d.snap[0].mrr,cm2Pct:d.snap[0].cm2P,cost:d.snap[0].fixed,profit:d.snap[0].pat},q16:{mrr:d.snap[15].mrr,cm2Pct:d.snap[15].cm2P,cost:d.snap[15].fixed,profit:d.snap[15].pat},funding:{equity:d.R.equity,rounds:d.R.rounds.map(r=>({quarter:r.q+1,amount:r.amt})),peak:d.R.G.peak,peakQuarter:d.R.G.peakQ+1,minCash:d.R.minCash,endCash:d.R.cash[15]},capital:d.cap.total,returnMultiple:d.return.mult,renders:renders.map(r=>r.k)};
+fs.writeFileSync('/Users/shashwat/Documents/Codex/2026-10-28/c/work/operating-checks.json',JSON.stringify(summary,null,2));console.log(JSON.stringify(summary,null,2));

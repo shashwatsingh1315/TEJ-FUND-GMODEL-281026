@@ -1,0 +1,102 @@
+{
+  "status": "passed",
+  "arithmeticComparisons": 3670,
+  "panelsRendered": 448,
+  "scenariosChecked": 20,
+  "annualWCPercent": 16.43835616438356,
+  "workingCapital": {
+    "full": 251.78301369863001,
+    "opening": 3.1561643835616446,
+    "additional": 248.62684931506837
+  },
+  "modesAt50Percent": [
+    {
+      "mode": "none",
+      "coverage": 50,
+      "equity": 200,
+      "debtQ16": 0,
+      "interest": 0,
+      "cashQ16": 22.82724172191797,
+      "minCash": 12.659928794889737,
+      "rounds": [
+        {
+          "quarter": 1,
+          "amount": 40
+        },
+        {
+          "quarter": 4,
+          "amount": 125
+        },
+        {
+          "quarter": 11,
+          "amount": 35
+        }
+      ]
+    },
+    {
+      "mode": "wc",
+      "coverage": 50,
+      "equity": 120,
+      "debtQ16": 124.31342465753418,
+      "interest": 15.676126027397256,
+      "cashQ16": 51.4645403520549,
+      "minCash": 12.963992325671768,
+      "rounds": [
+        {
+          "quarter": 1,
+          "amount": 40
+        },
+        {
+          "quarter": 4,
+          "amount": 75
+        },
+        {
+          "quarter": 11,
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "mode": "plant",
+      "coverage": 50,
+      "equity": 165,
+      "debtQ16": 49.780050416925334,
+      "interest": 9.38526301561106,
+      "cashQ16": 28.222029123232232,
+      "minCash": 14.033744780508414,
+      "rounds": [
+        {
+          "quarter": 1,
+          "amount": 40
+        },
+        {
+          "quarter": 4,
+          "amount": 100
+        },
+        {
+          "quarter": 11,
+          "amount": 25
+        }
+      ]
+    },
+    {
+      "mode": "both",
+      "coverage": 50,
+      "equity": 90,
+      "debtQ16": 174.09347507445952,
+      "interest": 25.06138904300832,
+      "cashQ16": 61.85932775336918,
+      "minCash": 12.270213209055868,
+      "rounds": [
+        {
+          "quarter": 1,
+          "amount": 40
+        },
+        {
+          "quarter": 5,
+          "amount": 50
+        }
+      ]
+    }
+  ]
+}

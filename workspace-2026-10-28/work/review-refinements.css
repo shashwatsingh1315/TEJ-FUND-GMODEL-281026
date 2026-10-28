@@ -1,0 +1,46 @@
+/* Refinements to the supplied design, limited to the reviewed elements. */
+.review-inputs{margin:0 0 16px;padding:14px 18px;border:1px solid var(--rule-2);border-radius:7px;background:var(--surface)}
+.review-inputs h3{margin:0 0 6px;font-size:16px}
+.review-inputs p{margin:0;font-family:var(--ft);font-size:14px;line-height:1.5;max-width:95ch}
+.review-inputs .review-formula{margin-top:9px}
+.review-logic{margin:14px 0 4px;padding:13px 15px;background:#f8f6f2;border:1px solid var(--rule)}
+.review-logic h4{margin:0 0 4px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.review-logic p{margin:0;font-family:var(--ft);font-size:13px;line-height:1.45}
+.avg-range{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.avg-range b{color:#af4c2b;font-size:11px;white-space:nowrap}.avg-rail{height:1px;flex:1;min-width:8px;background:#c8c3ba}
+.review-formula{margin:8px 0;padding:8px 10px;background:var(--paper);border:1px solid var(--rule);border-radius:4px;font-size:12.5px;line-height:1.5;font-variant-numeric:tabular-nums}
+.review-age-rule{margin:12px 0 0;border-top:1px solid var(--rule)}
+.review-age-rule>div{display:grid;grid-template-columns:108px minmax(0,1fr);gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:12.5px;line-height:1.4}
+.review-age-rule b{font-weight:600;color:var(--ink)}
+.review-age-rule span{color:var(--ink-2)}
+.review-quarter h4,.review-capital-plan h4{margin:0;font-size:13px;font-weight:600}
+.review-quarter{padding:12px 0 4px}
+.review-capital-plan{margin-top:16px;padding:14px 0 4px;border-top:1px solid var(--rule-2)}
+.review-capital-plan>p{margin:4px 0 8px;font-size:11.5px;color:var(--ink-3);line-height:1.4}
+.cx-side-p>.whyd{margin-top:12px}
+.cx-side-p .whyd-b>.cx-lev>.cx-sub:first-child{margin-top:0}
+.review-balances{margin-top:8px}
+.review-fund-total{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:4px 12px;margin-top:12px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.review-fund-total>span{font-size:13px;font-weight:600}
+.review-fund-total>b{font-family:var(--fd);font-size:25px;font-weight:500;color:var(--accent)}
+.review-fund-total>small{grid-column:1/-1;font-size:12px;color:var(--ink-3)}
+.review-rounds{display:grid;grid-template-columns:1fr;gap:0}
+.review-round{padding:14px 0;border-bottom:1px solid var(--rule)}
+.review-round header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.review-round h4{margin:0 0 2px;font-size:14px;font-weight:600}
+.review-round header span{font-size:12px;color:var(--ink-3)}
+.review-round header strong{font-family:var(--fd);font-weight:500;font-size:28px;color:var(--accent);white-space:nowrap}
+.review-round header strong small{font-family:var(--f);font-size:12px;margin-left:5px}
+.review-round-period{margin:10px 0 5px;font-size:11px;color:var(--ink-3)}
+.review-uses{margin:0;display:grid;gap:4px}
+.review-uses>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12px;line-height:1.4}
+.review-uses dt{display:flex;align-items:center;gap:6px;color:var(--ink-2)}
+.review-uses dd{margin:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.review-uses .sw{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.review-uses .review-closing{margin-top:4px;padding-top:6px;border-top:1px solid var(--rule);font-weight:600}
+.review-uses .review-closing dt{color:var(--ink)}
+.review-round>.whyd{margin:7px 0 0}
+.review-round>.whyd summary{font-size:11.5px}
+.cx-chart .cap-legend{gap:5px 15px}
+.cx-chart .cap-legend>span{font-size:11.5px}
+@media(max-width:600px){.review-inputs{padding:12px}.review-inputs p{font-size:13px}.review-formula{font-size:12px}.review-age-rule>div{grid-template-columns:1fr;gap:3px}.review-round header strong{font-size:25px}.cx-side-p{padding:12px!important}}

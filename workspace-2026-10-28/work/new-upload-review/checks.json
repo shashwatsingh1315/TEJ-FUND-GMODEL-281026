@@ -1,0 +1,43 @@
+{
+  "checks": "passed",
+  "all16QuartersMatchConfirmedCalculations": true,
+  "panelsChecked": 112,
+  "chartSizesChecked": [
+    560,
+    900,
+    1300
+  ],
+  "sevenSteps": [
+    "Revenue",
+    "Margins",
+    "Growth spending",
+    "Funding need",
+    "Raises and cash",
+    "Investor return",
+    "Return on capital"
+  ],
+  "q16": {
+    "revenue": 127.63999999999994,
+    "cm2Pct": 29.947881450457153,
+    "cm2": 38.225475883363494,
+    "overhead": 17.596119999999992,
+    "profit": 20.629355883363502
+  },
+  "equity": 200,
+  "rounds": [
+    {
+      "q": 0,
+      "amt": 40
+    },
+    {
+      "q": 3,
+      "amt": 125
+    },
+    {
+      "q": 10,
+      "amt": 35
+    }
+  ],
+  "stakeValue": 1552.2953501944887,
+  "roce": 0.5869185400084452
+}

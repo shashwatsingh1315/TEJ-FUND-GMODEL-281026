@@ -1,0 +1,50 @@
+{
+  "checks": "passed",
+  "q1": {
+    "mrr": 1.7700000000000002,
+    "cm2Pct": 19.516077532048744,
+    "cost": 0.61,
+    "profit": -0.26456542768273716
+  },
+  "q16": {
+    "mrr": 127.63999999999994,
+    "cm2Pct": 29.947881450457153,
+    "cost": 17.596119999999992,
+    "profit": 20.629355883363502
+  },
+  "funding": {
+    "equity": 205,
+    "rounds": [
+      {
+        "quarter": 1,
+        "amount": 40
+      },
+      {
+        "quarter": 4,
+        "amount": 125
+      },
+      {
+        "quarter": 11,
+        "amount": 40
+      }
+    ],
+    "peak": 190.3696602462061,
+    "peakQuarter": 15,
+    "minCash": 14.63033975379389,
+    "endCash": 24.374091036986442
+  },
+  "capital": 423.9653901432479,
+  "returnMultiple": 11.662941451287697,
+  "renders": [
+    "growth",
+    "consume",
+    "earn",
+    "gap",
+    "fund",
+    "price",
+    "r1",
+    "ret",
+    "roce",
+    "rests"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "unitConvention": "INR crore; monthly schedule; 30 days per model month",
+  "sixtyDaysInMonths": 2,
+  "oldFormula": "(quarter-end monthly revenue - opening monthly revenue) * 60 / 30",
+  "oldQ16AdditionalReceivables": 252.07999999999993,
+  "conditionalAllSalesCredit60Days": {
+    "augustSales": 122.48666666666665,
+    "septemberSales": 127.63999999999994,
+    "closingReceivables": 250.1266666666666,
+    "assumedOpeningReceivables": 3.2,
+    "additionalReceivables": 246.92666666666662,
+    "overstatement": 5.153333333333308
+  }
+}
