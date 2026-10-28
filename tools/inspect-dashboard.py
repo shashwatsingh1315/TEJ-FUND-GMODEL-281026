@@ -1,0 +1,15 @@
+import re,sys
+src=open(sys.argv[1],encoding='utf-8').read()
+css=re.search(r'<style>(.*?)</style>',src,re.S).group(1)
+css=re.sub(r'@font-face\{[^}]*\}','',css)
+roots=re.findall(r':root\s*\{[^}]*\}',css)
+print('ROOT BLOCKS',len(roots))
+for r in roots[-2:]: print(re.sub(r'\s+',' ',r)[:1700]); print('--')
+print('FONT FAMILIES', sorted(set(re.findall(r"font-family:\s*'?([A-Za-z ]+)'?",src)))[:12])
+fn=re.findall(r'function\s+([A-Za-z0-9_$]+)',src)
+print('FUNCTIONS',len(fn)); print(' '.join(fn[:150]))
+cls=sorted(set(re.findall(r'\.([a-z][a-zA-Z0-9_-]+)',css)))
+keep=[c for c in cls if re.search(r'kpi|step|stp|how|card|panel|pnl|led|seg|tog|nav|foot|note|why|btn|chev|hero|rule|box|bar|split|grid|tab',c)]
+print('CLASSES',len(cls),'FILTERED',len(keep)); print(' '.join(keep[:200]))
+secs=re.findall(r'<(?:section|div)[^>]*id="([^"]+)"',src)
+print('IDS',secs[:60])

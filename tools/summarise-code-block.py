@@ -1,0 +1,11 @@
+import re,sys
+L=open(sys.argv[1],encoding='utf-8').read().split('\n')
+start=int(sys.argv[2])-1; end=int(sys.argv[3])
+blk='\n'.join(L[start:end])
+print('BLOCK chars',len(blk))
+calls=sorted(set(re.findall(r'\b([A-Za-z_$][A-Za-z0-9_$]*)\(',blk)))
+skip=set('if for while switch function return map filter join push slice Math Object Array String Number parseInt parseFloat reduce forEach round floor ceil min max abs concat entries keys values sort includes indexOf replace split toFixed toLocaleString Set Date JSON'.split())
+print('CALLS',[c for c in calls if c not in skip and len(c)>1])
+print('CLASSES',sorted(set(re.findall(r'class="([^"$]+)"',blk)))[:90])
+for m in re.finditer(r'(Section \d of \d|steps\s*=\s*\[[^\]]{0,300}\])',blk): print('STEPS',m.group(0)[:320])
+print('HEAD',blk[:700].replace('\n',' '))
