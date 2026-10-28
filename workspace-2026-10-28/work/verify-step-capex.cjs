@@ -53,7 +53,9 @@ for(const mode of ['none','wc','plant','both']){const r=run(`(()=>{setFinanceMod
 run(`setFinanceMode('none',50)`);
 
 /* renderers: page 03 growth-spending panel for every quarter, stress list, Edit inputs */
-for(let q=0;q<16;q++){const h=run(`(()=>{A.cap.selQ=${q};const D=capData();return CX.spend(D).body;})()`);ok(h.includes(`Capex bought in Q${q+1}`)&&h.includes('Phases to Q16')&&!/NaN|undefined/.test(h),`page 03 spend panel Q${q+1}`);}
+/* the page-03 panel is static: it states the phase rule and plan, the same whichever quarter is picked */
+const spend0=run(`(()=>{A.cap.selQ=0;return CX.spend(capData()).body;})()`);
+for(let q=0;q<16;q++){const h=run(`(()=>{A.cap.selQ=${q};const D=capData();return CX.spend(D).body;})()`);ok(h===spend0&&/Phase plan to Q16/i.test(h)&&!/NaN|undefined/.test(h),`page 03 spend panel Q${q+1}`);}
 const inputs=run(`capitalInputs(f=>'<i data-f="'+f[0]+'"></i>')`);ok(inputs.includes('data-input="capital.phases.tileP5"')&&inputs.includes('capital.leadQ')&&inputs.includes('Product and income-stream margins')&&inputs.includes('Common monthly overhead anchors')&&(inputs.match(/Cost of revenue · capex/g)||[]).length===1&&!inputs.includes('in step with what it is built with')&&!/NaN|undefined/.test(inputs),'Edit inputs: capex panel replaced, other panels kept');
 ok(run(`stressCases().find(c=>c.k==='pre0').label`)==='Wood and uPVC in equal phases','stress label for equal phases');
 

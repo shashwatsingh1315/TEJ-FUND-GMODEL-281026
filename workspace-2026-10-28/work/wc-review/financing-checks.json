@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "arithmeticComparisons": 3670,
-  "panelsRendered": 448,
+  "panelsRendered": 384,
   "scenariosChecked": 20,
   "annualWCPercent": 16.43835616438356,
   "workingCapital": {
@@ -13,11 +13,11 @@
     {
       "mode": "none",
       "coverage": 50,
-      "equity": 230,
+      "equity": 240,
       "debtQ16": 0,
       "interest": 0,
-      "cashQ16": 52.82724172191797,
-      "minCash": 10.589412493013583,
+      "cashQ16": 62.82724172191797,
+      "minCash": 20.589412493013583,
       "rounds": [
         {
           "quarter": 1,
@@ -25,21 +25,17 @@
         },
         {
           "quarter": 3,
-          "amount": 130
-        },
-        {
-          "quarter": 10,
-          "amount": 60
+          "amount": 200
         }
       ]
     },
     {
       "mode": "wc",
       "coverage": 50,
-      "equity": 160,
+      "equity": 240,
       "debtQ16": 124.31342465753418,
       "interest": 15.676126027397256,
-      "cashQ16": 91.4645403520549,
+      "cashQ16": 171.46454035205488,
       "minCash": 12.93410541483074,
       "rounds": [
         {
@@ -48,22 +44,18 @@
         },
         {
           "quarter": 4,
-          "amount": 90
-        },
-        {
-          "quarter": 11,
-          "amount": 30
+          "amount": 200
         }
       ]
     },
     {
       "mode": "plant",
       "coverage": 50,
-      "equity": 190,
+      "equity": 240,
       "debtQ16": 47.953125,
       "interest": 11.03072265625,
-      "cashQ16": 49.74964406566798,
-      "minCash": 14.772986711763593,
+      "cashQ16": 99.74964406566798,
+      "minCash": 18.443899935378685,
       "rounds": [
         {
           "quarter": 1,
@@ -71,22 +63,18 @@
         },
         {
           "quarter": 4,
-          "amount": 115
-        },
-        {
-          "quarter": 11,
-          "amount": 35
+          "amount": 200
         }
       ]
     },
     {
       "mode": "both",
       "coverage": 50,
-      "equity": 115,
+      "equity": 240,
       "debtQ16": 172.2665496575342,
       "interest": 26.706848683647255,
-      "cashQ16": 83.38694269580492,
-      "minCash": 12.179150118943284,
+      "cashQ16": 208.38694269580492,
+      "minCash": 19.700355414830742,
       "rounds": [
         {
           "quarter": 1,
@@ -94,11 +82,7 @@
         },
         {
           "quarter": 4,
-          "amount": 65
-        },
-        {
-          "quarter": 12,
-          "amount": 10
+          "amount": 200
         }
       ]
     }
