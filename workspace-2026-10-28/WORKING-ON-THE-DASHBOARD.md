@@ -33,7 +33,8 @@ The figures are projections from model assumptions, not actuals.
 | `src/base/dashboard-base.html` | Every page, the styles, the default inputs (`<script type="application/json" id="inputs-default">`) and the fonts. Holds an empty slot for the capex layer. |
 | `src/capex/step-capex-layer.js` | Capex bought in whole phases within the fixed ₹170 Cr spend to Q16. Inserted into the base's slot. |
 | `src/page03/` | Page 03, Funding & returns: the six-step chart, its tables, the right-hand panels and the takeaways. Loaded after the base, so it overrides it. |
-| `src/build.py` | Puts the three together and writes the dashboard into `outputs/`. |
+| `src/guide/` | The six exposed page summaries and shared model diagram on How to read. The two separate containers stretch to matching heights. |
+| `src/build.py` | Combines the base, capex, page 03 and guide sources into the dashboard in `outputs/`. |
 | `check-all.sh` | Every check, in one command. |
 | `work/` | Check scripts and the reports they write. |
 | `work/legacy/` | Retired scripts from the earlier way of building. They refuse to run; see its README. |
@@ -73,6 +74,7 @@ Clearing out the dead copies is the planned next clean-up (see "Known gaps").
 
    | To change | Edit |
    |---|---|
+   | Guide layout and connection diagram | `src/guide/guide.css` and `guide.js`; page descriptions in the live `renderGuide` in the base |
    | Text or logic on any page except 03 | `src/base/dashboard-base.html`, at the live definition |
    | Anything on page 03 | `src/page03/` (table above) |
    | Capex phasing | `src/capex/step-capex-layer.js` |

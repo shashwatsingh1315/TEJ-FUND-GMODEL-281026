@@ -3903,14 +3903,13 @@ function stepKey(e){
 /* ---------- how to read: compact layers beside the colour key ---------- */
 function renderGuide(){
   const chip=(sw,l)=>`<span class="chip">${sw}${l}</span>`,sq=(c,extra='')=>`<i style="background:${c};${extra}"></i>`;
-  const F=fin(),c=F.cols,D=qFin(),V=view(SCOPE.core),T=V.T,Q=D.Q,y4=Q.slice(12,16),beyond=Math.round((1-V.M.tile[15]/T[15])*100),FP=raisePlan(),FX=capData().ret.lead;
   const pages=[
-    ['01','Model basis','basis','The market and product sizes; the formula and how a line’s share grows; a check against today and a worked example.','Shows the forecast is built bottom-up from measured units, not set top-down.','Its formula produces the revenue on 02.',`Every rupee traces to units × market × size × share, starting from ₹${fd(INP.valuation.todayMRR,1)} Cr a month today.`],
-    ['02','4Y Revenue Scale-up','revenue','The 16-quarter revenue chart by product line or by city and dealer zone, with every quarter’s numbers.','The forecast itself: the number every other page explains.','Adds up 04’s units and 05’s lines; 03 and 06 build on it.',`₹${fd(INP.valuation.todayMRR,1)} Cr a month today, ₹${fd(T[15],1)} Cr by Q16: exit ARR ₹${f0(T[15]*12)} Cr.`],
-    ['03','Funding & returns','finance','One chart built up in six steps: revenue, margins, growth spending and the funding need it creates, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.organic.equity)} Cr organic in rounds 1–2, plus $${f0(FP.acq.usd)}M for acquisitions in rounds 3–4; ₹${f0(FX.amt)} Cr in this round returns ${fd(FX.mult,1)}× at Q16.`],
-    ['04','Cities & Dealers','cities','Every city and dealer zone, quarter by quarter, split by product line on a click.','Lets any number be checked city by city.','Splits 02’s total by city and dealer zone.',`${f0(Q[15].units)} cities and dealer zones by Q16; every rupee has a named unit behind it.`],
-    ['05','Products','products','One card per product line on a shared scale, with how many cities and dealer zones each has reached.','Shows how much rests on lines not yet launched.','Splits 02’s total by product line.',`Lines beyond tile adhesive bring ${beyond}% of Q16 revenue.`],
-    ['06','Financials','audit','Revenue, the income statement and the capital it takes, every quarter, with year totals and a CSV download.','Every figure in one table, ready to take away.','Brings 02 and 03 together, quarter by quarter.',`Q16 monthly revenue ₹${fd(operatingModel().S[15].net,1)} Cr and monthly operating profit ₹${fd(operatingModel().S[15].pat,1)} Cr.`]];
+    ['01','Model basis','basis','What is each rupee built from?','Market and product sizes, share growth, the revenue formula, a check against today and a worked example.'],
+    ['02','4Y Revenue Scale-up','revenue','How large does the plan become?','The 16-quarter forecast by product, city and dealer zone, with every quarter’s numbers.'],
+    ['03','Funding & returns','finance','What does growth need, and what does the money return?','Six steps: revenue, margins, growth spending and funding gap, raises and cash, investor returns, and return on capital.'],
+    ['04','Cities & Dealers','cities','Which markets make up the revenue?','Every city and dealer zone, quarter by quarter, with its product split. Check the plan market by market.'],
+    ['05','Products','products','Which product lines drive the growth?','Product lines on one shared scale, with the markets each reaches and the reliance on future launches.'],
+    ['06','Financials','audit','How do the numbers add up?','Quarterly revenue, income statement and capital, with year totals and a CSV download. Every figure in one table.']];
   const rows=[
     ['The heading','Short; it names what the page covers.',`<div class="ph-demo"><span>Page heading</span></div>`],
     ['The key figures','The numbers to take away from the page; the most important one is in orange.',`<div class="b-metrics ph-metrics"><div class="ans-k"><span>Key figure</span><strong>₹0.0 Cr</strong></div><div><span>Key figure</span><strong>0.0%</strong></div></div>`],
@@ -3919,9 +3918,7 @@ function renderGuide(){
     ['Sources','Reasoning and sources, opened only when you want them.',whyD('Where these come from','Reasoning and sources sit here.')]];
   const CI={capex:'factory',pp:'pp',wc:'wc',loss:'loss'},capChips=CAP4.map(([k,l])=>chip(`<span class="cap-ic">${capIcon(CI[k],k==='wc'?'#55544F':CAP4C[k])}</span>`,l)).join('');
   $('main-content').innerHTML=pageHead('00 · How to read','Dashboard guide')+
-  secHead('What this dashboard is')+
-  `<div class="s-panel stage3 about"><p class="about-p"><b>Tejas financial model.</b> Revenue, funding and investor returns from Oct 2026 to Sep 2030.</p>
-   <div class="s-tw"><table class="s-table pages-t pages-t6"><thead><tr><th>Order</th><th>Page</th><th>What you will find there</th><th>Why it is there</th><th>How it connects</th><th>Key takeaway</th></tr></thead><tbody>${pages.map((p,i)=>`<tr><td class="ord"><span>${i+1}</span></td><td><a href="#${p[2]}"><b>${p[0]}</b> ${p[1]}</a></td><td>${p[3]}</td><td>${p[4]}</td><td>${p[5]}</td><td class="tk">${hlAnswer(p[6])}</td></tr>`).join('')}</tbody></table></div></div>`+
+  guideOverview(pages)+
   secHead('Chart guide')+
   `<div class="b-grid"><div class="s-panel c7 lay-compact">
    <div class="lay lay-band lay-sw">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
@@ -3933,6 +3930,7 @@ function renderGuide(){
    <div class="key key-wide"><h4>Capital buckets</h4><p class="rule-l">The deck’s four buckets keep their colours on page 03 and in the financials.</p><div class="chips">${capChips}</div></div>
    </div></div></div>`+
   notesBlock();
+  mountGuideMap();
 }
 /* ---------- back office: capex, receivables and the cost plan ---------- */
 function capitalInputs(fld){
@@ -4558,7 +4556,7 @@ let lastPage=null;
 function stage(kind){const m=$('main-content');m.classList.remove('enter','enter-tab');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;void m.offsetWidth;m.classList.add(kind);
   m.querySelectorAll('.revenue-bar').forEach(b=>{const q=+(b.dataset.barQuarter||0);b.style.animationDelay=(0.18+q*0.035)+'s';});
   clearTimeout(stage.t);stage.t=setTimeout(()=>m.classList.remove('enter','enter-tab'),1600);}
-function renderApp(){hideTip();renderGlobal();(PAGES[A.page]||renderBasis)();addPageNav();fitCharts();glueUnits($('main-content'));if(A.page!==lastPage){stage('enter');lastPage=A.page;}document.title=`Tejas · ${TITLES[A.page]||'Model basis'}`;}
+function renderApp(){disposeGuideMap();hideTip();renderGlobal();(PAGES[A.page]||renderBasis)();addPageNav();fitCharts();glueUnits($('main-content'));if(A.page!==lastPage){stage('enter');lastPage=A.page;}document.title=`Tejas · ${TITLES[A.page]||'Model basis'}`;}
 /* Navigation works without hash events: previews and sandboxed frames can block or swallow them. */
 function go(hash){
   const [page,anchor]=String(hash||'').replace(/^#/,'').split('/');

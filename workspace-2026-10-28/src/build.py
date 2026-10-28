@@ -7,6 +7,7 @@ Sources (all in this folder; see WORKING-ON-THE-DASHBOARD.md):
   base/dashboard-base.html  every page, styles, inputs and fonts; holds an empty capex-layer slot
   capex/step-capex-layer.js the capex phasing layer, inserted into that slot
   page03/*.css, page03/*.js page 03 (Funding & returns), appended after the base so it overrides it
+  guide/guide.css, guide/guide.js the page directory and connection diagram on How to read
 """
 import base64,os,sys
 d=os.path.dirname(os.path.abspath(__file__))
@@ -30,8 +31,8 @@ icon=icon.replace('\n<path','\n<rect x="-6" y="-25" width="96" height="96" rx="1
 h=put(h,'__TEJAS_LOGO_DATA_URI__',uri(logo))
 h=put(h,'__TEJAS_ICON_DATA_URI__',uri(icon))
 h=put(h,OPEN+'\n'+CLOSE,OPEN+'\n'+src('capex','step-capex-layer.js').rstrip('\n')+'\n'+CLOSE)
-css=''.join(src('page03',f)+'\n' for f in PAGE03_CSS)
-js=''.join(src('page03',f)+'\n' for f in PAGE03_JS)
+css=''.join(src('page03',f)+'\n' for f in PAGE03_CSS)+src('guide','guide.css')+'\n'
+js=''.join(src('page03',f)+'\n' for f in PAGE03_JS)+src('guide','guide.js')+'\n'
 h=put(h,'</style>\n</head><body>','</style>\n<style id="page03-review">\n'+css+'</style>\n</head><body>')
 h=put(h,'\nrouteApp();\n</script>','\n'+js+'\nrouteApp();\n</script>')
 open(out,'w',encoding='utf-8').write(h)

@@ -1816,6 +1816,49 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 /* large screens (the 640 px panel): everything in the panel a size up, so the cards use the height instead of floating in it */
 @media(min-width:1700px) and (min-height:960px){.cx-side-p>*{zoom:1.1}}
 
+/* How to read: an exposed six-page directory beside a shared model map. */
+.guide-layout{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(325px,1fr);gap:20px;align-items:stretch;margin:24px 0 30px}
+#main-content .guide-layout>.s-panel{border:1px solid var(--rule-2)!important;border-radius:8px;background:var(--surface);margin:0;padding:20px;min-width:0;display:flex;flex-direction:column}
+.guide-card-head{min-height:83px;padding-bottom:16px}
+.guide-card-head h2{margin:0;font-family:var(--fd);font-size:20px;font-weight:500;line-height:1.3;letter-spacing:-.015em;color:var(--ink)}
+.guide-card-head p{margin:8px 0 0;font-family:var(--f);font-size:13px;line-height:1.5;color:var(--ink-3);max-width:68ch}
+.guide-directory{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);display:flex;flex-direction:column;flex:1}
+.guide-columns,.guide-page{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.5fr);gap:18px}
+.guide-columns{padding:10px 0;color:var(--ink-3);font-size:11.5px;line-height:1.5}
+.guide-page{border-top:1px solid var(--rule);padding:17px 0;flex:1 0 auto;align-content:start}
+.guide-page-head{display:grid;grid-template-columns:23px minmax(0,1fr);gap:0 9px;align-content:start}
+.guide-page-number{font-size:12px;line-height:1.8;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums}
+.guide-page h3{margin:0;font-family:var(--fd);font-size:17px;font-weight:500;line-height:1.35;letter-spacing:-.015em;color:var(--ink)}
+.guide-page h3 a{color:inherit;text-decoration:none}
+.guide-page h3 a:hover{text-decoration:underline;text-decoration-color:var(--ink);text-underline-offset:4px}
+.guide-page-question{grid-column:2;margin:7px 0 0;font-family:var(--f);font-size:13px;line-height:1.45;color:var(--ink-3);max-width:29ch}
+.guide-page-content{margin:0;font-family:var(--f);font-size:13.5px;line-height:1.6;color:var(--ink-2);max-width:58ch}
+.guide-map-panel .guide-card-head{min-height:83px}
+.guide-map-canvas{position:relative;flex:1 0 514px;min-height:514px;width:100%}
+.guide-map-edges{position:absolute;inset:0;overflow:visible;pointer-events:none}
+.guide-map-node{position:absolute;left:9%;width:45%;height:63px;padding:10px 13px;background:var(--surface);border:1px solid var(--rule-2);border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:4px;text-decoration:none;color:var(--ink)}
+.guide-map-node>span{font-family:var(--f);font-size:11px;line-height:1.3;font-weight:500;color:var(--accent)}
+.guide-map-node>b{font-family:var(--f);font-size:14px;line-height:1.3;font-weight:500;color:var(--ink)}
+.guide-map-node:hover{border-color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+.guide-map-node:focus-visible,.guide-page a:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.guide-map-node[data-node="1"]{top:2%}
+.guide-map-node[data-node="2"]{top:25%;background:#E8EFF7;border-color:#8AA8CB}
+.guide-map-node[data-node="2"]>b{color:#193B63}
+.guide-map-node[data-node="3"]{top:58%;height:70px}
+.guide-map-node[data-node="6"]{top:86%}
+.guide-map-branch{left:66%;width:34%;padding:10px 9px;background:none;border:0;border-left:1px solid var(--rule-2);border-radius:0}
+.guide-map-branch[data-node="4"]{top:20%;height:72px}
+.guide-map-branch[data-node="5"]{top:43%;height:62px}
+.guide-map-branch>b{font-size:13px}
+.guide-map-branch>span{font-size:11px;color:var(--ink-3)}
+.guide-map-edges text{font-family:var(--f);font-size:11px;fill:var(--ink-3);stroke:var(--surface);stroke-width:5px;paint-order:stroke fill;stroke-linejoin:round}
+.guide-map-edges .guide-map-line{stroke:var(--ink-3);stroke-width:1;fill:none}
+.guide-map-edges .guide-map-arrow{fill:var(--ink-3)}
+@media(max-width:1400px){.guide-layout{grid-template-columns:minmax(0,2fr) minmax(325px,1fr)}#main-content .guide-layout>.s-panel{padding:18px}.guide-columns,.guide-page{gap:14px}.guide-page{padding:15px 0}.guide-page h3{font-size:16px}.guide-page-content{font-size:13px}.guide-page-head{grid-template-columns:21px minmax(0,1fr);gap:0 8px}}
+@media(max-width:1050px){.guide-layout{grid-template-columns:minmax(0,1fr)}.guide-map-canvas{width:min(100%,430px);align-self:center;flex:0 0 514px}.guide-card-head{min-height:0}.guide-map-panel .guide-card-head{min-height:0}.guide-map-canvas{margin-top:15px}}
+@media(max-width:560px){#main-content .guide-layout>.s-panel{padding:17px}.guide-columns{display:none}.guide-page{grid-template-columns:1fr;gap:11px;padding:18px 0}.guide-page h3{font-size:17px}.guide-page-content{padding-left:29px;font-size:13.5px}.guide-page-question{max-width:none}.guide-card-head h2{font-size:19px}.guide-map-node{padding-left:10px;padding-right:9px}.guide-map-node>b{font-size:13px}}
+@media print{.guide-layout{break-inside:avoid}.guide-map-node{color:var(--ink);text-decoration:none}}
+
 </style>
 </head><body>
 <a class="skip" href="#main-content">Skip to dashboard</a>
@@ -4331,14 +4374,13 @@ function stepKey(e){
 /* ---------- how to read: compact layers beside the colour key ---------- */
 function renderGuide(){
   const chip=(sw,l)=>`<span class="chip">${sw}${l}</span>`,sq=(c,extra='')=>`<i style="background:${c};${extra}"></i>`;
-  const F=fin(),c=F.cols,D=qFin(),V=view(SCOPE.core),T=V.T,Q=D.Q,y4=Q.slice(12,16),beyond=Math.round((1-V.M.tile[15]/T[15])*100),FP=raisePlan(),FX=capData().ret.lead;
   const pages=[
-    ['01','Model basis','basis','The market and product sizes; the formula and how a line’s share grows; a check against today and a worked example.','Shows the forecast is built bottom-up from measured units, not set top-down.','Its formula produces the revenue on 02.',`Every rupee traces to units × market × size × share, starting from ₹${fd(INP.valuation.todayMRR,1)} Cr a month today.`],
-    ['02','4Y Revenue Scale-up','revenue','The 16-quarter revenue chart by product line or by city and dealer zone, with every quarter’s numbers.','The forecast itself: the number every other page explains.','Adds up 04’s units and 05’s lines; 03 and 06 build on it.',`₹${fd(INP.valuation.todayMRR,1)} Cr a month today, ₹${fd(T[15],1)} Cr by Q16: exit ARR ₹${f0(T[15]*12)} Cr.`],
-    ['03','Funding & returns','finance','One chart built up in six steps: revenue, margins, growth spending and the funding need it creates, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.organic.equity)} Cr organic in rounds 1–2, plus $${f0(FP.acq.usd)}M for acquisitions in rounds 3–4; ₹${f0(FX.amt)} Cr in this round returns ${fd(FX.mult,1)}× at Q16.`],
-    ['04','Cities & Dealers','cities','Every city and dealer zone, quarter by quarter, split by product line on a click.','Lets any number be checked city by city.','Splits 02’s total by city and dealer zone.',`${f0(Q[15].units)} cities and dealer zones by Q16; every rupee has a named unit behind it.`],
-    ['05','Products','products','One card per product line on a shared scale, with how many cities and dealer zones each has reached.','Shows how much rests on lines not yet launched.','Splits 02’s total by product line.',`Lines beyond tile adhesive bring ${beyond}% of Q16 revenue.`],
-    ['06','Financials','audit','Revenue, the income statement and the capital it takes, every quarter, with year totals and a CSV download.','Every figure in one table, ready to take away.','Brings 02 and 03 together, quarter by quarter.',`Q16 monthly revenue ₹${fd(operatingModel().S[15].net,1)} Cr and monthly operating profit ₹${fd(operatingModel().S[15].pat,1)} Cr.`]];
+    ['01','Model basis','basis','What is each rupee built from?','Market and product sizes, share growth, the revenue formula, a check against today and a worked example.'],
+    ['02','4Y Revenue Scale-up','revenue','How large does the plan become?','The 16-quarter forecast by product, city and dealer zone, with every quarter’s numbers.'],
+    ['03','Funding & returns','finance','What does growth need, and what does the money return?','Six steps: revenue, margins, growth spending and funding gap, raises and cash, investor returns, and return on capital.'],
+    ['04','Cities & Dealers','cities','Which markets make up the revenue?','Every city and dealer zone, quarter by quarter, with its product split. Check the plan market by market.'],
+    ['05','Products','products','Which product lines drive the growth?','Product lines on one shared scale, with the markets each reaches and the reliance on future launches.'],
+    ['06','Financials','audit','How do the numbers add up?','Quarterly revenue, income statement and capital, with year totals and a CSV download. Every figure in one table.']];
   const rows=[
     ['The heading','Short; it names what the page covers.',`<div class="ph-demo"><span>Page heading</span></div>`],
     ['The key figures','The numbers to take away from the page; the most important one is in orange.',`<div class="b-metrics ph-metrics"><div class="ans-k"><span>Key figure</span><strong>₹0.0 Cr</strong></div><div><span>Key figure</span><strong>0.0%</strong></div></div>`],
@@ -4347,9 +4389,7 @@ function renderGuide(){
     ['Sources','Reasoning and sources, opened only when you want them.',whyD('Where these come from','Reasoning and sources sit here.')]];
   const CI={capex:'factory',pp:'pp',wc:'wc',loss:'loss'},capChips=CAP4.map(([k,l])=>chip(`<span class="cap-ic">${capIcon(CI[k],k==='wc'?'#55544F':CAP4C[k])}</span>`,l)).join('');
   $('main-content').innerHTML=pageHead('00 · How to read','Dashboard guide')+
-  secHead('What this dashboard is')+
-  `<div class="s-panel stage3 about"><p class="about-p"><b>Tejas financial model.</b> Revenue, funding and investor returns from Oct 2026 to Sep 2030.</p>
-   <div class="s-tw"><table class="s-table pages-t pages-t6"><thead><tr><th>Order</th><th>Page</th><th>What you will find there</th><th>Why it is there</th><th>How it connects</th><th>Key takeaway</th></tr></thead><tbody>${pages.map((p,i)=>`<tr><td class="ord"><span>${i+1}</span></td><td><a href="#${p[2]}"><b>${p[0]}</b> ${p[1]}</a></td><td>${p[3]}</td><td>${p[4]}</td><td>${p[5]}</td><td class="tk">${hlAnswer(p[6])}</td></tr>`).join('')}</tbody></table></div></div>`+
+  guideOverview(pages)+
   secHead('Chart guide')+
   `<div class="b-grid"><div class="s-panel c7 lay-compact">
    <div class="lay lay-band lay-sw">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
@@ -4361,6 +4401,7 @@ function renderGuide(){
    <div class="key key-wide"><h4>Capital buckets</h4><p class="rule-l">The deck’s four buckets keep their colours on page 03 and in the financials.</p><div class="chips">${capChips}</div></div>
    </div></div></div>`+
   notesBlock();
+  mountGuideMap();
 }
 /* ---------- back office: capex, receivables and the cost plan ---------- */
 function capitalInputs(fld){
@@ -4986,7 +5027,7 @@ let lastPage=null;
 function stage(kind){const m=$('main-content');m.classList.remove('enter','enter-tab');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;void m.offsetWidth;m.classList.add(kind);
   m.querySelectorAll('.revenue-bar').forEach(b=>{const q=+(b.dataset.barQuarter||0);b.style.animationDelay=(0.18+q*0.035)+'s';});
   clearTimeout(stage.t);stage.t=setTimeout(()=>m.classList.remove('enter','enter-tab'),1600);}
-function renderApp(){hideTip();renderGlobal();(PAGES[A.page]||renderBasis)();addPageNav();fitCharts();glueUnits($('main-content'));if(A.page!==lastPage){stage('enter');lastPage=A.page;}document.title=`Tejas · ${TITLES[A.page]||'Model basis'}`;}
+function renderApp(){disposeGuideMap();hideTip();renderGlobal();(PAGES[A.page]||renderBasis)();addPageNav();fitCharts();glueUnits($('main-content'));if(A.page!==lastPage){stage('enter');lastPage=A.page;}document.title=`Tejas · ${TITLES[A.page]||'Model basis'}`;}
 /* Navigation works without hash events: previews and sandboxed frames can block or swallow them. */
 function go(hash){
   const [page,anchor]=String(hash||'').replace(/^#/,'').split('/');
@@ -6355,6 +6396,70 @@ CX.roce=D=>{
   return {lead:'',body:panel([c1,c2,c3],more,'pnc-c6')};
 };
 })();
+
+/* Layout only: no model inputs or financial calculations live in this module. */
+let guideMapObserver=null,guideMapFrame=0,guideMapEpoch=0;
+function disposeGuideMap(){
+  if(guideMapObserver){guideMapObserver.disconnect();guideMapObserver=null;}
+  if(guideMapFrame){cancelAnimationFrame(guideMapFrame);guideMapFrame=0;}
+  guideMapEpoch++;
+}
+function guideOverview(pages){
+  const node=(id,name,route,extra='',label=id)=>`<a class="guide-map-node${extra}" data-node="${Number(id)}" href="#${route}" aria-label="${id} ${name}"><span>${label}</span><b>${name}</b></a>`;
+  return `<div class="guide-layout">
+  <section class="s-panel stage3 guide-overview" aria-labelledby="guide-overview-title">
+   <header class="guide-card-head"><h2 id="guide-overview-title">What this dashboard is</h2><p>The Tejas plan, from revenue assumptions to funding and investor returns · Oct 2026–Sep 2030.</p></header>
+   <div class="guide-directory"><div class="guide-columns" aria-hidden="true"><span>The page &amp; the question it answers</span><span>What you’ll find</span></div>
+    ${pages.map(p=>`<article class="guide-page"><header class="guide-page-head"><span class="guide-page-number">${p[0]}</span><h3><a href="#${p[2]}">${p[1]}</a></h3><p class="guide-page-question">${p[3]}</p></header><p class="guide-page-content">${p[4]}</p></article>`).join('')}
+   </div>
+  </section>
+  <aside class="s-panel stage3 guide-map-panel" aria-labelledby="guide-map-title">
+   <header class="guide-card-head"><h2 id="guide-map-title">How the model fits together</h2><p>Assumptions build revenue. Revenue drives funding. The financials bring them together.</p></header>
+   <div class="guide-map-canvas" id="guide-connection-map">
+    <svg class="guide-map-edges" role="img" aria-label="Model basis feeds Revenue. Cities and Products break down Revenue. Revenue feeds Funding and Financials. Funding feeds Financials; operating profit returns from Financials to Funding."></svg>
+    ${node('01','Model basis','basis')}${node('02','Revenue','revenue')}${node('03','Funding &amp; returns','finance')}
+    ${node('04','Cities &amp; Dealers','cities',' guide-map-branch','04 · By market')}${node('05','Products','products',' guide-map-branch','05 · By product')}${node('06','Financials','audit')}
+   </div>
+  </aside>
+ </div>`;
+}
+function mountGuideMap(){
+  disposeGuideMap();
+  const canvas=document.getElementById('guide-connection-map');
+  if(!canvas)return;
+  const svg=canvas.querySelector('svg'),epoch=guideMapEpoch,ns='http://www.w3.org/2000/svg';
+  const make=(tag,attrs)=>{const el=document.createElementNS(ns,tag);for(const [key,value]of Object.entries(attrs))el.setAttribute(key,String(value));return el;};
+  function draw(){
+    guideMapFrame=0;
+    if(epoch!==guideMapEpoch||!canvas.isConnected)return;
+    const box=canvas.getBoundingClientRect(),width=box.width,height=box.height;
+    if(!width)return;
+    svg.setAttribute('width',width);svg.setAttribute('height',height);svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.replaceChildren();
+    const defs=make('defs',{}),marker=make('marker',{id:'guide-map-arrow',viewBox:'0 0 6 6',refX:5.5,refY:3,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
+    marker.appendChild(make('path',{d:'M0 0 L6 3 L0 6 Z',class:'guide-map-arrow'}));defs.appendChild(marker);svg.appendChild(defs);
+    const n={};canvas.querySelectorAll('[data-node]').forEach(el=>{const r=el.getBoundingClientRect();n[el.dataset.node]={x:r.x-box.x,y:r.y-box.y,w:r.width,h:r.height,cx:r.x-box.x+r.width/2,cy:r.y-box.y+r.height/2};});
+    const line=d=>svg.appendChild(make('path',{d,class:'guide-map-line','marker-end':'url(#guide-map-arrow)'}));
+    const label=(value,x,y,extra={})=>{const el=make('text',{x,y,...extra});el.textContent=value;svg.appendChild(el);};
+    line(`M${n[1].cx} ${n[1].y+n[1].h} V${n[2].y-2}`);
+    label('Assumptions',n[1].cx+12,(n[1].y+n[1].h+n[2].y)/2+3);
+    line(`M${n[2].cx} ${n[2].y+n[2].h} V${n[3].y-2}`);
+    label('Revenue',n[2].cx+12,(n[2].y+n[2].h+n[3].y)/2+3);
+    const hub=(n[2].x+n[2].w+n[4].x)/2;
+    line(`M${n[2].x+n[2].w} ${n[2].cy} H${hub} V${n[4].cy} H${n[4].x-3}`);
+    line(`M${n[2].x+n[2].w} ${n[2].cy} H${hub} V${n[5].cy} H${n[5].x-3}`);
+    const left=7,ry=(n[2].cy+n[6].cy)/2;
+    line(`M${n[2].x} ${n[2].cy} H${left} V${n[6].cy} H${n[6].x-3}`);
+    label('Revenue',left-4,ry,{transform:`rotate(-90 ${left-4} ${ry})`,'text-anchor':'middle'});
+    const down=n[3].cx-9,up=n[3].cx+9,middle=(n[3].y+n[3].h+n[6].y)/2;
+    line(`M${down} ${n[3].y+n[3].h} V${n[6].y-2}`);
+    line(`M${up} ${n[6].y} V${n[3].y+n[3].h+2}`);
+    label('Funding',down-7,middle+3,{'text-anchor':'end'});label('Operating profit',up+7,middle+3);
+  }
+  const schedule=()=>{if(epoch===guideMapEpoch&&!guideMapFrame)guideMapFrame=requestAnimationFrame(draw);};
+  guideMapObserver=new ResizeObserver(schedule);guideMapObserver.observe(canvas);
+  if(document.fonts)document.fonts.ready.then(schedule);
+  schedule();
+}
 
 
 routeApp();
