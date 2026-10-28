@@ -75,5 +75,3 @@
 .pnb-sep{height:1px;background:var(--rule);margin:8px 0 6px}
 .cx-side-p .whyd-b .cx-lev{margin-top:10px}
 
-/* an open fold scrolls inside the panel box (the box is a fixed height beside the chart; it would otherwise clip the fold) */
-@media(min-width:1101px){.cx-side:has(.pnb-fold[open]) .cx-side-p{overflow-y:auto;overscroll-behavior:contain}}
