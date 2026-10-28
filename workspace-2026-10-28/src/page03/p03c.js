@@ -25,7 +25,7 @@ cxLegends=function(D){
    i(PC.value,`${pcR(D.ret.lead.amt)} in this round, worth at that exit`)+i('#fff','Exit used',`outline:2px solid ${INK};outline-offset:-2px`)+ln(`border-top:1.5px dashed ${PC.fund}`,`${pcR(D.ret.lead.amt)} put in`),
    i(PC.profit,'Return before depreciation')+`<span><i class="dot o" style="border-color:${PC.profit}"></i>After depreciation</span>`+i(PC.loss,'Below zero')+'<span class="lg-n">axis stops at −20%</span>'];
 };
-/* three takeaways per step, every figure computed from the model */
+/* three takeaways per step, every figure computed from the model except step 2's (the founders' three lines) */
 /* the colour of each takeaway: [edge, figure] */
 const pcTc={rev:[PC.rev,PC.rev],profit:[PC.profit,PC.profit],oh:[PC.oh,PC.oh],fund:[PC.fund,PC.fundTxt],capex:[PC.capex,PC.capex],cash:[PC.cash,PC.cash],value:[PC.value,PC.value]};
 const pcTk=[['rev','rev','rev'],['profit','profit','profit'],['capex','fund','capex'],['fund','fund','fund'],['value','value','value'],['profit','profit','profit']];
@@ -202,17 +202,17 @@ fundDrawer=function(){
 };
 renderFinance=function(){
   const D=capData(),cur=A.steps.finance,heads=cxHeads(D),legs=cxLegends(D),tk=pcTakes(D),tb=pcTables(D),st=STEPS.finance,nx=PAGE_ORDER[PAGE_ORDER.indexOf('finance')+1];
-  /* short labels on the Next button so the kicker row stays one line in a narrow panel; the full name is its title */
+  /* the Next button names the next step without a "Next:" prefix, so the kicker row stays one line in a narrow panel; its title says "Next: …" */
   const nav=i=>`<span class="cx-nav">${i>0?`<button type="button" class="cx-pv" data-step="${i-1}" aria-label="Back to ${st[i-1]}" title="Back to ${st[i-1]}">←</button>`:''}${i<st.length-1?`<button type="button" class="cx-nx" data-step="${i+1}" title="Next: ${st[i+1]}">${st[i+1]} →</button>`:`<button type="button" class="cx-nx" data-goto="${nx}" title="Next page: ${PAGE_NAME[nx]}">Next page →</button>`}</span>`;
   const side=CX_KEYS.map((k,i)=>{const p=CX[k](D);return `<section class="step cx-step${i===cur?' on':''}" data-step-panel="${i}"${i===cur?'':' hidden'}><div class="s-panel cx-side-p"><div class="cx-kickrow"><p class="cx-kick" title="${st[i]}">Step ${i+1} of ${st.length}</p>${nav(i)}</div>${p.pre||''}${p.body}</div></section>`;}).join('');
-  /* the chart card: heading, the plot (one slot, the same size on every step), the key; its data table is the card below it */
+  /* the chart card: heading, the plot (one slot, the same size on every step), the key; its three takeaways sit under it, then its data table */
   const chart=`<div class="s-panel cx-chart" data-layer="${cur}"><div class="cx-heads">${heads.map(([t,s],i)=>`<div class="cx-head" data-l="${i}"><h3>${t}</h3>${s?`<p>${s}</p>`:''}</div>`).join('')}</div>
    <div class="cx-plot"><div class="cx-s cx-s-m">${cbox('cx-money',W=>cxMoney(W,D),660)}</div><div class="cx-s cx-s-v">${cbox('cx-val',W=>cxVal(W,D),660)}</div><div class="cx-s cx-s-r">${cbox('cx-ret',W=>cxRet(W,D),660)}</div><div class="cx-s cx-s-o">${cbox('cx-roce',W=>cxRoce(W,D),660)}</div></div>
    <div class="cx-legs">${legs.map((h,i)=>`<div class="cap-legend static cx-leg" data-l="${i}">${h}</div>`).join('')}</div></div>`;
   const dcard=`<div class="s-panel cx-dtcard" data-layer="${cur}"><h3 class="pc-dtt">Data behind the chart</h3><div class="cx-dts">${tb.map((h,i)=>h.replace('class="cx-dt"',`class="cx-dt" data-l="${i}"`)).join('')}</div></div>`;
-  const takes=tk.map((t,i)=>`<section class="pc-takes" data-take="${i}"${i===cur?'':' hidden'} aria-label="Key takeaways: ${st[i]}">${t.map(([f,x,c,ct])=>`<article class="pc-take" style="--c:${c};--ct:${ct}"><b>${f}</b><p>${x}</p></article>`).join('')}</section>`).join('');
+  const takes=tk.map((t,i)=>`<section class="pc-takes" data-take="${i}"${i===cur?'':' hidden'} aria-label="Key takeaways: ${st[i]}">${t.map(([f,x,c,ct])=>`<article class="pc-take${x==null?' pc-say':''}" style="--c:${c};--ct:${ct}"><b>${f}</b>${x==null?'':`<p>${x}</p>`}</article>`).join('')}</section>`).join('');
   $('main-content').innerHTML=editedBanner()+pageHead('03 · Funding & returns','Funding & returns','','',`<a class="s-edit" href="#inputs">Edit inputs</a>`)+capKPI(D)
-   +`<div class="step-host cx-host" data-steps="finance">${financingControls(D)}${stepBar('finance')}<div class="cx-grid">${chart}${dcard}<div class="cx-side">${side}</div></div>${takes}${fundDrawer()}</div>`+notesBlock();
+   +`<div class="step-host cx-host" data-steps="finance">${financingControls(D)}${stepBar('finance')}<div class="cx-grid">${chart}<div class="cx-side">${side}</div></div>${takes}${dcard}${fundDrawer()}</div>`+notesBlock();
 };
 PAGES.finance=renderFinance;
 /* a step change swaps the layer on the chart card and the data card, the panel and the takeaways; the chart itself is not redrawn */
