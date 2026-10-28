@@ -1,0 +1,518 @@
+diff --git a/workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html b/workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html
+index 18b0968..0617d76 100644
+--- a/workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html
++++ b/workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html
+@@ -3,8 +3,8 @@
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+-<meta name="description" content="Tejas revenue chain: the story, the sixteen-quarter forecast by product, city and dealer zone, margins, cash and valuation.">
+-<title>Tejas · Revenue chain dashboard</title>
++<meta name="description" content="Tejas financial model: the story, the sixteen-quarter forecast by product, city and dealer zone, margins, cash and valuation.">
++<title>Tejas financial model</title>
+ <style>
+ /* Primitives → semantic tokens → components. Colour identifies the same product everywhere. */
+ :root{color-scheme:light;--paper:#f7f6f2;--white:#fff;--ink:#17202a;--slate:#52617a;--rule:#d6dde5;--rule-soft:#e6eaf0;--blue:#2854c5;--navy:#163a65;--tile:var(--navy);--wood:var(--blue);--niche:#759ad1;--upvc:#267668;--p5:#a9c7e8;--pipes:#687a91;--steel:#344960;--surface:var(--white);--wash:#edf2fa;--selected:#e4edff;--focus:var(--blue);--text:var(--ink);--secondary:var(--slate);--border:var(--rule);--radius:4px;--data-1:var(--navy);--data-3:var(--upvc);--data-wash:var(--wash);--axis:#9ca9bb}
+@@ -867,7 +867,7 @@ p.product-meta{font-size:12px;color:var(--ink-3)}
+ .burn-t{font-size:12.5px}.burn-t td,.burn-t th{padding:6px 8px}.burn-t tr.b td{font-weight:600;color:var(--ink)}
+ .keys-2 .key-wide .chips{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px 22px}
+ 
+-/* ====================== v15: page 03 · Capital Utilisation ====================== */
++/* ====================== v15: page 03 · Funding & returns ====================== */
+ /* five steps fit the process bar */
+ .step-host[data-steps="finance"] .stepbar .st{font-size:15px}
+ .step-host[data-steps="finance"] .stepbar li.on .st{font-size:16px}
+@@ -1292,6 +1292,9 @@ body[data-page="finance"] .ph-t{font-size:26px}
+ .review-inputs h3{margin:0 0 6px;font-size:16px}
+ .review-inputs p{margin:0;font-family:var(--ft);font-size:14px;line-height:1.5;max-width:95ch}
+ .review-inputs .review-formula{margin-top:9px}
++.cap-kpi .kpi-sub{display:block;margin-top:2px;font-size:12px;line-height:1.35;font-weight:400;color:var(--ink-3)}
++.cap-kpi .kpi-lbl{color:var(--ink-2);font-weight:600}
++.cx-ctl .cx-ctl-note{flex-basis:100%}
+ .review-logic{margin:14px 0 4px;padding:13px 15px;background:#f8f6f2;border:1px solid var(--rule)}
+ .review-logic h4{margin:0 0 4px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+ .review-logic p{margin:0;font-family:var(--ft);font-size:13px;line-height:1.45}
+@@ -1318,6 +1321,7 @@ body[data-page="finance"] .ph-t{font-size:26px}
+ .review-round header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .review-round h4{margin:0 0 2px;font-size:14px;font-weight:600}
+ .review-round header span{font-size:12px;color:var(--ink-3)}
++.review-round header span.review-round-when{display:block;margin-top:2px;font-weight:600;color:var(--accent)}
+ .review-round header strong{font-family:var(--fd);font-weight:500;font-size:28px;color:var(--accent);white-space:nowrap}
+ .review-round header strong small{font-family:var(--f);font-size:12px;margin-left:5px}
+ .review-round-period{margin:10px 0 5px;font-size:11px;color:var(--ink-3)}
+@@ -1369,12 +1373,12 @@ body[data-page="finance"] .ph-t{font-size:26px}
+ </head><body>
+ <a class="skip" href="#main-content">Skip to dashboard</a>
+ <header class="topbar"><div class="shell topbar-inner">
+-  <a class="brand" href="#basis" aria-label="Tejas home"><strong>Tejas</strong><span>Revenue chain<br>dashboard</span></a>
++  <a class="brand" href="#basis" aria-label="Tejas home"><strong>Tejas</strong><span>financial<br>model</span></a>
+   <nav class="nav" aria-label="Dashboard pages">
+     <a href="#guide" data-page="guide">00 How to read</a>
+     <a href="#basis" data-page="basis">01 Model basis</a>
+     <a href="#revenue" data-page="revenue">02 4Y Revenue Scale-up</a>
+-    <a href="#finance" data-page="finance">03 Capital Utilisation</a>
++    <a href="#finance" data-page="finance">03 Funding &amp; returns</a>
+     <a href="#cities" data-page="cities">04 Cities &amp; Dealers</a>
+     <a href="#products" data-page="products">05 Products</a>
+     <a href="#audit" data-page="audit">06 Financials</a>
+@@ -1387,7 +1391,7 @@ body[data-page="finance"] .ph-t{font-size:26px}
+     <span class="scope-label" id="scope-label"></span>
+   </div>
+   <main id="main-content" tabindex="-1" class="page"></main>
+-  <footer class="page-footer"><span>MRR = monthly revenue run-rate · ₹ Cr unless noted · Forecast, not actuals · Q1 = Oct–Dec 2026</span><span>Tejas · Revenue chain dashboard · <a href="#inputs">Back office</a></span></footer>
++  <footer class="page-footer"><span>MRR = monthly revenue run-rate · ₹ Cr unless noted · Forecast, not actuals · Q1 = Oct–Dec 2026</span><span>Tejas financial model · <a href="#inputs">Back office</a></span></footer>
+ </div>
+ <div class="tip" id="tip" role="tooltip"></div>
+ <div class="sr-only" id="announcer" aria-live="polite"></div>
+@@ -2301,7 +2305,7 @@ function renderRevenue(){
+     (!activeProducts().length?emptyProducts():`<section class="panel" aria-label="Revenue growth chart"><div class="panel-title"><div><h2 id="breakdown-title">${A.breakdown==='products'?'Product breakdown':A.breakdown==='units'?'City / dealer breakdown':'Total revenue'}</h2><p>MRR · ₹ Cr / month</p></div><div class="chart-controls"><div class="segmented chart-type" role="group" aria-label="Chart type">${[['area','Area'],['bar','Bar']].map(([type,label])=>`<button type="button" data-chart-type="${type}" aria-pressed="${A.chartType===type}">${label}</button>`).join('')}</div>${toggleControl('toggle-products','Product breakdown',A.breakdown==='products')}${toggleControl('toggle-units','City / Dealer',A.breakdown==='units')}</div></div><div class="panel-body"><div class="toolbar">${channelControl()}<span class="how-inline">${A.chartType==='bar'?'<b>How to read.</b> Each bar is revenue a month at the end of a quarter, split by product line, with the total on top; exact values are in the table below.':'<b>How to read.</b> Each band is one product line’s revenue a month; hover a quarter to read it.'} <b class="acc">Why it matters.</b> This is the forecast every other page explains.</span></div><div class="chart-wrap" id="revenue-chart">${cbox('revenue',w=>chartSVG({series,total:V.T,selected:A.revenueQ,type:A.chartType,forceW:w,forceH:revH()}),720)}</div></div><div class="legend chart-legend">${series.map(row=>`<span><i class="swatch" style="--series:${row.color}"></i>${row.label}</span>`).join('')}</div><div class="chart-readout" id="revenue-readout"></div></section>
+     <div class="table-scroll" style="margin-top:12px"><table class="duration-table revenue-detail-table" aria-label="Quarter durations, total MRR, split values and equivalent monthly growth"><thead><tr><th scope="col">Duration</th>${V.T.map((_,q)=>`<th scope="col" data-period="${q}">${periodHeader(q)}</th>`).join('')}</tr></thead><tbody><tr class="emphasis"><td>Total MRR · ₹ Cr</td>${V.T.map((v,q)=>`<td data-period="${q}">${fmtValue(v,V.T,q)}</td>`).join('')}</tr>${splitRows}<tr><td>Eq. MoM</td>${st.mom.map((v,q)=>`<td data-period="${q}">${fmtMom(v)}</td>`).join('')}</tr></tbody></table></div>`)+
+     
+-    footnote('All chart and split values are ₹ Cr/month. Display amounts are rounded; CSV exports retain full precision. Equivalent MoM is inferred as (current-quarter MRR ÷ previous-quarter MRR)^(1/3) − 1. Annual ARR at Q16 = Q16 MRR × 12. Revenue values are quarter-end monthly run rates. Cash estimates interpolate the intervening months separately.');
++    footnote('<b>Revenue basis</b><br>₹ Cr/month at quarter end.<br><small>ARR = monthly revenue × 12. Cash calculations estimate the intervening months separately.</small>');
+   if(activeProducts().length)updateRevenueInspection(A.revenueQ);
+ }
+ function updateRevenueInspection(q){
+@@ -2314,8 +2318,8 @@ function updateRevenueInspection(q){
+ function renderCities(){
+   $('main-content').innerHTML=pageHead('04 · Cities & Dealers','City and dealer zone revenue','Where does the revenue come from, unit by unit?','Four live units plus 65 openings. Raipur alone grows from ₹0.46 Cr to ₹2.04 Cr a month.')+
+     `<div class="toolbar">${channelControl()}<input type="search" id="unit-search" aria-label="Search planning units" placeholder="Search units, e.g. Medium City 03" value="${esc(A.search)}"><span class="spacer"></span>${toggleControl('toggle-rows','Show product rows',A.showProducts)}${toggleControl('toggle-unopened','Show unopened units ('+UNITS.filter(u=>!u.activation.length).length+')',A.showUnopened)}</div>`+
+-    `<div class="matrix-layout"><div><p class="matrix-caption"><b>How to read this table.</b> Each row is one city or dealer zone; each number is its revenue in ₹ Cr a month at the end of that quarter, and darker cells earn more. Click a name to split it by product line; click any number to see on the right how it is built. Use City / Dealer / Both to filter, and “Show unopened units” to add the cities and zones not yet opened.<br><b class="acc">Why it matters.</b> No revenue in the forecast appears without a named city or dealer zone behind it, so each number can be checked unit by unit.</p><div id="city-table-host"></div><div class="heat-legend">Lower ${[0,.05,.12,.2,.3,.45,.7].map(v=>`<i style="--heat:${v}"></i>`).join('')} Higher MRR</div></div><aside class="inspector" id="unit-inspector" aria-label="Selected unit"></aside></div><div id="city-baseline"></div>`+
+-    footnote('These are numbered planning allocations, not named-city forecasts. Rounded row values can sum differently from rounded totals; portfolio totals always read the existing forecast directly. A dash means zero.', 'units');
++    `<div class="matrix-layout"><div><p class="matrix-caption"><b>Revenue by planning unit</b><br>City and dealer-zone sales contribute to product revenue.<br><small>Future locations are planning allocations; only the four live locations are named.</small></p><div id="city-table-host"></div><div class="heat-legend">Lower ${[0,.05,.12,.2,.3,.45,.7].map(v=>`<i style="--heat:${v}"></i>`).join('')} Higher MRR</div></div><aside class="inspector" id="unit-inspector" aria-label="Selected unit"></aside></div><div id="city-baseline"></div>`+
++    footnote('<b>Future locations</b><br>Numbered planning units for the expansion forecast.<br><small>Figures are rounded; a dash means zero.</small>', 'units');
+   renderCityTable();
+ }
+ function visibleUnits(){return UNITS.filter(u=>(A.channel==='all'||u.channel===A.channel)&&(A.showUnopened||u.activation.length)&&(!A.search||u.label.toLowerCase().includes(A.search.toLowerCase().trim())));}
+@@ -2339,7 +2343,7 @@ function renderCityTable(){
+     if(group.length>shown.length)rows+=`<tr class="more-row"><td colspan="17"><button type="button" class="text-button" data-group="${type.id}">${chevron(false)} Show ${group.length-shown.length} more ${type.plural.toLowerCase()}</button></td></tr>`;
+     else if(showAll&&!A.search&&group.length>limit)rows+=`<tr class="more-row"><td colspan="17"><button type="button" class="text-button" data-group="${type.id}">Show fewer ${type.plural.toLowerCase()}</button></td></tr>`;
+   }
+-  host.innerHTML=!activeProducts().length?emptyProducts():!units.length?`<div class="panel empty"><strong>No units match these filters</strong><p>Try a different name or include unopened planning units.</p><button type="button" id="clear-unit-search">Clear search</button></div>`:`<div class="table-scroll matrix-wrap" tabindex="0" role="region" aria-label="Individual planning unit MRR, horizontally scrollable"><table class="matrix"><thead><tr><th scope="col">Unit (City / Dealer)</th>${Array.from({length:16},(_,q)=>`<th scope="col">Q${q+1}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
++  host.innerHTML=!activeProducts().length?emptyProducts():!units.length?`<div class="panel empty"><strong>No matching units</strong><p>Clear the search or show unopened units.</p><button type="button" id="clear-unit-search">Clear search</button></div>`:`<div class="table-scroll matrix-wrap" tabindex="0" role="region" aria-label="Individual planning unit MRR, horizontally scrollable"><table class="matrix"><thead><tr><th scope="col">Unit (City / Dealer)</th>${Array.from({length:16},(_,q)=>`<th scope="col">Q${q+1}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+   const next=host.querySelector('.table-scroll');if(next){next.scrollLeft=scroll.x;next.scrollTop=scroll.y;}
+   $('unit-inspector').innerHTML=unitInspector();
+   const city=currentView('city').T[15],dealer=currentView('dist').T[15],total=currentView('all').T[15];
+@@ -2606,7 +2610,7 @@ function whyMultiple(F){
+ const NOTES=['Deck slide 33: monthly tile-adhesive markets of Raipur ₹50 L, Nagpur ₹40 L, Vidarbha ₹35 L and CG ₹15 L; Nagpur ₹20.4 L by month 4, Vidarbha ₹37.9 L by month 7.','Pidilite commentary, Aug 2026: tile-adhesive market ₹8,041 Cr; adhesive used on 20–25% of tiling jobs.','Deck slide 7: 16 SKUs cover 80% of the range; seven more within 12 months.','Deck slide 24: specialty adhesive market ₹4,000 Cr at 60–80% gross margin.','Deck slide 4: tile-adhesive ₹8,041 Cr and wood-adhesive ₹8,572 Cr markets; the wood-adhesive leader at 55% gross margin and about 25% PBT.','Deck slide 10: six wood-adhesive SKUs on the 12-month roadmap; 16 formulations and 4 patents in 9 months for under ₹50 L.','Deck slide 2: windows and façades ₹10,800 Cr to ₹14,700 Cr by 2030; waterproofing ₹7,200 Cr to ₹12,500 Cr by 2030; pipes and fittings ₹39,200 Cr.','Mordor Intelligence: India uPVC doors and windows, about USD 1.6B in 2026.','Deck slide 9: crystalline waterproofing in the lab queue. <b>Helix</b> is Tejas’s in-house formulation lab.','Deck slide 14: a city is mapped in under 2 months.','Deck slide 19: 84% repeat revenue; 46.5% gross margin; 80% made in-house; order value up 54% from February to August.','Deck slide 18: dark-store rent ₹50 k and staff ₹20 k a month; store fixed cost falls from 1.0% to 0.5% of throughput in a year.','<b>BDO bhai</b> is Tejas’s contractor-scouting tool, <b>Chiraag</b> the relationship-manager CRM and <b>Adhikar</b> the contractor loyalty programme.','Deck slide 13: direct orders are paid in advance, before dispatch.','MIS Monthly (Consolidated): figures are printed GST-inclusive, so net revenue = printed ÷ 1.20.','Operating profit here is CM2 less fixed cost (salaries, office, software, dark-store rent). Depreciation, interest and tax are not modelled separately.','Deck slide 15: a mature RM brings ₹8–20 L a month; RM cost at 10% of revenue heading to 6%.'];
+ 
+ /* ====================== pages ====================== */
+-function notesBlock(){return `<details class="b-notes"><summary>Sources and notes (${NOTES.length})</summary><ol>${NOTES.map((n,i)=>`<li id="fn${i+1}">${n}</li>`).join('')}</ol></details>`;}
++function notesBlock(){return `<details class="b-notes"><summary>Sources &amp; assumptions</summary><ol>${NOTES.map((n,i)=>`<li id="fn${i+1}">${n}</li>`).join('')}</ol></details>`;}
+ function howToStrip(){
+   return `<div class="b-howto" id="how"><div><h3>How to read this dashboard</h3><ol><li>Every page opens with its <b>question</b> and its <span class="ans">answer</span>.</li><li>Ledgers read top to bottom and end in a shaded <b>total row</b>.</li><li>This page explains the model. Pages 02–04 explore revenue live; 05 shows margins, cash and valuation; 06 traces any number.</li></ol></div>
+   <div><h3>What colour means</h3><div class="s-key"><div class="s">${P.map(p=>`<i style="background:${COLORS[p]}"></i>`).join('')}</div><div><b>Hue</b> = product line, same on every page</div>
+@@ -2816,7 +2820,7 @@ const INPUT_SCHEMA=[
+     ['margins.elasticity','Fixed-cost elasticity charged in plan','Fixed cost grows as revenue^this'],['margins.elasticityMeasured','Fixed-cost elasticity measured','Shown for reference'],
+     ['margins.rmJul','RM cost, July','% of net revenue'],['margins.rmQ16','RM cost, Q16','% of net revenue'],['margins.lmJul','Last-mile, July','% of net revenue'],['margins.lmQ16','Last-mile, Q16','% of net revenue']],
+    table:[['margins.cogs','COGS, % of net'],['margins.variable','Variable cost, % of net']]},
+-  {title:'Valuation',intro:'The ask, the multiple and the ARR milestone.',fields:[
++  {title:'First-round assumptions',intro:'Raise amount, entry valuation multiple and revenue milestone.',fields:[
+     ['valuation.todayMRR','Revenue today','₹ Cr a month'],['valuation.multiple','Multiple','× ARR'],['valuation.ask','The ask','₹ Cr'],['valuation.milestoneMRR','ARR milestone','₹ Cr a month (× 12 = ARR)']]}];
+ const getPath=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
+ function setPath(o,p,v){const ks=p.split('.');let a=o;ks.slice(0,-1).forEach(k=>a=a[k]);a[ks.at(-1)]=v;}
+@@ -2827,9 +2831,9 @@ function inputSummary(){
+ function renderInputs(){
+   const fld=([path,label,unit])=>{const v=getPath(INP,path),d=getPath(INPUT_DEFAULT,path);return `<label class="s-in${v!==d?' changed':''}"><span class="l">${label}<small>${unit||''}</small></span><input type="number" step="any" data-input="${path}" value="${v}"><span class="d">plan ${d}</span></label>`;};
+   const tbl=rows=>`<div class="s-tw"><table class="s-table s-intable"><thead><tr><th></th>${MCOLS.map(c=>`<th class="r">${c[1]}</th>`).join('')}</tr></thead><tbody>${rows.map(([path,label])=>`<tr><td>${label}</td>${MCOLS.map(c=>{const p=path+'.'+c[0],v=getPath(INP,p),d=getPath(INPUT_DEFAULT,p);return `<td class="r"><input type="number" step="any" data-input="${p}" value="${v}" class="${v!==d?'changed':''}" title="plan ${d}"></td>`;}).join('')}</tr>`).join('')}</tbody></table></div>`;
+-  $('main-content').innerHTML=`<div class="story s-page">${pageHead('Back office','Inputs and model trace','What drives the cost, margin and valuation figures, and how is each unit built?','These inputs. Change one and page 03 recomputes; revenue stays fixed.')}
++  $('main-content').innerHTML=`<div class="story s-page">${pageHead('Back office','Assumptions & calculations','What drives the cost, margin and valuation figures, and how is each unit built?','These inputs. Change one and page 03 recomputes; revenue stays fixed.')}
+   <div class="s-panel s-inbar"><div id="input-summary">${inputSummary()}</div><div class="s-inactions"><button type="button" data-action="download-dashboard" class="primary">Download dashboard with these inputs</button><button type="button" data-action="export-inputs">Export inputs (JSON)</button><label class="s-file">Import inputs<input type="file" accept="application/json" data-action="import-inputs"></label><button type="button" data-action="reset-inputs">Reset to plan values</button></div>
+-  <p class="note">Edits are kept in this browser only. To send them, use <b>Download dashboard with these inputs</b>: it saves a copy of this file with your values as the defaults. Changed fields are marked in orange.</p></div>
++  <p class="note"><b>Scenario storage</b><br>Changes are saved in this browser. Download a dashboard copy to share the assumptions.</p></div>
+   ${INPUT_SCHEMA.map(g=>`<div class="s-panel"><h3>${g.title}</h3><p class="meta">${g.intro}</p>${g.table?tbl(g.table):''}<div class="s-ingrid">${g.fields.map(fld).join('')}</div></div>`).join('')}${capitalInputs(fld)}</div>`+traceSection();
+ }
+ function onInput(el){
+@@ -3532,7 +3536,7 @@ function renderAudit(){
+   $('main-content').innerHTML=pageHead('06 · Financials','The financials, quarter by quarter','What do the numbers add up to, quarter by quarter?',`Year 4 revenue is ₹${f0(rev)} Cr and Operating profit ₹${f0(pat)} Cr; the ₹${round40(S.total)} Cr is spent in Q1–Q6.`,`<a class="s-edit" href="#inputs/trace">Trace any unit</a>`)+finSheet()+notesBlock();
+ }
+ function traceSection(){
+-  return `<div class="b-section" id="trace"><h2>Trace any unit</h2><span class="meta">pick a city or dealer zone and a quarter</span><span class="rule"></span></div>${howRead('Follow steps 1 to 7. Pick any city or dealer zone and quarter in step 3; the other panels show how its revenue is built and how it adds up to the total.','Any number on page 02 can be rebuilt by hand from these steps; nothing is scaled to fit.')}${traceHTML()}`;
++  return `<div class="b-section" id="trace"><h2>Unit revenue calculation</h2><span class="meta">Revenue inputs for the selected planning unit and quarter.</span><span class="rule"></span></div><div class="how-read"><p>Any number on page 02 can be rebuilt by hand from these steps; nothing is scaled to fit.</p></div>${traceHTML()}`;
+ }
+ /* ---------- how to read ---------- */
+ function renderGuide(){
+@@ -3617,9 +3621,9 @@ function qFin(){return {...incomeFin(),...capFin()};}
+ /* ---------- page 01 ---------- */
+ function logicFlow(){
+   const mk=MODEL.market.medCity,sz=MODEL.products.tile.size,sh=MODEL.ramp.med[5],per=mk*sz*sh,n=4+UNIT_TYPES.reduce((s,t)=>s+sum(MODEL.openings[t.id]),0);
+-  const box=(k,v,what,why,res)=>`<div class="eq-f${res?' res':''}"><span class="k">${k}</span><p class="w"><b>What it is.</b> ${what}</p><p class="w"><b class="acc">${res?'What it means.':'Why it is here.'}</b> ${why}</p><span class="v">${v}</span></div>`;
++  const box=(k,v,what,why,res)=>`<div class="eq-f${res?' res':''}"><span class="k">${k}</span><p class="w">${Array.isArray(what)?`<b>${what[0]}</b><br>${what[1]}`:`<b>What it is.</b> ${what}`}</p><p class="w">${Array.isArray(why)?`<b class="acc">${why[0]}</b><br>${why[1]}`:`<b class="acc">${res?'What it means.':'Why it is here.'}</b> ${why}`}</p><span class="v">${v}</span></div>`;
+   const f=[
+-    box('Units open','1 city',`Cities and dealer zones Tejas sells in: 4 today, ${Math.round(n)} by Q16.`,'Revenue is earned unit by unit.'),
++    box('Units open','1 city',['Cities and dealer zones',`4 today → ${Math.round(n)} by Q16.`],['Location revenue','City and dealer-zone sales add up to the revenue forecast.']),
+     box('Market size',`₹${fd(mk,2)} Cr`,'Monthly tile-adhesive market of an average medium city.','The measured base every unit is sized from.'),
+     box('Product size',`${fd(sz,2)}×`,'A line’s sales against tile adhesive, the base at 1.00×.','One city’s market sizes all five lines; uPVC is 1.72×.'),
+     box('Share at the line’s age',`${Math.round(sh*100)}%`,'Tejas’s share: 8% in a line’s first quarter in a city, 30% by its sixth.','Contractors try, repeat, then switch.'),
+@@ -3674,7 +3678,7 @@ function renderBasis(){
+   const s1=logicFlow()+`<div class="b-grid"><div class="s-panel c5">${agingPanel()}</div>
+    <div class="s-panel c7"><h3>Share grows with each quarter a line sells in a city</h3>
+    ${howRead('The x-axis is the number of quarters a product has sold in a unit; the y-axis is Tejas’s market share. Black = medium units; grey = large units.','Use the product’s selling age, not the company’s calendar quarter, to read its share.')}${rampChart2()}</div></div>`;
+-  const s2=`<div class="review-inputs"><h3>How these two inputs work together</h3><p>Market size sets the local base. Product size scales it for each line.</p><div class="review-formula">Monthly revenue = units open × market size per unit × product-size multiplier × Tejas’s share</div></div><div class="b-grid two-up"><div class="s-panel c6"><div class="top"><h3>Market size per unit</h3><p class="meta">Monthly tile-adhesive market at 100% share</p>
++  const s2=`<div class="review-inputs"><h3>Revenue drivers</h3><p>Location count × market size × product size × market share.</p><div class="review-formula">Monthly revenue = units open × market size per unit × product-size multiplier × Tejas’s share</div></div><div class="b-grid two-up"><div class="s-panel c6"><div class="top"><h3>Market size per unit</h3><p class="meta">Monthly tile-adhesive market at 100% share</p>
+      <div class="how-read"><p><b>How to read.</b> Square area shows the monthly tile-adhesive market of one unit. Outlined squares are live today; the grid below shows new openings.</p></div><div class="review-logic"><h4>Why use averages?</h4><p>Each location is different. One planning average per class keeps the forecast comparable; large markets have their own class.</p><div class="avg-range" aria-label="Illustration: individual markets may be smaller or larger than their class average"><span>Smaller</span><span class="avg-rail" aria-hidden="true"></span><b>Class average</b><span class="avg-rail" aria-hidden="true"></span><span>Larger</span></div></div>
+      ${marketChart()}</div><div class="in-part"><h4>Cities and dealer zones opened each quarter</h4>${schedGrid2()}</div></div>
+    <div class="s-panel c6"><div class="top"><h3>Product size per line</h3><p class="meta">Each line sized against tile adhesive</p>
+@@ -3807,7 +3811,7 @@ function finSheet(){
+   const FR=raisePlan(),FG=FR.G,pos=v=>Math.abs(v)<0.005?'–':money(v),sgn=v=>Math.abs(v)<0.005?'–':(v<0?'−':'')+money(Math.abs(v)),eqIn=(a,b)=>sum(FR.rounds.filter(x=>x.q>=a&&x.q<=b).map(x=>x.amt));
+   body+=`<tr class="sec"><td class="lbl" colspan="${NC}"><b>Funding</b><span>Gap = capital to date, burn left out, less Operating profit to date · rounds placed and sized by the raise rule on page 03${FR.D.on?'':' · no debt'}</span></td></tr>`;
+   body+=row('','Gap to date',Q.map(r=>[sgn(FG.gap[r.q])]),yrs.map(y=>sgn(FG.gap[y*4+3])));
+-  body+=row('','Equity raised',Q.map(r=>[pos(eqIn(r.q,r.q))]),yrs.map(y=>pos(eqIn(y*4,y*4+3))));
++  body+=row('','Planned equity',Q.map(r=>[pos(eqIn(r.q,r.q))]),yrs.map(y=>pos(eqIn(y*4,y*4+3))));
+   if(FR.D.on)body+=row('','Debt outstanding',Q.map(r=>[pos(FR.D.bal[r.q])]),yrs.map(y=>pos(FR.D.bal[y*4+3])));
+   body+=row('b','Cash at end of quarter',Q.map(r=>[sgn(FR.cash[r.q])]),yrs.map(y=>sgn(FR.cash[y*4+3])));
+   return `<div class="s-panel stage3"><div class="sheet-h"><div><h3>Tejas financials, quarter by quarter</h3><p class="meta">₹ Cr unless marked · quarters labelled by their last month · revenue in a quarter = 3 × its exit month · Operating profit = CM2 − fixed cost, before tax and depreciation</p></div><button type="button" data-action="download-sheet">Download CSV</button></div>
+@@ -3825,7 +3829,7 @@ function sheetCSV(){
+   const FR=raisePlan(),FG=FR.G,eqIn=(a,b)=>sum(FR.rounds.filter(x=>x.q>=a&&x.q<=b).map(x=>x.amt));
+   lines.push(esc('Funding'));
+   lines.push([esc('Gap to date'),...Q.map(r=>n(FG.gap[r.q])),...yrs.map(y=>n(FG.gap[y*4+3]))].join(','));
+-  lines.push([esc('Equity raised'),...Q.map(r=>n(eqIn(r.q,r.q))),...yrs.map(y=>n(eqIn(y*4,y*4+3)))].join(','));
++  lines.push([esc('Planned equity'),...Q.map(r=>n(eqIn(r.q,r.q))),...yrs.map(y=>n(eqIn(y*4,y*4+3)))].join(','));
+   if(FR.D.on)lines.push([esc('Debt outstanding'),...Q.map(r=>n(FR.D.bal[r.q])),...yrs.map(y=>n(FR.D.bal[y*4+3]))].join(','));
+   lines.push([esc('Cash at end of quarter'),...Q.map(r=>n(FR.cash[r.q])),...yrs.map(y=>n(FR.cash[y*4+3]))].join(','));
+   return lines.join('\n');
+@@ -3836,7 +3840,7 @@ function renderAudit(){
+ }
+ 
+ /* ---------- crisp page headings ---------- */
+-const PAGE_TITLE={guide:'Dashboard guide',basis:'Revenue model',revenue:'Revenue forecast',finance:'Cost of revenue, margins and valuation',cities:'Revenue by city and dealer zone',products:'Revenue by product line',audit:'Financials',inputs:'Back office · inputs and model trace'};
++const PAGE_TITLE={guide:'Dashboard guide',basis:'Revenue model',revenue:'Revenue forecast',finance:'Cost of revenue, margins and valuation',cities:'Revenue by city and dealer zone',products:'Revenue by product line',audit:'Financials',inputs:'Assumptions & calculations'};
+ function pageHead(kicker,title,q,a,right=''){return `<header class="ph"><div class="ph-main"><h1 class="ph-t">${PAGE_TITLE[A.page]||title}</h1></div>${right}</header>`;}
+ /* ---------- arrows and a next-page button on every page ---------- */
+ function pageNav(page){
+@@ -3865,7 +3869,7 @@ function renderGuide(){
+   const pages=[
+     ['01','Model basis','basis','The market and product sizes; the formula and how a line’s share grows; a check against today and a worked example.','Shows the forecast is built bottom-up from measured units, not set top-down.','Its formula produces the revenue on 02.',`Every rupee traces to units × market × size × share, starting from ₹${fd(INP.valuation.todayMRR,1)} Cr a month today.`],
+     ['02','4Y Revenue Scale-up','revenue','The 16-quarter revenue chart by product line or by city and dealer zone, with every quarter’s numbers.','The forecast itself: the number every other page explains.','Adds up 04’s units and 05’s lines; 03 and 06 build on it.',`₹${fd(INP.valuation.todayMRR,1)} Cr a month today, ₹${fd(T[15],1)} Cr by Q16: exit ARR ₹${f0(T[15]*12)} Cr.`],
+-    ['03','Capital Utilisation','finance','One chart built up in seven steps: revenue, margins, growth spending, how far short of cash the business gets, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.equity)} Cr raised in ${FP.rounds.length} rounds; the first ₹${f0(INP.valuation.ask)} Cr returns ${fd(FX.mult,1)}× at Q16.`],
++    ['03','Funding & returns','finance','One chart built up in seven steps: revenue, margins, growth spending, how far short of cash the business gets, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.equity)} Cr raised in ${FP.rounds.length} rounds; the first ₹${f0(INP.valuation.ask)} Cr returns ${fd(FX.mult,1)}× at Q16.`],
+     ['04','Cities & Dealers','cities','Every city and dealer zone, quarter by quarter, split by product line on a click.','Lets any number be checked city by city.','Splits 02’s total by city and dealer zone.',`${f0(Q[15].units)} cities and dealer zones by Q16; every rupee has a named unit behind it.`],
+     ['05','Products','products','One card per product line on a shared scale, with how many cities and dealer zones each has reached.','Shows how much rests on lines not yet launched.','Splits 02’s total by product line.',`Lines beyond tile adhesive bring ${beyond}% of Q16 revenue.`],
+     ['06','Financials','audit','Revenue, the income statement and the capital it takes, every quarter, with year totals and a CSV download.','Every figure in one table, ready to take away.','Brings 02 and 03 together, quarter by quarter.',`Q16 monthly revenue ₹${fd(operatingModel().S[15].net,1)} Cr and monthly operating profit ₹${fd(operatingModel().S[15].pat,1)} Cr.`]];
+@@ -3878,9 +3882,9 @@ function renderGuide(){
+   const CI={capex:'factory',pp:'pp',wc:'wc',loss:'loss'},capChips=CAP4.map(([k,l])=>chip(`<span class="cap-ic">${capIcon(CI[k],k==='wc'?'#55544F':CAP4C[k])}</span>`,l)).join('');
+   $('main-content').innerHTML=pageHead('00 · How to read','Dashboard guide')+
+   secHead('What this dashboard is')+
+-  `<div class="s-panel stage3 about"><p class="about-p">This dashboard is a companion to the Tejas investor deck. It shows the 16-quarter revenue forecast, from Oct 2026 to Sep 2030; how every rupee of it is built; the capital it takes; how much of each rupee Tejas keeps; and what the business is worth.</p>
++  `<div class="s-panel stage3 about"><p class="about-p"><b>Tejas financial model</b><br>Revenue, funding and investor returns from Oct 2026 to Sep 2030.</p>
+    <div class="s-tw"><table class="s-table pages-t pages-t6"><thead><tr><th>Order</th><th>Page</th><th>What you will find there</th><th>Why it is there</th><th>How it connects</th><th>Key takeaway</th></tr></thead><tbody>${pages.map((p,i)=>`<tr><td class="ord"><span>${i+1}</span></td><td><a href="#${p[2]}"><b>${p[0]}</b> ${p[1]}</a></td><td>${p[3]}</td><td>${p[4]}</td><td>${p[5]}</td><td class="tk">${hlAnswer(p[6])}</td></tr>`).join('')}</tbody></table></div></div>`+
+-  secHead('Elements present in the dashboard')+
++  secHead('Chart guide')+
+   `<div class="b-grid"><div class="s-panel c7 lay-compact">
+    <div class="lay lay-band lay-sw">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
+    <div class="s-panel c5"><h3>Meaning of colours and icons</h3><div class="keys keys-2">
+@@ -3898,7 +3902,8 @@ function capitalInputs(fld){
+   const cell=(path,v,d)=>`<td class="r"><input type="number" step="any" data-input="${path}" value="${v}" class="${v!==d?'changed':''}" title="plan ${d}"></td>`;
+   const bucketName=k=>({factory:'Capex',misc:'Capex',pp:'Intangibles'})[k]||k;
+   const DRV={tileP5:'Its lines’ sales (tile adhesive + waterproofing)',wood:'First phase the quarter before launch, then its sales',upvc:'First phase the quarter before launch, then its sales',centres:'Cities and dealer zones opened',labs:'The plants',systems:'Revenue',misc:'Revenue'};
+-  const capex=`<div class="s-panel"><h3>Cost of revenue · capex</h3><p class="meta">End state at Q16, ₹ Cr. Each item is built quarter by quarter in step with what it is built with.</p>
++  const capex=`<div class="s-panel"><h3>Growth investment</h3><p class="meta">Capex and other investment required for the expansion plan.</p>
++  <p class="meta"><b>Investment schedule.</b> Spending follows product sales and rollout. Wood and uPVC include spending before launch.</p>
+   <div class="s-tw"><table class="s-table s-intable"><thead><tr><th>Item</th><th>Bucket</th><th>Built with</th><th class="r">₹ Cr at Q16</th></tr></thead><tbody>
+   ${CAPEX_ITEMS.map(([k,l,bk])=>`<tr><td>${l}</td><td>${bucketName(bk)}</td><td>${DRV[k]}</td>${cell('capital.capex.'+k,C.capex[k],D.capex[k])}</tr>`).join('')}
+   </tbody></table></div><div class="s-ingrid">${fld(['capital.firstPhase','First phase before launch','% of the wood and uPVC plants'])}${fld(['capital.centresN','Experience centres','number at Q16'])}${fld(['capital.wcDays','Receivable days','working capital = days ÷ 30 × revenue a month added'])}</div></div>`;
+@@ -4051,13 +4056,13 @@ function planGrid(X){
+   return out;
+ }
+ 
+-/* ====================== v15: page 03 · Capital Utilisation — five steps, nine beats, one shared quarter axis ====================== */
++/* ====================== v15: page 03 · Funding & returns — five steps, nine beats, one shared quarter axis ====================== */
+ const CAP4=[['capex','Capex'],['pp','Intangibles'],['wc','Working capital'],['loss','Burn']];
+ const CAP4C={capex:CASHC.capex,pp:CASHC.intang,wc:CASHC.wc,loss:CASHC.burn};
+ const CAP_BEATS=[[['rev','Revenue']],[['mar','Margins']],[['spend','Growth spending']],[['need','Funding need']],[['raise','Raises and cash']],[['ret','Investor return']],[['roce','Return on capital']]];
+ STEPS.finance=['Revenue','Margins','Growth spending','Funding need','Raises and cash','Investor return','Return on capital'];
+-PAGE_NAME.finance='03 Capital Utilisation';PAGE_NAME.revenue='02 4Y Revenue Scale-up';
+-PAGE_TITLE.finance='Capital Utilisation';PAGE_TITLE.revenue='4Y Revenue Scale-up';
++PAGE_NAME.finance='03 Funding & returns';PAGE_NAME.revenue='02 4Y Revenue Scale-up';
++PAGE_TITLE.finance='Funding & returns';PAGE_TITLE.revenue='4Y Revenue Scale-up';
+ A.cap=A.cap||{selQ:10,beat:[0,0,0,0,0,0,0],view:'cum',iso:null,earnQ:7,gapQ:null,round:1,exitQ:15,exitM:'arr',exitMult:10,ach:1,stress:{},drawer:false};
+ NOTES.push(
+  'Assumption · raise policy: keep at least ₹10 Cr of cash; close a round one quarter before cash would fall below that; size it to cover the highest gap over the next eight quarters plus the minimum, rounded up to ₹5 Cr. Placeholders for the founders to set.',
+@@ -4195,6 +4200,7 @@ function cxSeries(D){
+ }
+ 
+ /* ---------- the frame every chart on this page shares: same width, same quarter positions ---------- */
++const roundWhen=(R,i)=>{const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],at=q=>QD[q].ya*12+M.indexOf(QD[q].a),d=QD[R.rounds[i].q],date=`${d.a} ${d.ya}`;if(!i)return {date,now:true,text:`Now · ${date}`};const m=at(R.rounds[i].q)-at(R.rounds[0].q),rel=`${m} month${m===1?'':'s'} from now`;return {date,months:m,rel,text:`${date} · ${rel}`};}; /* a round is dated by the first month of its quarter; Round 1 is 'now' */
+ function cxFrame(W,h){const ml=60,mr=86,pw=W-ml-mr,slot=pw/16,top=24,rowT=top+h+8,axT=rowT+30;return {ml,mr,pw,slot,x:q=>ml+(q+.5)*slot,top,h,W,rowT,axT,H:axT+34};}
+ /* the value row under the plot: one number per quarter, the chosen quarter picked out */
+ function cxRow(c,vals,label,sel,col){let s=`<line x1="${c.ml}" x2="${c.ml+c.pw}" y1="${c.rowT+0.5}" y2="${c.rowT+0.5}" stroke="#E6E3DA"/>`+label.map((l,i)=>T(c.ml-8,c.rowT+11+i*12,l,'smut','end','font-size:11px')).join('');vals.forEach((v,q)=>{const on=q===sel;s+=T(c.x(q),c.rowT+18,v.t,'smono','middle',`font-size:${on?12.5:11.5}px;font-weight:${on?700:500};fill:${on?ACCENT_TXT:(v.c||col||'#3D3C38')}`);});return s;}
+@@ -4232,7 +4238,7 @@ function cxMoney(W,D){
+   const raised=q=>sum(R.rounds.filter(r=>r.q===q).map(r=>r.amt));let cp=start,arrows='';
+   for(let q=0;q<N;q++){const x=c.x(q),a=raised(q),v=S.cash[q];
+     if(a>0){cp+=`L${x.toFixed(1)} ${y(v-a).toFixed(1)}L${x.toFixed(1)} ${y(v).toFixed(1)}`;const i=R.rounds.findIndex(r=>r.q===q);
+-      arrows+=`<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y(v-a).toFixed(1)}" y2="${(y(v)+5).toFixed(1)}" stroke="${ACCENT}" stroke-width="4" marker-end="url(#cxarr${id})"/>`+T(x,y(v)-26,`Round ${i+1}`,'slab-b','middle',`font-size:12.5px;fill:${ACCENT_TXT};${halo}`)+T(x,y(v)-11,`+₹${f0(a)} Cr`,'slab-b','middle',`font-size:12.5px;fill:${ACCENT_TXT};${halo}`);}
++      arrows+=`<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y(v-a).toFixed(1)}" y2="${(y(v)+5).toFixed(1)}" stroke="${ACCENT}" stroke-width="4" marker-end="url(#cxarr${id})"/>`+T(x,y(v)-26,`Round ${i+1}`,'slab-b','middle',`font-size:12.5px;fill:${ACCENT_TXT};${halo}`)+T(x,y(v)-41,roundWhen(R,i).text,'slab-b',q?'middle':'start',`font-size:12.5px;fill:${ACCENT_TXT};${halo}`)+T(x,y(v)-11,`+₹${f0(a)} Cr`,'slab-b','middle',`font-size:12.5px;fill:${ACCENT_TXT};${halo}`);}
+     else cp+=`L${x.toFixed(1)} ${y(v).toFixed(1)}`;}
+   const yb=y(P.buffer);
+   let cash=`<line x1="${c.ml}" x2="${c.ml+c.pw+4}" y1="${yb.toFixed(1)}" y2="${yb.toFixed(1)}" stroke="${ACCENT}" stroke-width="1.5" stroke-dasharray="6 4"/>`+T(c.ml+c.pw+8,yb-2,`₹${f0(P.buffer)} Cr`,'slab-b','',`font-size:12px;fill:${ACCENT_TXT}`)+T(c.ml+c.pw+8,yb+12,'floor','slab-b','',`font-size:12px;fill:${ACCENT_TXT}`)
+@@ -4269,7 +4275,7 @@ function cxRoce(W,D){
+     s+=`<circle cx="${x.toFixed(1)}" cy="${y(cl(r.post)).toFixed(1)}" r="3.5" fill="#fff" stroke="${CX_PAT}" stroke-width="1.5"/>`;});
+   s+=cxRow(c,ro.map(r=>({t:pctR(r.pre*100),c:r.pre<0?ACCENT_TXT:''})),['Return','pre-tax'],sel);
+   s+=cxAxisX(c,sel)+cxHits(c,'selq');
+-  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Annualised operating return on gross modelled capital by quarter">${s}</svg>`;
++  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Operating return on capital by quarter">${s}</svg>`;
+ }
+ 
+ /* chart titles, the one line on how to read each, and the key — one per step */
+@@ -4280,8 +4286,8 @@ function cxHeads(D){
+    ['Where each quarter’s revenue goes','The same bars, split into costs. What is left at the bottom, in black, is Operating profit; the row gives the Operating profit margin.'],
+    ['Operating profit against growth spending','Costs fade. Above the line, Operating profit; below it, what growth spends that quarter. The row is Operating profit less spending: orange when the quarter is short of cash.'],
+    ['Running total: how far short of cash the business gets','The line adds up step 3’s row, quarter after quarter. The shaded area under zero is what outside money has to fill.'],
+-   ['Cash in the bank, with the raises',`Each arrow is a round coming in. The grey dashed line is step 4’s running total, with no raises; cash has to stay above the ₹${fl} Cr floor.`],
+-   [`What the first ₹${ask} Cr is worth, by exit quarter`,`A new scale: each bar is the first investor’s stake if Tejas is sold or listed in that quarter; the row is the multiple of the ₹${ask} Cr. Click a bar to pick the exit.`],
++   ['Projected cash balance',`Each arrow is a round coming in. The grey dashed line is step 4’s running total, with no raises; cash has to stay above the ₹${fl} Cr floor.`],
++   ['Potential investor return',`A new scale: each bar is the first investor’s stake if Tejas is sold or listed in that quarter; the row is the multiple of the ₹${ask} Cr. Click a bar to pick the exit.`],
+    ['Return on capital employed, quarter by quarter','A new scale: a year of Operating profit at that quarter’s rate, as a share of all the capital tied up so far. The dots take depreciation off first.']];
+ }
+ function cxLegends(D){
+@@ -4369,12 +4375,12 @@ CX.raise=D=>{
+   return {lead,body:`<div class="cx-rds">${rs.map(card).join('')}</div>`+rule+qline+cxLev('Equity needed if…',[...cases,['Half of plants and receivables on debt',rc(dp.equity),`${dp.rounds.length} round${dp.rounds.length>1?'s':''} · ${rc(dp.D.cumInt[N-1])} interest`]],`Debt rates are placeholders until lenders quote.${fn(NOTE_DEBT)}`)};
+ };
+ 
+-const RET_M=[['arr-10','10× ARR'],['arr-2','2× ARR'],['arr-3','3× ARR'],['arr-5','5× ARR'],['pat',null],['model','Round method']];
++const RET_M=[['arr-10','10× ARR'],['arr-2','2× ARR'],['arr-3','3× ARR'],['arr-5','5× ARR'],['pat',null],['model','Round-pricing method']];
+ CX.ret=D=>{
+   const R=D.R,X=D.X,ret=D.ret,pr=ret.pr,q=X.q,e=pr[0],Fd=INP.funding,cur=X.m==='arr'?`arr-${X.mult}`:X.m,lbl=k=>k==='pat'?`${f0(Fd.multPat)}× Operating profit`:(RET_M.find(x=>x[0]===k)||[0,`${X.mult}× ARR`])[1];
+   const later=pr.filter((r,i)=>i>0&&r.q<=q),back=ret.path.findIndex(v=>v>=e.amt),arr=12*D.T[q]*X.ach,pat4=12*R.G.patMonthly[q]*X.ach;
+-  const ctl=`<div class="cx-ctl"><span>Exit valued at</span>${seg(RET_M.map(([k])=>[k,lbl(k)]),cur,'exitm','Exit valued at')}<span>Plan achieved</span>${seg([[1,'100%'],[0.7,'70%'],[0.5,'50%']],X.ach,'ach','Share of the revenue plan achieved')}</div>`;
+-  const lead=`Exit in ${qName(q)} at ${lbl(cur)}: the first ₹${f0(e.amt)} Cr is worth <b>${rc(ret.val)}</b>, ${xS(ret.mult)} the money or ${pct1(ret.irr*100)} a year.${back>=0?` The stake is worth more than what was put in from ${qName(back)}.`:''}`;
++  const ctl=`<div class="cx-ctl"><span>Exit valued at</span>${seg(RET_M.map(([k])=>[k,lbl(k)]),cur,'exitm','Exit valued at')}<span>Exit revenue vs plan</span>${seg([[1,'100%'],[0.7,'70%'],[0.5,'50%']],X.ach,'ach','Share of the revenue plan achieved')}<span class="cx-ctl-note">Changes exit valuation only; funding and operating cash stay fixed.</span></div>`;
++  const lead=`<b>Potential proceeds · ${rc(ret.val)}</b><br>${xS(ret.mult)} on ₹${f0(e.amt)} Cr invested.`,retNote=`<p class="cx-note">Assumes a ${qName(q)} exit at ${lbl(cur)}, after dilution and projected net cash.</p>`;
+   const worth=X.m==='pat'?`annualised Operating profit ${rc(pat4)} × ${f0(Fd.multPat)}`:X.m==='model'?`ARR ${rc(arr)} at the round method’s ${xS(multArrAt(q))}${blendW(q,R)>0.001?`, part on ${f0(Fd.multPat)}× Operating profit`:''}`:`ARR ${rc(arr)} × ${X.mult}`;
+   const calc=cxCalc([['',ACCENT,'Round 1 buys',`${rc(e.amt)} at ${rc(e.post)} post-money = ${xS(e.mArr)} today’s ARR of ${rc(e.arr)}${fn(NOTE_PRICE)}`,pct2(e.stake)],
+     ...later.map(r=>['×',null,`Round ${pr.indexOf(r)+1} dilutes`,`${rc(r.amt)} at ${rc(r.post)} post-money = ${xS(r.mArr)} ARR of ${rc(r.arr)}${r.w>0.001?`, ${Math.round(r.w*100)}% on Operating profit`:''}; you keep ${rc(r.pre)} ÷ ${rc(r.post)}`,pct2(r.pre/r.post)]),
+@@ -4382,7 +4388,7 @@ CX.ret=D=>{
+     ['×',null,'What all of Tejas is worth',`${worth} + cash ${rc(ret.cash)}${ret.debt>0.005?` − debt ${rc(ret.debt)}`:''}`,rc(ret.eqv)],
+     ['=',ACCENT,`₹${f0(e.amt)} Cr becomes`,`${xS(ret.mult)} · IRR ${pct1(ret.irr*100)} over ${fd(ret.yrs,ret.yrs%1?2:0)} years${fn(NOTE_RET)}`,rc(ret.val),'tot']]);
+   const rows=RET_M.filter(([k])=>k!==cur).map(([k])=>{const [m,x]=k.split('-'),r=investorReturn(R,{q,m,mult:x?+x:undefined,ach:X.ach});return [k==='model'?'On the round method':`At ${lbl(k)}`,rc(r.val),`${xS(r.mult)} · IRR ${pct1(r.irr*100)}`];});
+-  return {lead,pre:ctl,body:cxQ(q,'exitq','Exit in')+calc+cxLev(`The same ${qName(q)} exit, valued other ways`,rows)};
++  return {lead,pre:ctl,body:retNote+cxQ(q,'exitq','Exit in')+calc+cxLev(`The same ${qName(q)} exit, valued other ways`,rows)};
+ };
+ 
+ CX.roce=D=>{
+@@ -4398,10 +4404,10 @@ CX.roce=D=>{
+ function capKPI(D){
+   const T=D.T,ret=D.ret,R=D.R,G=D.G,ro=roceFin(G)[G.N-1];
+   return `<div class="b-metrics cap-kpi"><div class="ans-k"><span>Revenue a month, today → Q16</span><strong>₹${fd(INP.valuation.todayMRR,1)} → ₹${fd(T[15],1)}<small>Cr</small></strong></div>
+-   <div><span>Q16 capital + early losses</span><strong>₹${f0(G.cumTot[G.N-1])}<small>Cr</small></strong></div>
+-   <div><span>Equity raised · ${R.rounds.length} round${R.rounds.length>1?'s':''}</span><strong>₹${f0(R.equity)}<small>Cr</small></strong></div>
++   <div><span>Growth investment + operating losses</span><strong>₹${f0(G.cumTot[G.N-1])}<small>Cr</small></strong><small class="kpi-sub">Total investment and early losses through Q16.</small></div>
++   <div><span>Planned equity · ${R.rounds.length} round${R.rounds.length>1?'s':''}</span><strong>₹${f0(R.equity)}<small>Cr</small></strong></div>
+    <div><span>First ₹${f0(INP.valuation.ask)} Cr at a ${qName(D.X.q)} exit</span><strong>${xS(ret.mult)}<small>₹${f0(ret.val)} Cr</small></strong></div>
+-   <div><span>Q16 operating return</span><strong>${fd(ro.pre*100,0)}%<small>gross capital proxy</small></strong></div></div>`;
++   <div><span>Q16 operating return</span><strong>${fd(ro.pre*100,0)}%</strong><small class="kpi-sub kpi-lbl">Forecast assets + full working capital</small><small class="kpi-sub">Existing fixed assets are excluded.</small></div></div>`;
+ }
+ function fundDrawer(){
+   const fld=([path,label,unit])=>{const v=getPath(INP,path),d=getPath(INPUT_DEFAULT,path);return `<label class="s-in${v!==d?' changed':''}"><span class="l">${label}<small>${unit}</small></span><input type="number" step="any" data-input="${path}" value="${v}"><span class="d">plan ${d}</span></label>`;};
+@@ -4419,7 +4425,7 @@ function renderFinance(){
+   const chart=`<div class="s-panel cx-chart" data-layer="${cur}"><div class="cx-heads">${heads.map(([t,s],i)=>`<div class="cx-head" data-l="${i}"><h3>${t}</h3>${s?`<p>${s}</p>`:''}</div>`).join('')}</div>
+    <div class="cx-s cx-s-m">${cbox('cx-money',W=>cxMoney(W,D),560)}</div><div class="cx-s cx-s-r">${cbox('cx-ret',W=>cxRet(W,D),560)}</div><div class="cx-s cx-s-o">${cbox('cx-roce',W=>cxRoce(W,D),560)}</div>
+    <div class="cx-legs">${legs.map((h,i)=>`<div class="cap-legend static cx-leg" data-l="${i}">${h}</div>`).join('')}</div></div>`;
+-  $('main-content').innerHTML=editedBanner()+pageHead('03 · Capital Utilisation','Capital Utilisation','','',`<a class="s-edit" href="#inputs">Edit inputs</a>`)+capKPI(D)
++  $('main-content').innerHTML=editedBanner()+pageHead('03 · Funding & returns','Funding & returns','','',`<a class="s-edit" href="#inputs">Edit inputs</a>`)+capKPI(D)
+    +`<div class="step-host cx-host" data-steps="finance">${financingControls(D)}${stepBar('finance')}<div class="cx-grid">${chart}<div class="cx-side">${side}</div></div>${fundDrawer()}</div>`+notesBlock();
+ }
+ /* a step change keeps the chart and swaps its layer; the panel on the right changes */
+@@ -4447,13 +4453,13 @@ INPUT_SCHEMA.push(
+  {title:'Funding plan',intro:'Drive the raise engine on page 03. Round 1 is the ask in Valuation; later rounds are placed and sized by these.',fields:[
+   ['funding.buffer','Minimum cash','₹ Cr'],['funding.lead','Lead time','quarters before cash runs short'],['funding.window','Sizing window','quarters a round covers'],['funding.roundTo','Round to','₹ Cr'],
+   ['funding.wcBasis','Working capital basis','0 = receivable days · 1 = cash cycle'],['funding.debtCapex','Debt on plant capex','%'],['funding.debtWC','Debt on receivables','%'],['funding.rateCapex','Plant loan rate','% a year'],
+-  ['funding.rateWC','Receivables limit rate','% a year'],['funding.moratorium','Plant loan moratorium','quarters'],['funding.tenor','Plant loan repayment','quarters']]},
+- {title:'Round pricing and return',intro:'ARR multiple glide after round 1, the profit multiple and blend, and depreciation lives for ROCE.',fields:[
++  ['funding.rateWC','Receivables limit rate','% a year'],['funding.moratorium','Plant principal grace period','quarters · interest still applies'],['funding.tenor','Plant loan repayment','quarters']]},
++ {title:'Later-round valuation',intro:'ARR and profit multiples determine later entry prices. Keep depreciation lives under capital-return assumptions.',fields:[
+   ['funding.multQ4','ARR multiple at Q4','×'],['funding.multQ8','ARR multiple at Q8','×'],['funding.multQ16','ARR multiple at Q16','×'],['funding.multPat','Profit multiple','× annualised Operating profit'],
+   ['funding.blendLo','Blend starts at','Operating profit margin, %'],['funding.blendHi','Fully on profit at','Operating profit margin, %'],['funding.lifePlant','Plant and centre life','years'],['funding.lifeOther','Labs, systems, misc life','years']]});
+ function inputSummary(){
+   const F=fin(),c=F.cols,R=raisePlan(),ret=investorReturn(R,capX());
+-  return `<div class="s-sum"><div><span>Operating profit at Q16</span><b>${pct1(c[4].pat)}</b></div><div><span>Capital to Q16</span><b>₹${f0(R.G.cumTot[R.N-1])} Cr</b></div><div><span>Peak gap</span><b>₹${f0(R.G.peak)} Cr</b></div><div><span>Equity raised</span><b>₹${f0(R.equity)} Cr</b></div><div><span>₹${f0(INP.valuation.ask)} Cr buys</span><b>${pct1(ret.pr[0].sold*100)}</b></div><div><span>First investor at ${qName(A.cap.exitQ)}</span><b>${xS(ret.mult)}</b></div></div>`;
++  return `<div class="s-sum"><div><span>Operating profit at Q16</span><b>${pct1(c[4].pat)}</b></div><div><span>Capital to Q16</span><b>₹${f0(R.G.cumTot[R.N-1])} Cr</b></div><div><span>Peak gap</span><b>₹${f0(R.G.peak)} Cr</b></div><div><span>Planned equity</span><b>₹${f0(R.equity)} Cr</b></div><div><span>₹${f0(INP.valuation.ask)} Cr buys</span><b>${pct1(ret.pr[0].sold*100)}</b></div><div><span>First investor at ${qName(A.cap.exitQ)}</span><b>${xS(ret.mult)}</b></div></div>`;
+ }
+ 
+ function renderGlobal(){
+@@ -4480,7 +4486,7 @@ function renderProducts(){
+   const V=currentView(),max=Math.max(...ps.flatMap(p=>V.M[p]),1),p=A.product,d=MODEL.products[p];
+   const grid=ps.map(p=>`<article class="product-panel" style="--series:${COLORS[p]}"><div class="product-header"><h2>${swatch(p)}${NAME[p]}</h2><div><small>Q16 · ₹ Cr / month</small><strong>₹${fmtValue(V.M[p][15],V.M[p],15)}</strong></div></div><p class="product-meta">${p==='tile'||p==='niche'?'Live today':`Launch Q${MODEL.products[p].launch} · ${LAB[MODEL.products[p].launch-1]}`} · Wait after opening: ${openingWait(p)} · Size ${count(MODEL.products[p].size)}× tile adhesive</p><div class="chart-wrap small-plot">${cbox('sp-'+p,w=>chartSVG({series:[{values:V.M[p],color:COLORS[p]}],total:V.M[p],height:200,small:true,max,key:p,forceW:w}),300)}</div><div class="product-coverage">${productCoverage(p,'city',A.coverageQ)}${productCoverage(p,'dist',A.coverageQ)}</div></article>`).join('');
+   $('main-content').innerHTML=pageHead('05 · Products','Products, reach and share','When does each line start, and how big does it get?',`Two lines sell today; the three that join by Q10 bring ${Math.round(['wood','upvc','p5'].reduce((s,p)=>s+view(SCOPE.core).M[p][15],0)/view(SCOPE.core).T[15]*100)}% of Q16 revenue.`)+
+-    `<p class="how-read"><b>How to read this page.</b> Each card is one product line’s revenue, in ₹ Cr a month, from Q1 to Q16, across all cities and dealer zones. Every card uses the same scale, so heights compare directly. The two bars under each chart show reach: of the cities, and dealer zones, open at the chosen quarter, how many already sell this line. Change the quarter with “Coverage at”.<br><b class="acc">Why it matters.</b> Lines beyond tile adhesive bring ${Math.round((1-view(SCOPE.core).M.tile[15]/view(SCOPE.core).T[15])*100)}% of Q16 revenue; this page shows when each one starts and how far it has reached.</p>`+
++    `<p class="how-read"><b>Revenue by product</b><br>Launch timing and channel coverage explain the sales mix.<br><small>All charts use the same scale. Coverage counts locations selling each product.</small></p>`+
+     `<div class="toolbar">${channelControl()}<span class="spacer"></span><label class="coverage-quarter">Coverage at <select id="coverage-quarter" aria-label="Coverage quarter">${quarterOptions(A.coverageQ)}</select></label></div>`+
+     (!ps.length?emptyProducts():`<div class="products-layout full"><div class="product-grid">${grid}</div></div>`)+
+     footnote('Revenue curves read the forecast of record. All product panels share one y-axis scale. Pipes and fittings, and steel, sit outside this plan.');
+@@ -4489,7 +4495,7 @@ function auditSection(n,title,body){return `<section class="audit-section"><h2><
+ function auditTable(headers,rows,cls=''){return `<table class="audit-table ${cls}"><thead><tr>${headers.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;}
+ function registry(){return `<div class="registry"><h3>Opened unit registry <span class="muted">(select any unit)</span></h3>${UNIT_TYPES.map(t=>{const units=UNITS.filter(u=>u.type===t.id&&u.activation.length),sample=units.length>6?[...units.slice(0,5),units[units.length-1]]:units;return `<div class="registry-row"><span>${t.plural} (${units.length})</span>${sample.map((u,i)=>`${i===5?'<span style="width:auto">…</span>':''}<button type="button" data-registry-unit="${u.id}" aria-label="Inspect ${u.label}" aria-pressed="${u.id===A.unit}">${u.live?u.label:u.id.split('-')[1]}</button>`).join('')}</div>`;}).join('')}</div>`;}
+ function openingDetail(){return `<details class="opening-details"><summary>Show the full quarterly opening plan</summary><div class="table-scroll" style="margin-top:10px"><table class="audit-table opening-table"><thead><tr><th>New units opened</th>${Array.from({length:16},(_,q)=>`<th>Q${q+1}</th>`).join('')}</tr></thead><tbody>${UNIT_TYPES.map(t=>`<tr><td>${t.plural}</td>${MODEL.openings[t.id].map(v=>`<td>${count(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;}
+-function modelDetails(){return `<details class="source-details"><summary>Forecast of record · ₹ Cr a month by line and quarter</summary><div class="source-tools"><p>These totals are the model of record shared in the revenue chain. The unit mechanics on this page reproduce them within ${fd(allocationAudit().tie*100,2)}% in every product and quarter; each unit row is scaled by that small factor so units add up exactly.</p><button type="button" data-download="portfolio">Download forecast CSV</button></div><div class="table-scroll source-table-wrap" tabindex="0" role="region" aria-label="Forecast of record"><table class="source-table"><thead><tr><th scope="col">Line</th>${QD.map((d,q)=>`<th scope="col">Q${q+1}</th>`).join('')}</tr></thead><tbody>${P.map(p=>`<tr><th scope="row">${SH[p]}</th>${MODEL.forecast[p].map(v=>`<td>${v?trimmedNumber(v):'–'}</td>`).join('')}</tr>`).join('')}<tr class="source-total"><th scope="row">Total</th>${QD.map((_,q)=>`<td>${trimmedNumber(sum(P.map(p=>MODEL.forecast[p][q])))}</td>`).join('')}</tr></tbody></table></div></details>`;}
++function modelDetails(){return `<details class="source-details"><summary>Forecast of record · ₹ Cr a month by line and quarter</summary><div class="source-tools"><p><b>Product revenue targets</b><br>Unit allocations are adjusted to match the fixed targets.</p><button type="button" data-download="portfolio">Download forecast CSV</button></div><div class="table-scroll source-table-wrap" tabindex="0" role="region" aria-label="Forecast of record"><table class="source-table"><thead><tr><th scope="col">Line</th>${QD.map((d,q)=>`<th scope="col">Q${q+1}</th>`).join('')}</tr></thead><tbody>${P.map(p=>`<tr><th scope="row">${SH[p]}</th>${MODEL.forecast[p].map(v=>`<td>${v?trimmedNumber(v):'–'}</td>`).join('')}</tr>`).join('')}<tr class="source-total"><th scope="row">Total</th>${QD.map((_,q)=>`<td>${trimmedNumber(sum(P.map(p=>MODEL.forecast[p][q])))}</td>`).join('')}</tr></tbody></table></div></details>`;}
+ function traceHTML(){
+   const u=unitById(A.unit),ps=activeProducts(),q=A.q,V=currentView('all'),report=allocationAudit();
+   const counts=auditTable(['Unit','Live today','Opened by Q16','Pool'],UNIT_TYPES.map(t=>[t.plural,count(MODEL.live.filter(l=>l.type===t.id).length),count(sum(MODEL.openings[t.id])),count(MODEL.pool[t.id])]));
+@@ -4502,12 +4508,12 @@ function traceHTML(){
+   const contributions=auditTable(['Product','Eligible<br>share','Market<br>₹ Cr','Size vs<br>tile adhesive','Share','Mechanics','Tied<br>MRR'],ps.map(p=>{const m=unitMechanics(u,p,q);return [productLabel(p),count(m.weight),trimmedNumber(m.basis),`${count(m.size)}×`,m.weight?pc(m.pen,1):'—',fmtValue(m.raw),fmtValue(u.products[p][q],u.products[p],q)];}));
+   const revenue=`<p>Opening share × market × size × share = mechanics; tied to the forecast of record.</p><div class="table-scroll" style="margin-top:10px">${contributions}</div><div class="unit-mrr-total"><span>${u.label} MRR</span><strong>₹${fmtValue(unitTotal(u,A.on)[q],unitTotal(u,A.on),q)} <span class="small">Cr/month</span></strong></div>`;
+   const market=auditTable(['Unit','Market<br>₹ Cr/month','Ramp','Ceiling'],[...UNIT_TYPES.map(t=>[t.label,trimmedNumber(MODEL.market[t.id]),t.tier==='med'?'Medium':'Large',fmtPercent(MODEL.ramp[t.tier][5])]),['Raipur, Nagpur (live)','1.37','At ceiling','30%'],['Vidarbha, CG (live)','1.03','At ceiling','30%']])+`<p>Later markets are sized 27% below the live ones.</p>`;
+-  const aggregation=`<div class="aggregate-chain"><span>Selected<br>products</span>→<span>Unit<br>MRR</span>→<span>Channel<br>totals</span>→<span>Portfolio</span></div><div class="aggregate-equation">City <strong>${fmtValue(currentView('city').T[15])}</strong> + Dealer <strong>${fmtValue(currentView('dist').T[15])}</strong><br>= <strong>₹${fmtValue(V.T[15])} Cr/month</strong><br><span class="small">Q16 · ${LAB[15]} · ${scopeName()}</span></div><div class="status-line"><i class="status-dot"></i>${report.cells} product/quarter totals tie to the forecast of record (largest mechanics gap ${fd(report.tie*100,2)}%)</div>`;
++  const aggregation=`<div class="aggregate-chain"><span>Selected<br>products</span>→<span>Unit<br>MRR</span>→<span>Channel<br>totals</span>→<span>Portfolio</span></div><div class="aggregate-equation">City <strong>${fmtValue(currentView('city').T[15])}</strong> + Dealer <strong>${fmtValue(currentView('dist').T[15])}</strong><br>= <strong>₹${fmtValue(V.T[15])} Cr/month</strong><br><span class="small">Q16 · ${LAB[15]} · ${scopeName()}</span></div><div class="status-line"><i class="status-dot"></i><span><b>Forecast reconciliation</b><br>Unit allocations are adjusted to match product revenue targets.<br><small>Current maximum adjustment: ${fd(report.tie*100,2)}%.</small></span></div>`;
+   return `<div class="model-spine" aria-label="Revenue calculation sequence">${['Opening plan','Opening shares','Product eligibility','Share ramp','Unit revenue','Portfolio total'].map((s,i)=>`${i?'<i aria-hidden="true"></i>':''}<span><b>${i+1}</b>${s}</span>`).join('')}</div><div class="audit-grid"><div class="panel audit-column">${auditSection(1,'Opening plan by city and dealer zone',counts+registry()+examples+openingDetail())}${auditSection(2,'Product eligibility',eligibility)}</div><div class="panel audit-column">${auditSection(3,'Inspect any city or dealer zone',inspector)}${auditSection(4,'Unit contribution at Q'+(q+1),revenue)}</div><div class="panel audit-column">${auditSection(5,'Share by the line’s age',rampTable()+'<p>Each new line starts its own ramp in each unit. Share never falls as quarters pass.</p>')}${auditSection(6,'Market basis and ceiling',market)}${auditSection(7,'Aggregate at Q16',aggregation)}</div></div>${modelDetails()}`
+     +footnote('A planning model explains a forecast; it is not evidence of market demand. Market sizes, product sizes and ramps are set out in page 01, Model basis with their sources.','units');;
+ }
+ const PAGES={guide:renderGuide,basis:renderBasis,revenue:renderRevenue,cities:renderCities,products:renderProducts,finance:renderFinance,audit:renderAudit,inputs:renderInputs};
+-const TITLES={guide:'How to read',basis:'Model basis',revenue:'4Y Revenue Scale-up',cities:'Cities & Dealers',products:'Products',finance:'Capital Utilisation',audit:'Financials',inputs:'Back office'};
++const TITLES={guide:'How to read',basis:'Model basis',revenue:'4Y Revenue Scale-up',cities:'Cities & Dealers',products:'Products',finance:'Funding & returns',audit:'Financials',inputs:'Back office'};
+ function glueUnits(root){ /* keep ₹ amounts and their units on one line */
+   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const re=/(₹[\d.,]+|[\d.,]+[×%]?) (Cr|L|k|T|days|qtrs?|pts)\b/g;
+   while((n=w.nextNode())){if(re.test(n.nodeValue)){re.lastIndex=0;n.nodeValue=n.nodeValue.replace(re,'$1\u00a0$2');}}
+@@ -4553,7 +4559,7 @@ function inspectChart(target,event){
+ }
+ document.addEventListener('click',e=>{
+   const button=e.target.closest('button'),link=e.target.closest('a');
+-  if(button?.dataset.action==='reset-inputs'){if(confirm('Reset every input to the plan values?')){INP=structuredClone(INPUT_DEFAULT);saveInputs();renderApp();}return;}
++  if(button?.dataset.action==='reset-inputs'){if(confirm('Reset assumptions? Replace saved browser edits with the base case.')){INP=structuredClone(INPUT_DEFAULT);saveInputs();renderApp();}return;}
+   if(button?.dataset.action==='download-dashboard'){downloadDashboard();return;}
+   if(button?.dataset.action==='download-sheet'){downloadText('\ufeff'+sheetCSV(),'tejas-financials.csv','text/csv;charset=utf-8');return;}
+   if(button?.dataset.action==='export-inputs'){downloadText(JSON.stringify(INP,null,2),'tejas-inputs.json','application/json');return;}
+@@ -4579,7 +4585,7 @@ document.addEventListener('click',e=>{
+ document.addEventListener('change',e=>{
+   const el=e.target;
+   if(el.dataset.product){A.on[el.dataset.product]=el.checked?1:0;renderApp();}
+-  else if(el.dataset.action==='import-inputs'&&el.files[0]){el.files[0].text().then(t=>{try{INP=mergeInputs(INPUT_DEFAULT,JSON.parse(t));saveInputs();renderApp();}catch(err){alert('That file is not a valid inputs file.');}});}
++  else if(el.dataset.action==='import-inputs'&&el.files[0]){el.files[0].text().then(t=>{try{INP=mergeInputs(INPUT_DEFAULT,JSON.parse(t));saveInputs();renderApp();}catch(err){alert('Import failed. Choose a Tejas inputs JSON file.');}});}
+   else if(el.id==='audit-unit'){A.unit=el.value;(PAGES[A.page]||renderInputs)();}
+   else if(el.id==='audit-quarter'){A.q=+el.value;(PAGES[A.page]||renderInputs)();}
+   else if(el.id==='coverage-quarter'){A.coverageQ=+el.value;renderProducts();}
+@@ -4695,12 +4701,12 @@ stats=function(V){
+ 
+ const opMoney=v=>(v<0?'−':'')+rc(v);
+ function opBasis(){return '<p class="note"><b>Basis:</b> quarter-end figures are monthly snapshots. RT = cities; DD = dealer zones. Margins interpolate from Q1 to Q16. Common overheads are additional to CM2 costs. GST is ignored. Operating profit excludes tax, interest and depreciation.</p>';}
+-function opAssumptions(){const O=INP.operating,A=O.anchors,ref=O.extrapolateFrom,low=sum(OP_COSTS.map(([k])=>O.costs[k][0])),marginal=sum(OP_COSTS.map(([k])=>O.costs[k].at(-1)-O.costs[k][ref]))/(A.at(-1)-A[ref])*100;return `<p class="note"><b>Cost assumptions:</b> ₹${fd(low,1)} L/month budget floor below ₹${fd(A[0]/100,1)} Cr MRR; line-by-line interpolation between supplied anchors; above ₹${fd(A.at(-1)/100,1)} Cr, each line continues at its marginal growth from ₹${fd(A[ref]/100,1)} Cr to ₹${fd(A.at(-1)/100,1)} Cr (₹${fd(marginal,2)} of additional overhead per ₹100 additional revenue). Waterproofing copies wood’s RT/DD costs. Blank discounts are zero. Component calculations retain the 0.5 percentage points rounded in the supplied CM2 display.</p>`;}
++function opAssumptions(){const O=INP.operating,A=O.anchors,ref=O.extrapolateFrom,low=sum(OP_COSTS.map(([k])=>O.costs[k][0])),marginal=sum(OP_COSTS.map(([k])=>O.costs[k].at(-1)-O.costs[k][ref]))/(A.at(-1)-A[ref])*100;return `<p class="note"><b>Common overhead</b><br>Monthly costs linked to revenue levels.<br><small>Assumption: ₹${trimmedNumber(low,1)} lakh/month floor. Above ₹${trimmedNumber(A.at(-1)/100,1)} Cr monthly revenue, costs extend the supplied ₹${trimmedNumber(A[ref]/100,1)}–${trimmedNumber(A.at(-1)/100,1)} Cr trend.</small></p>`;}
+ 
+ function opInputTables(fld){
+   const cell=(p,v)=>`<input type="number" step="any" data-input="${p}" value="${v}" aria-label="${p}">`;
+   const margin=['tile','wood','upvc','niche'].map(p=>['dd','rt'].map(ch=>`<tr><td>${SH[p]} · ${ch.toUpperCase()}</td>${['cm1',...OP_LINES.map(x=>x[0])].map(k=>[0,1].map(i=>`<td class="r">${cell('operating.products.'+p+'.'+ch+'.'+k+'.'+i,INP.operating.products[p][ch][k][i])}</td>`).join('')).join('')}</tr>`).join('')).join('');
+-  return `<div class="s-panel"><h3>Product and income-stream margins</h3><p class="meta">Percent of revenue · each pair is Q1, Q16 · CM2 is calculated from these components at full precision. Waterproofing follows wood.</p><div class="s-tw"><table class="s-table s-intable"><thead><tr><th>Product / stream</th>${['CM1',...OP_LINES.map(x=>x[1])].map(l=>`<th colspan="2">${l}<small>Q1 / Q16</small></th>`).join('')}</tr></thead><tbody>${margin}</tbody></table></div></div><div class="s-panel"><h3>Common monthly overhead anchors</h3><p class="meta">₹ lakh · revenue anchors drive costs, independent of dates · retained ₹128 L total at ₹600 L revenue</p><div class="s-tw"><table class="s-table s-intable"><thead><tr><th>₹ L / month</th>${INP.operating.anchors.map((v,i)=>`<th>${cell('operating.anchors.'+i,v)}</th>`).join('')}</tr></thead><tbody>${OP_COSTS.map(([k,l])=>`<tr><td>${l}</td>${INP.operating.costs[k].map((v,i)=>`<td>${cell('operating.costs.'+k+'.'+i,v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${opAssumptions()}</div>`;
++  return `<div class="s-panel"><h3>Margins by product and channel</h3><p class="meta">Percent of revenue · each pair is Q1, Q16 · CM2 is calculated from these components at full precision. Waterproofing follows wood.</p><div class="s-tw"><table class="s-table s-intable"><thead><tr><th>Product / stream</th>${['CM1',...OP_LINES.map(x=>x[1])].map(l=>`<th colspan="2">${l}<small>Q1 / Q16</small></th>`).join('')}</tr></thead><tbody>${margin}</tbody></table></div></div><div class="s-panel"><h3>Monthly overhead</h3><p class="meta">Costs at each monthly revenue level.</p><div class="s-tw"><table class="s-table s-intable"><thead><tr><th>₹ L / month</th>${INP.operating.anchors.map((v,i)=>`<th>${cell('operating.anchors.'+i,v)}</th>`).join('')}</tr></thead><tbody>${OP_COSTS.map(([k,l])=>`<tr><td>${l}</td>${INP.operating.costs[k].map((v,i)=>`<td>${cell('operating.costs.'+k+'.'+i,v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${opAssumptions()}</div>`;
+ }
+ const opLegacyCapitalInputs=capitalInputs;
+ capitalInputs=function(fld){const old=opLegacyCapitalInputs(fld),first=old.indexOf('<div class="s-panel"><h3>Cost of revenue · cost plan and burn');return opInputTables(fld)+(first>=0?old.slice(0,first):old);};
+@@ -4723,12 +4729,12 @@ cxSeries=function(D){
+   return {Q,cashQ:D.I.Q,net:Q.map(r=>r.net),pat,patMonthly:Q.map(r=>r.pat),sp,ncf,cum,cash:R.cash,base:R.base,fl,pk,peak:-cum[pk],back,cross};
+ };
+ cxHeads=function(D){const ask=f0(D.pr[0].amt),floor=f0(D.R.P.buffer);return [
+-  ['Revenue a month at each quarter end','Each bar is the final month of a quarter, in ₹ Cr/month. Click a quarter to see the city/retail and dealer-zone split on the right. GST is ignored.'],
+-  ['Where each month’s revenue goes','The same monthly bars split into product costs, selling costs, common overhead and operating profit. Product and RT/DD margins are weighted by their revenue.'],
++  ['Monthly revenue','Each bar is the final month of a quarter, in ₹ Cr/month. Click a quarter to see the city/retail and dealer-zone split on the right. GST is ignored.'],
++  ['Costs and operating profit','The same monthly bars split into product costs, selling costs, common overhead and operating profit. Product and RT/DD margins are weighted by their revenue.'],
+   ['Operating cash earnings against growth spending','From this step, bars show cash flows during each quarter: estimated operating earnings above zero and growth investment below. Earnings sum the intervening months; they are not three times the closing month.'],
+-  ['Running total: the accumulated funding shortfall','The line accumulates the quarterly cash flows from step 3. The area below zero is the funding shortfall before equity or debt.'],
+-  ['Cash in the bank, with the raises',`Each arrow adds a funding round. The grey line is closing cash without equity raises; the plan targets at least ₹${floor} Cr at quarter ends.`],
+-  [`What the first ₹${ask} Cr is worth, by exit quarter`,'Each bar values the investor’s diluted stake at that exit, adding estimated cash and subtracting debt. This is a valuation scenario.'],
++  ['Funding gap before financing','The line accumulates the quarterly cash flows from step 3. The area below zero is the funding shortfall before equity or debt.'],
++  ['Projected cash balance',`Each arrow adds a funding round. The grey line is closing cash without equity raises; the plan targets at least ₹${floor} Cr at quarter ends.`],
++  ['Potential investor return','Exit equity value × ownership after dilution.<br><small>Exit equity value includes projected cash less outstanding debt.</small>'],
+   ['Return on capital employed, quarter by quarter','Annualised quarter-end monthly operating profit (×12) divided by capital employed. The dots deduct modelled depreciation. This is a simple return before interest and tax.']
+ ];};
+ const nativeLegends=cxLegends;
+@@ -4780,20 +4786,20 @@ window.__dash={...window.__dash,fin,stats,operatingModel,opRates,opOverheads,rai
+ Object.assign(CAP4C,{capex:'#36518A',pp:'#9B72A6',wc:'#43A3AD',loss:CX_NEG});
+ A.cap.exitM='arr';A.cap.exitMult=10;
+ 
+-function reviewScenarios(html){return whyD('Scenarios and sensitivities',html);}
++function reviewScenarios(html){return whyD('Sensitivity analysis','<p class="cx-note">Changes in assumptions and their effect on the result.</p>'+html);}
+ function reviewCollapseLast(body){const i=body.lastIndexOf('<div class="cx-lev">');return i<0?body:body.slice(0,i)+reviewScenarios(body.slice(i));}
+ const reviewRow=cxRow;
+ cxRow=function(c,vals,label,sel,col){let svg=reviewRow(c,vals,label,sel,col);if(label[0]==='Op. profit'){const size=Math.min(15,Math.max(12.5,c.slot*.34));svg=svg.replaceAll('font-size:11.5px',`font-size:${size}px`).replaceAll('font-size:12.5px',`font-size:${size+1}px`).replaceAll('font-size:11px','font-size:12px');}return svg;};
+ 
+ const reviewHeads=cxHeads;
+-cxHeads=function(D){const h=reviewHeads(D);h[0][1]='';h[1][1]='Monthly revenue is split into costs and operating profit. Labels above key quarters show operating margin.';h[2]=['Quarterly cash flow before funding','Operating earnings less growth spending in each quarter. The row below shows the resulting surplus or deficit.'];h[4][1]=`Each arrow adds a funding round. Closing cash is shown against the ₹${f0(D.R.P.buffer)} Cr minimum.`;h[6]=['Annualised operating return on modelled capital','Quarter-end monthly operating profit × 12 ÷ gross capital deployed to date. Dots deduct depreciation.'];return h;};
++cxHeads=function(D){const h=reviewHeads(D);h[0][1]='Revenue in the final month of each quarter.';h[1][1]='Revenue split into product costs, selling costs, overhead and profit.';h[2]=['Quarterly cash flow','Operating earnings less growth investment, before financing.'];h[4][1]=`Each arrow adds a funding round. Closing cash is shown against the ₹${f0(D.R.P.buffer)} Cr minimum.`;h[6]=['Operating return on capital','Annualised monthly operating profit ÷ modelled capital.<br><small>Dots show return after depreciation.</small>'];return h;};
+ cxLegends=function(D){
+  const i=(c,l)=>`<span>${swc(c)}${l}</span>`,ln=(c,l,dashed=false)=>`<span><i class="ln" style="border-top:${dashed?'1.5px dashed':'2.5px solid'} ${c}"></i>${l}</span>`;
+  return [i(CX_REV,'Revenue / month'),
+  i(CX_PAT,'Operating profit')+i(CX_FIX,'Common overhead')+i(CX_VAR,'Selling costs')+i(CX_COGS,'Cost of goods')+i(CX_NEG,'Operating loss'),
+  i(CX_PAT,'Quarter operating earnings')+i(CAP4C.capex,'Capex additions')+i(CAP4C.pp,'Labs / systems additions')+i(CAP4C.wc,'Increase in working capital'),
+  ln(CX_NEG,'Accumulated cash before funding')+i(CX_HOLE,'Funding shortfall')+i('#DDDCD6','Quarter flows, faded'),
+- ln(CX_CASH,'Cash in the bank')+i(ACCENT,'Equity raised')+ln(ACCENT,`₹${f0(D.R.P.buffer)} Cr minimum`,true),
++ ln(CX_CASH,'Cash in the bank')+i(ACCENT,'Planned equity')+ln(ACCENT,`₹${f0(D.R.P.buffer)} Cr minimum`,true),
+  i(CX_VALUE,'Investor stake value')+ln(ACCENT,`₹${f0(D.pr[0].amt)} Cr invested`,true),
+  i(CX_PAT,'Before depreciation')+`<span><i class="dot o" style="border-color:${CX_PAT}"></i>After depreciation</span>`];
+ };
+@@ -4817,8 +4823,8 @@ function reviewRound(r,i,R){
+  const rs=R.rounds,G=R.G,K=G.K,P=R.P,end=rs[i+1]?rs[i+1].q-1:R.N-1,start=r.q,at=k=>K.cum[end][k]-(start?K.cum[start-1][k]:0),earn=G.cumPat[end]-(start?G.cumPat[start-1]:0),opening=start?R.cash[start-1]:0;
+  const debt=R.D.bal[end]-(start?R.D.bal[start-1]:0)-(R.D.cumInt[end]-(start?R.D.cumInt[start-1]:0));
+  const costs=[['capex','Capex',at('capex')],['wc','Working capital increase',at('wc')],['pp','Labs / systems',at('pp')]];
+- const detail=i?`Cash falls below ${rc(P.buffer)} in ${qName(r.trigger)} before this round. Required funding at ${qName(r.needQ)}: ${rc(r.need)} + ${rc(P.buffer)} buffer − ${rc(r.raised)} already raised = ${rc(r.raw)}; rounded up to ${rc(r.amt)}.`:`The opening round uses the supplied ${rc(r.amt)} ask.`;
+- return `<article class="review-round"><header><div><h4>Round ${i+1}</h4><span>${qName(start)} · ${EXIT[start]}</span></div><strong>₹${f0(r.amt)}<small>Cr</small></strong></header><div class="review-round-period">Cash bridge · ${qName(start)}–${qName(end)}</div><dl class="review-uses"><div><dt>Opening cash + this round</dt><dd>${rc(opening+r.amt)}</dd></div>${costs.map(([k,l,v])=>`<div><dt>${swc(CAP4C[k])}${l}</dt><dd>−${rc(v)}</dd></div>`).join('')}<div><dt>${swc(earn<0?CX_NEG:CX_PAT)}Operating ${earn<0?'losses':'earnings'}</dt><dd>${earn<0?'−':'+'}${rc(Math.abs(earn))}</dd></div>${Math.abs(debt)>.005?`<div><dt>Debt, net of interest</dt><dd>${sr(debt)}</dd></div>`:''}<div class="review-closing"><dt>Cash at ${qName(end)} end</dt><dd>${rc(R.cash[end])}</dd></div></dl>${whyD('Timing and round size',`<p class="cx-note">${detail}</p>`)}</article>`;
++ const detail=i?`<b>Round ${i+1} · ₹${f0(r.amt)} Cr in ${qName(start)}</b><br>Protects the ₹${f0(P.buffer)} Cr cash floor.<br><small>Without this round, projected cash breaches the floor in ${qName(r.trigger)}.</small>`:`The opening round uses the supplied ${rc(r.amt)} ask.`;
++ return `<article class="review-round"><header><div><h4>Round ${i+1}</h4><span>${qName(start)} · ${EXIT[start]}</span><span class="review-round-when">${roundWhen(R,i).text}</span></div><strong>₹${f0(r.amt)}<small>Cr</small></strong></header><div class="review-round-period">Cash bridge · ${qName(start)}–${qName(end)}</div><dl class="review-uses"><div><dt>Opening cash + this round</dt><dd>${rc(opening+r.amt)}</dd></div>${costs.map(([k,l,v])=>`<div><dt>${swc(CAP4C[k])}${l}</dt><dd>−${rc(v)}</dd></div>`).join('')}<div><dt>${swc(earn<0?CX_NEG:CX_PAT)}Operating ${earn<0?'losses':'earnings'}</dt><dd>${earn<0?'−':'+'}${rc(Math.abs(earn))}</dd></div>${Math.abs(debt)>.005?`<div><dt>Debt, net of interest</dt><dd>${sr(debt)}</dd></div>`:''}<div class="review-closing"><dt>Cash at ${qName(end)} end</dt><dd>${rc(R.cash[end])}</dd></div></dl>${whyD('Timing and round size',`<p class="cx-note">${detail}</p>`)}</article>`;
+ }
+ const reviewRaise=CX.raise;
+ CX.raise=D=>{const r=reviewRaise(D),R=D.R,S=cxSeries(D);r.lead='';const old=r.body.indexOf('<p class="cx-note cx-rulen">'),after=old>=0?r.body.slice(old):'';r.body=`<div class="review-fund-total"><span>Total equity · ${R.rounds.length} rounds</span><b>${rc(R.equity)}</b><small>Lowest closing cash ${rc(R.minCash)} · ${qName(R.minQ)}</small></div><div class="review-rounds">${R.rounds.map((x,i)=>reviewRound(x,i,R)).join('')}</div>`+after;r.body=reviewCollapseLast(r.body);r.body=r.body.replace(/<p class="cx-note cx-rulen">[\s\S]*?<\/p>/,'');return r;};
+@@ -4827,7 +4833,7 @@ CX.ret=D=>{const r=reviewRet(D);r.body=r.body.replace(/<p class="cx-note">Profit
+ const reviewRoce=CX.roce;
+ CX.roce=D=>{
+  const r=reviewRoce(D);r.lead='';r.body=r.body.replace(`background:${ACCENT};`,`background:${CX_PAT};`);r.body=reviewCollapseLast(r.body);
+- const method=`<div class="review-formula">Before depreciation = monthly operating profit × 12 ÷ gross modelled capital</div><div class="review-formula">After depreciation = (monthly operating profit × 12 − annual depreciation) ÷ gross modelled capital</div><p class="cx-note">Gross modelled capital = cumulative capex + labs/systems + additional working capital. Annual depreciation = plants and centres ÷ ${f0(INP.funding.lifePlant)} + labs, systems and misc ÷ ${f0(INP.funding.lifeOther)}.</p><p class="cx-note">This compares total company operating profit with the new capital included in this forecast. Existing assets and opening receivables are outside that capital balance. It is a gross-capital proxy, not a complete company ROCE. Small early capital balances produce large negative percentages.</p>`;
++ const method=`<div class="review-formula">Before depreciation = monthly operating profit × 12 ÷ gross modelled capital</div><div class="review-formula">After depreciation = (monthly operating profit × 12 − annual depreciation) ÷ gross modelled capital</div><p class="cx-note">Gross modelled capital = cumulative capex + labs/systems + additional working capital. Annual depreciation = plants and centres ÷ ${f0(INP.funding.lifePlant)} + labs, systems and misc ÷ ${f0(INP.funding.lifeOther)}.</p><p class="cx-note"><b>Capital included</b><br>Forecast assets and the full working-capital target.<br><small>Existing fixed assets are excluded. This is not complete company ROCE.</small></p>`;
+  r.body+=whyD('Return calculation and capital basis',method);return r;
+ };
+ NOTES.push('Capital cash check: capex, labs/systems and working capital are cumulative closing balances. Cash outflow in a quarter is its closing balance less the previous quarter’s closing balance. Funding deducts those changes and includes operating losses once through the monthly earnings schedule.');
+@@ -4878,7 +4884,7 @@ function setFinanceMode(mode,coverage){
+ }
+ if(INP.funding.debtMode==='none'&&(INP.funding.debtCapex>0||INP.funding.debtWC>0))INP.funding.debtMode=INP.funding.debtCapex>0?(INP.funding.debtWC>0?'both':'plant'):'wc';
+ INP.funding.debtCoverage??=Math.max(INP.funding.debtCapex,INP.funding.debtWC,50);
+-function financeSummary(R){return `<span>Equity raised <b>${rc(R.equity)}</b></span><span>Debt at Q16 <b>${rc(R.D.bal[15])}</b></span><span>Interest over plan <b>${rc(R.D.cumInt[15])}</b></span>`;}
++function financeSummary(R){return `<span>Planned equity <b>${rc(R.equity)}</b></span><span>Debt at Q16 <b>${rc(R.D.bal[15])}</b></span><span>Interest over plan <b>${rc(R.D.cumInt[15])}</b></span>`;}
+ function financingControls(D){
+  const m=financeMode(),share=finPct(INP.funding.debtCoverage??50),days=INP.capital.wcDays;
+  return `<section class="finance-choice" aria-label="Growth financing"><div class="finance-choice-main"><div class="finance-options"><h3>Debt financing</h3><div class="finance-modes" role="group" aria-label="Assets financed with debt">${[['none','No debt'],['wc','Working capital'],['plant','Plants'],['both','Both']].map(([k,l])=>`<button type="button" data-finance-mode="${k}" aria-pressed="${m===k}">${l}</button>`).join('')}</div></div><div class="finance-coverage"><label for="finance-debt-share">Debt coverage <output id="finance-share-output" for="finance-debt-share">${m==='none'?'Off':fd(share,0)+'%'}</output></label><input id="finance-debt-share" data-finance-share type="range" min="0" max="100" step="5" value="${share}" aria-valuetext="${fd(share,0)} percent of eligible growth capital"${m==='none'?' disabled':''}><div class="finance-range-ends"><span>0%</span><span>100%</span></div></div></div><div class="finance-choice-foot"><div data-finance-summary role="status" aria-live="polite" aria-atomic="true">${financeSummary(D.R)}</div><span class="finance-wc-basis">WC target: ${fd(days,0)} / 365 = <b>${fd(days/365*100,2)}% of ARR</b> · pre-tax plan</span></div></section>`;
+@@ -4889,7 +4895,7 @@ document.addEventListener('change',e=>{if(e.target.matches?.('[data-finance-shar
+ 
+ fundDrawer=function(){
+  const field=(p,l,u,min=0,step='any')=>`<label class="s-in"><span class="l">${l}<small>${u}</small></span><input type="number" min="${min}" step="${step}" data-input="${p}" value="${getPath(INP,p)}"><span class="d">plan ${getPath(INPUT_DEFAULT,p)}</span></label>`;
+- return `<details class="cap-drawer"${A.cap.drawer?' open':''}><summary>Model assumptions and loan terms</summary><div class="cap-drawer-b"><p class="note">Debt coverage applies to additional working capital and/or the three factories. Experience centres, labs, systems and misc are excluded from plant borrowing. Rates are illustrative; interest uses average quarterly debt balances.</p><div class="s-ingrid cap-ingrid">${[['capital.wcDays','Working-capital target','days of annualised revenue'],['funding.rateCapex','Plant loan rate','% per year · assumption'],['funding.rateWC','Working-capital rate','% per year · assumption'],['funding.moratorium','Plant principal grace','full quarters after draw',0,1],['funding.tenor','Plant amortisation','quarterly instalments after grace',1,1],['funding.buffer','Minimum closing cash','₹ Cr · quarter-end target'],['funding.lead','Equity lead time','quarters before cash threshold',0,1],['funding.window','Equity sizing window','quarters',1,1],['capital.firstPhase','Pre-launch plant build','% of wood and uPVC budgets']].map(x=>field(...x)).join('')}</div>${whyD('Assumptions requiring business validation',financeAssumptions())}</div></details>`;
++ return `<details class="cap-drawer"${A.cap.drawer?' open':''}><summary>Assumptions &amp; loan terms</summary><div class="cap-drawer-b"><p class="note"><b>Debt eligibility</b><br>Added working capital and the three factories.<br><small>Other investment stays equity-funded.</small></p><div class="s-ingrid cap-ingrid">${[['capital.wcDays','Working-capital target','days of annualised revenue'],['funding.rateCapex','Plant loan rate','% per year · assumption'],['funding.rateWC','Working-capital rate','% per year · assumption'],['funding.moratorium','Plant principal grace','full quarters after draw',0,1],['funding.tenor','Plant amortisation','quarterly instalments after grace',1,1],['funding.buffer','Minimum closing cash','₹ Cr · quarter-end target'],['funding.lead','Equity lead time','quarters before cash threshold',0,1],['funding.window','Equity sizing window','quarters',1,1],['capital.firstPhase','Pre-launch plant build','% of wood and uPVC budgets']].map(x=>field(...x)).join('')}</div>${whyD('Unverified assumptions',financeAssumptions())}</div></details>`;
+ };
+ function financeAssumptions(){return `<ul class="finance-assumptions"><li>Working capital is a planning target expressed as days of annualised sales. Receivables, inventory and supplier credit are not separately forecast.</li><li>The opening working-capital target is assumed already funded. No opening free cash is added.</li><li>Capex timing follows product sales, with the selected pre-launch portion of wood/uPVC. It is not a capacity or vendor-payment schedule.</li><li>Monthly sales between quarter-end targets are estimated; operating cash is before income tax. Returns include modelled depreciation but no existing fixed-asset book values.</li><li>Above ₹20 Cr monthly revenue, common overhead extends the ₹10–20 Cr marginal slope. Q16 overhead is an extrapolation, not a supplied budget.</li><li>Debt rates, repayment terms, equity buffer, round timing and valuations are planning assumptions. Quarter-end cash does not establish the lowest cash within a quarter.</li></ul>`;}
+ const finStressCases=stressCases;
+@@ -4897,7 +4903,7 @@ stressCases=function(){return finStressCases().filter(c=>!['c41','c336','glide']
+ const finLegends=cxLegends;
+ cxLegends=function(D){const L=finLegends(D);if(D.R.D.on)L[2]+=`<span>${swc(CAP4C.interest)}Loan interest</span>`;return L;};
+ const financeHeads=cxHeads;
+-cxHeads=function(D){const h=financeHeads(D);h[2][1]='Operating earnings less capital additions'+(D.R.D.on?' and loan interest':'')+' during each quarter, before equity and net loan proceeds.';h[3][1]='Accumulated cash flow before equity and net loan proceeds. Interest is included when borrowing is selected.';h[4][1]='Each arrow adds an equity round. Debt draws, principal repayments and interest are included in closing cash.';return h;};
++cxHeads=function(D){const h=financeHeads(D);h[2][1]='Operating earnings less growth investment, before financing.';h[3][1]='Growth investment less accumulated operating earnings.';h[4][1]='Cash remaining after investment, equity and debt.';return h;};
+ 
+ CX.spend=D=>{
+  const q=selQ(),G=D.G,K=G.K,S=cxSeries(D),days=K.days(),last=15,pct=days/365*100,open=K.openingWC,full=K.wcTotal[last],prev=q?K.cum[q-1].wc:0,c=K.cum[q],before=q?K.cum[q-1]:{capex:0,pp:0,wc:0};
+@@ -4912,7 +4918,7 @@ CX.need=D=>{const q=selQ(),G=D.G,S=cxSeries(D),R=D.R,calc=cxCalc([['',CAP4C.cape
+ const finRaise=CX.raise;
+ CX.raise=D=>{
+  const r=finRaise(D),R=D.R,q=selQ(),p=q?R.D.bal[q-1]:0,dp=R.D.draw[q]-R.D.repay[q]+R.D.wcBal[q]-(q?R.D.wcBal[q-1]:0),interest=R.D.intC[q]+R.D.intW[q];
+- const detail=`<p class="cx-note">Debt proceeds are financing, not earnings. Plant principal is repaid after the grace period; the WC facility follows the selected share of additional working capital.</p><table class="cx-cols"><tbody><tr><th>Debt entering ${qName(q)}</th><td>${rc(p)}</td></tr><tr><th>Net new borrowing during quarter</th><td>${sr(dp)}</td></tr><tr><th>Interest paid during quarter</th><td>${rc(interest)}</td></tr><tr><th>Debt at ${qName(q)} end</th><td>${rc(R.D.bal[q])}</td></tr><tr><th>Interest paid through Q16</th><td>${rc(R.D.cumInt[15])}</td></tr></tbody></table>`;
++ const detail=`<p class="cx-note"><b>Debt funding</b><br>Borrowing reduces the equity required and adds repayment costs.</p><table class="cx-cols"><tbody><tr><th>Debt entering ${qName(q)}</th><td>${rc(p)}</td></tr><tr><th>Net new borrowing during quarter</th><td>${sr(dp)}</td></tr><tr><th>Interest paid during quarter</th><td>${rc(interest)}</td></tr><tr><th>Debt at ${qName(q)} end</th><td>${rc(R.D.bal[q])}</td></tr><tr><th>Interest paid through Q16</th><td>${rc(R.D.cumInt[15])}</td></tr></tbody></table>`;
+  r.body=r.body.replaceAll('Receivables at','WC target at').replaceAll('plants and receivables','plants and additional WC');if(R.D.on)r.body=r.body.replaceAll('estimated quarter earnings less growth spending','operating cash less capital additions and interest');r.body+=whyD('Borrowing and interest calculation',detail);return r;
+ };
+ const finRoce=CX.roce;
+@@ -4920,18 +4926,16 @@ CX.roce=D=>{
+  const r=finRoce(D),q=selQ(),K=D.G.K;
+  r.body=r.body.replace(`working capital ${rc(K.cum[q].wc)}`,`full working-capital target ${rc(K.wcTotal[q])}`);
+  r.body=r.body.replace('Gross modelled capital = cumulative capex + labs/systems + additional working capital.','Gross modelled capital = cumulative capex + labs/systems + the full working-capital target, including its modelled opening balance.');
+- r.body=r.body.replace('Existing assets and opening receivables are outside that capital balance.','Existing fixed-asset book values are unavailable and excluded.');
+- r.body=r.body.replace('This compares total company operating profit with the new capital included in this forecast.','This compares company operating profit with forecast capex and the full working-capital target.');
+  return r;
+ };
+ const finCapitalInputs=capitalInputs;
+ capitalInputs=function(fld){return finCapitalInputs(fld).replace('Receivable days','Working-capital days').replace('working capital = days ÷ 30 × revenue a month added','working capital target = days ÷ 365 × annualised revenue; cash uses changes');};
+ const financingInput=onInput;
+-onInput=function(el){const p=el.dataset.input,v=Number(el.value),integer=['funding.tenor','funding.moratorium','funding.window','funding.lead'].includes(p),nonnegative=p.startsWith('capital.')||p.startsWith('operating.')||p.startsWith('funding.')||p.startsWith('valuation.'),positive=['funding.tenor','funding.window','funding.roundTo','funding.lifePlant','funding.lifeOther','valuation.todayMRR','valuation.multiple'].includes(p),percent=p==='capital.firstPhase'||p.startsWith('operating.products.');let bad=nonnegative&&(el.value.trim()===''||!Number.isFinite(v)||v<0||(integer&&!Number.isInteger(v))||(positive&&v<=0)||(percent&&v>100));if(p.startsWith('operating.anchors.')){const i=+p.split('.').at(-1),a=INP.operating.anchors;bad||=(i>0&&v<=a[i-1])||(i<a.length-1&&v>=a[i+1]);}if(p==='funding.blendLo')bad||=v>=INP.funding.blendHi;if(p==='funding.blendHi')bad||=v<=INP.funding.blendLo;if(bad){el.setCustomValidity?.('Enter a valid model value. Days and costs must be non-negative; lives and periods positive; percentages within 0–100; anchors and thresholds increasing.');return;}el.setCustomValidity?.('');financingInput(el);};
++onInput=function(el){const p=el.dataset.input,v=Number(el.value),integer=['funding.tenor','funding.moratorium','funding.window','funding.lead'].includes(p),nonnegative=p.startsWith('capital.')||p.startsWith('operating.')||p.startsWith('funding.')||p.startsWith('valuation.'),positive=['funding.tenor','funding.window','funding.roundTo','funding.lifePlant','funding.lifeOther','valuation.todayMRR','valuation.multiple'].includes(p),percent=p==='capital.firstPhase'||p.startsWith('operating.products.');let bad=nonnegative&&(el.value.trim()===''||!Number.isFinite(v)||v<0||(integer&&!Number.isInteger(v))||(positive&&v<=0)||(percent&&v>100));let msg=!bad?'':(integer&&positive)?'Enter at least 1 whole quarter.':integer?'Enter 0 or more whole quarters.':percent?'Enter a percentage from 0 to 100.':positive?'Enter a value above 0.':'Enter 0 or more.';if(p.startsWith('operating.anchors.')){const i=+p.split('.').at(-1),a=INP.operating.anchors;if(!bad&&i>0&&v<=a[i-1]){bad=true;msg='Enter a value higher than the previous one.';}if(!bad&&i<a.length-1&&v>=a[i+1]){bad=true;msg='Enter a value lower than the next one.';}}if(!bad&&p==='funding.blendLo'&&v>=INP.funding.blendHi){bad=true;msg='Enter a value lower than the full-profit threshold.';}if(!bad&&p==='funding.blendHi'&&v<=INP.funding.blendLo){bad=true;msg='Enter a value higher than the blend start.';}if(bad){el.setCustomValidity?.(msg);return;}el.setCustomValidity?.('');financingInput(el);};
+ const financeGroup=INPUT_SCHEMA.find(g=>g.title==='Funding plan');
+ if(financeGroup){financeGroup.fields=financeGroup.fields.filter(f=>!['funding.wcBasis','funding.debtCapex','funding.debtWC'].includes(f[0]));financeGroup.intro='Equity policy and illustrative loan terms. Choose which assets use debt, and the coverage, on page 03. Working capital uses days / 365 of annualised revenue.';}
+-NOTES[NOTE_WC-1]='Working-capital policy: target = days / 365 × annualised revenue (12 × quarter-end monthly revenue). At 60 days this is 16.44% of ARR. Additional funding deducts the modelled opening target, assumed already funded; quarter cash uses changes in that additional target. This is not a receivables-only or customer-credit assumption.';
+-NOTES[NOTE_DEBT-1]='Debt scenario: coverage applies to growth in the working-capital target and the three factories only. Default rates are 11% for plants and 10.5% for WC, as illustrative assumptions. Plant principal has four full quarters of grace after draw and sixteen quarterly instalments; interest uses average quarterly outstanding balances. Lender terms are not verified.';
++NOTES[NOTE_WC-1]='<b>Working-capital target</b><br>Cash tied up in growth increases the funding need.<br><small>Calculation: ARR × days ÷ 365. Opening WC is assumed funded. This is a planning ratio, not customer credit terms.</small>';
++NOTES[NOTE_DEBT-1]='<b>Illustrative loan terms</b><br>11% plant interest · 10.5% WC interest.<br><small>Plant principal: four-quarter grace, then 16 quarterly instalments. Lender terms are unverified.</small>';
+ NOTES[NOTE_PRICE-1]='Illustrative round pricing retained from the supplied dashboard: round 1 uses 16× today’s ARR as post-money; later rounds use the configured ARR-multiple glide, blended with 15× annualised operating profit at the configured margin thresholds. Exit defaults to the user-selected 10× ARR. These are scenario inputs, not verified market valuations or term sheets.';
+ NOTES.forEach((s,i)=>{if(s.startsWith('Capital return basis:'))NOTES[i]='Capital return basis: annualised quarter-end monthly operating profit / (cumulative forecast capex + labs/systems + the full working-capital target). Opening working capital is included in this denominator; existing fixed-asset book values are unavailable and excluded. This remains an indicative gross-capital return, not complete company ROCE.';});
+ NOTES.push('The former 200% represented 60/30 of monthly revenue, not 200% of annual revenue. The revised 365-day annual-sales rule uses 60/365 = 16.4384% of ARR, equivalent to 1.9726 months of the current sales rate. Changing the percentage base alone does not reduce capital twelvefold.');
