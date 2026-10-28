@@ -141,12 +141,12 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 ## Model facts worth knowing
 
 - Revenue grows from ₹1.6 Cr a month today to ₹127.6 Cr in Q16 (Q1 = Oct–Dec 2026).
-- Round 1 is the ₹40 Cr ask in Q1, priced at 12× today's ARR (₹230.4 Cr post-money); the lead investor's cheque inside it is ₹25 Cr (input `valuation.lead`).
+- Round 1 is the ₹40 Cr ask in Q1, set at ₹300 Cr post-money (input `valuation.r1Post`, an exception to the multiple; about 15.6× today's ARR); the lead investor's cheque inside it is ₹25 Cr (input `valuation.lead`).
 - Round 2 is ₹200 Cr in Q6 (inputs `funding.round2`, `funding.round2Q` = 5; quarters are 0-based, 0 = Q1) and funds organic growth.
 - Rounds 3 and 4 are ₹500 Cr in Q10 and ₹1,750 Cr in Q15, for organic growth & acquisition (inputs `funding.r3Q`, `funding.r3`, `funding.r4Q`, `funding.r4`; ₹ Cr). The acquisitions themselves are not modelled: their cash stays on the balance sheet and counts at face value in the exit value. Acquired revenue is upside, not in the plan.
-- Every round is priced at `valuation.multiple` (12×) ARR post-money, so valuation rises with ARR. Every round counts in cash and in the returns.
+- Rounds 2–4 are priced at `valuation.multiple` (12×) ARR post-money, so from round 2 valuation rises with ARR. Every round counts in cash and in the returns. Rounds 1 to 4 are 15, 12 and 15 months apart (Q1 → Q6 → Q10 → Q15).
 - Rounds 1–2 (₹240 Cr) cover the ₹219 Cr peak cash required (Q14). Cash goes below zero in Q5 (about −₹12 Cr) before round 2 lands in Q6.
-- The exit is at Q16, valued at the round ARR multiple (12× by default, `valuation.multiple`) or at 100× annual operating profit (`funding.multPat`): ₹25 Cr in round 1 becomes ₹1,635 Cr (65.4×) or ₹2,139 Cr (85.6×).
+- The exit is at Q16, valued at the round ARR multiple (12× by default, `valuation.multiple`) or at 100× annual operating profit (`funding.multPat`): ₹25 Cr in round 1 becomes ₹1,256 Cr (50.2×) or ₹1,643 Cr (65.7×).
 - The old unsized "round every 6 months" markers are gone (`funding.cadenceQ` is unused).
 - **Capex:** ₹170 Cr to Q16 is fixed (plants 40 + 30 + 50, centres 10, labs 10, systems 20, misc 10), bought in whole phases a quarter ahead of demand. Phase sizes are placeholders until the founders send real ones.
 - **Working capital** is 60 days of annualised revenue on the revenue added since today. **GST** is ignored by instruction.

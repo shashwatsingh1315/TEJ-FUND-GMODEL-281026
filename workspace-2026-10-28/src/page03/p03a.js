@@ -3,7 +3,7 @@
    a static right-hand panel that explains the logic (formula, inputs, rules, one fold); three takeaways per step.
    Round 1 = the ask in Q1. Round 2 = fixed amount (round2) at a fixed quarter (round2Q, default Q6).
    Rounds 3 and 4 = Rs Cr amounts (r3, r4) at fixed quarters (r3Q Q10, r4Q Q15), organic growth & acquisition.
-   Every round is priced at valuation.multiple x ARR, post-money (round 1 on 12 x todayMRR; rounds 2-4 on 12 x quarter-end monthly revenue). All four rounds count in cash and dilution.
+   Round 1 is set at valuation.r1Post (Rs 300 Cr post-money; 0 = price it at the multiple). Rounds 2-4 are priced at valuation.multiple x ARR, post-money (12 x quarter-end monthly revenue). All four rounds count in cash and dilution.
    Exit is Q16 at the round ARR multiple (12x by default) or 100x annual operating profit. The lead investor's cheque (valuation.lead) sits inside round 1.
    Debt stays off and its bar is hidden. */
 
@@ -38,15 +38,15 @@ raisePlan=function(o={}){
   return {G,D,P,N,rounds,base,cash,eq,equity:sum(rounds.map(r=>r.amt)),minCash,minQ,short:cash.map((c,q)=>c<0?q:-1).filter(q=>q>=0),later:[],
     organic:{equity:sum(org.map(r=>r.amt)),cash:oc,minCash:om,minQ:oc.indexOf(om)},acq:{amt:sum(acqR.map(r=>r.amt))}};
 };
-/* Every round is priced at valuation.multiple x ARR, post-money. Round 1 uses today's ARR (12 x todayMRR); rounds 2-4 use 12 x the quarter-end monthly revenue.
-   pre = post - amount. stake = the round-1 holder's stake after the round; stepUp = post / previous post (equals arrUp = arr / previous arr).
+/* Round 1 is set at valuation.r1Post post-money (0 or blank = multiple x today's ARR, 12 x todayMRR); mArr = post / ARR. Rounds 2-4 are priced at valuation.multiple x ARR, post-money, on 12 x the quarter-end monthly revenue.
+   pre = post - amount. stake = the round-1 holder's stake after the round; stepUp = post / previous post; arrUp = arr / previous arr (they differ for round 2 because round 1 is not on the multiple).
    over[k] overrides a pre-money (what-if), then post = pre + amount. */
 priceRounds=function(R,over){
   const T=baseData().V.T,mult=+INP.valuation.multiple;let stake=0,prev=null;
   return R.rounds.map((r,k)=>{
     const n=r.n??k+1,kind=r.kind||(k?'organic':'ask');let e;
-    if(!k){const arr=INP.valuation.todayMRR*12,post=mult*arr,pre=post-r.amt;stake=r.amt/post;
-      e={...r,k,n,kind,name:'E1',arr,mArr:mult,w:0,marg:null,arrVal:post,patVal:0,pre,post,sold:stake,dil:0,stake,stepUp:null,arrUp:null,method:fd(mult,0)+'× ARR'};}
+    if(!k){const arr=INP.valuation.todayMRR*12,r1=+INP.valuation.r1Post||0,post=r1>0?r1:mult*arr,pre=over&&over[0]!=null?over[0]:post-r.amt,pst=pre+r.amt;stake=r.amt/pst;
+      e={...r,k,n,kind,name:'E1',arr,mArr:pst/arr,w:0,marg:null,arrVal:pst,patVal:0,pre,post:pst,sold:stake,dil:0,stake,stepUp:null,arrUp:null,method:r1>0?'₹'+fd(post,0)+' Cr set':fd(mult,0)+'× ARR'};}
     else{const q=r.q,arr=12*T[q],pre=over&&over[k]!=null?over[k]:mult*arr-r.amt,post=pre+r.amt,dil=r.amt/post;stake*=pre/post;
       e={...r,k,n,kind,name:'E'+(k+1),arr,mArr:mult,w:0,marg:R.G.patMonthly[q]/T[q]*100,arrVal:post,patVal:0,pre,post,sold:dil,dil,stake,stepUp:post/prev.post,arrUp:arr/prev.arr,method:fd(mult,0)+'× ARR'};}
     prev=e;return e;});
@@ -68,20 +68,21 @@ investorReturn=function(R,X,over){
 };
 RET_M.splice(0,RET_M.length,['arr',null],['pat',null]);
 NOTES[NOTE_FUND-1]='Assumption · funding rounds: round 1 is the ₹40 Cr ask, closed in Q1. Round 2 (₹200 Cr) closes in Q6 and funds organic growth. Round 3 (₹500 Cr, Q10) and round 4 (₹1,750 Cr, Q15) are for organic growth & acquisition; the acquisitions themselves are not modelled, so their cash sits on the balance sheet. All four rounds are counted in cash and in every return shown. Round dates and sizes are placeholders for the founders to set.';
-NOTES[NOTE_PRICE-1]='Illustrative round pricing: every round is priced at 12× ARR post-money, so the valuation rises in step with ARR. Round 1 uses today’s ARR; later rounds use ARR as 12 × the quarter-end monthly revenue. Returns count each later round at its own price (pre-money ÷ post-money). Scenario inputs, not verified market valuations or term sheets.';
+NOTES[NOTE_PRICE-1]='Illustrative round pricing: round 1 is set at ₹300 Cr post-money (about 15.6× today’s ARR). Rounds 2 to 4 are priced at 12× ARR post-money, where ARR is 12 × the quarter-end monthly revenue, so from round 2 the valuation rises in step with ARR. Returns count each later round at its own price (pre-money ÷ post-money). Scenario inputs, not verified market valuations or term sheets.';
 NOTES[NOTE_RET-1]='Exit is at the end of Q16, valued at 12× ARR (the same multiple as the funding rounds) or at 100× annual operating profit (12 × the quarter-end monthly operating profit, before tax, interest and depreciation). Exit equity value adds closing cash, including unspent round 3 and 4 money at face value, and subtracts modelled debt. The lead investor’s cheque is part of round 1 and is valued on the same basis.';
 {const g=INPUT_SCHEMA.find(x=>x.title==='Funding plan');
  if(g){const at=g.fields.findIndex(f=>f[0]==='funding.window')+1;
   g.fields=g.fields.filter(f=>f[0]!=='funding.cadenceQ');
   g.fields.splice(at,0,['funding.round2','Round 2 amount','₹ Cr · organic growth · 0 = size it by the cash rule'],['funding.round2Q','Round 2 quarter','quarter index, 0-based · 0 = Q1, 5 = Q6'],
    ['funding.r3Q','Round 3 quarter','quarter index, 0-based · 9 = Q10'],['funding.r3','Round 3 amount','₹ Cr · organic growth & acquisition'],['funding.r4Q','Round 4 quarter','quarter index, 0-based · 14 = Q15'],['funding.r4','Round 4 amount','₹ Cr · organic growth & acquisition']);
-  g.intro='Equity policy and illustrative loan terms. Round 1 is the ask in Valuation; rounds 2 to 4 are fixed amounts at fixed quarters. Every round is priced at the round-1 ARR multiple, post-money. All four rounds count in cash and in the valuation. Debt is off in this plan. Working capital uses days / 365 of annualised revenue.';}
+  g.intro='Equity policy and illustrative loan terms. Round 1 is the ask in Valuation; rounds 2 to 4 are fixed amounts at fixed quarters. Round 1 is set at its own post-money (Valuation › Round 1 post-money); rounds 2 to 4 are priced at the ARR multiple, post-money. All four rounds count in cash and in the valuation. Debt is off in this plan. Working capital uses days / 365 of annualised revenue.';}
  /* the exit group: the ARR multiple per quarter and the profit blend are gone (every round is priced at valuation.multiple x ARR, the exit is valuation.multiple x ARR or multPat x profit) */
  const h=INPUT_SCHEMA.find(x=>x.title==='Later-round valuation');
  if(h){h.fields=h.fields.filter(f=>!['funding.multQ4','funding.multQ8','funding.multQ16','funding.blendLo','funding.blendHi'].includes(f[0]));
   const m=h.fields.find(f=>f[0]==='funding.multPat');if(m){m[1]='Exit profit multiple';m[2]='× annual operating profit at the Q16 exit';}
-  h.title='Exit multiple and depreciation';h.intro='The Q16 exit is valued at the round ARR multiple (Valuation › ARR multiple) or at this multiple of annual operating profit. Every funding round is priced at that same multiple. Keep depreciation lives under capital-return assumptions.';}
- const v=INPUT_SCHEMA.find(x=>x.title==='First-round assumptions');if(v&&!v.fields.some(f=>f[0]==='valuation.lead'))v.fields.push(['valuation.lead','Lead investor cheque','₹ Cr · inside the ask']);}
+  h.title='Exit multiple and depreciation';h.intro='The Q16 exit is valued at the round ARR multiple (Valuation › ARR multiple) or at this multiple of annual operating profit. Rounds 2 to 4 are priced at that same multiple. Keep depreciation lives under capital-return assumptions.';}
+ const v=INPUT_SCHEMA.find(x=>x.title==='First-round assumptions');if(v&&!v.fields.some(f=>f[0]==='valuation.lead'))v.fields.push(['valuation.lead','Lead investor cheque','₹ Cr · inside the ask']);
+ if(v&&!v.fields.some(f=>f[0]==='valuation.r1Post')){const i=v.fields.findIndex(f=>f[0]==='valuation.multiple');v.fields.splice(i>=0?i+1:v.fields.length,0,['valuation.r1Post','Round 1 post-money','₹ Cr · 0 = price at the ARR multiple']);}}
 const pcInput=onInput;
 onInput=function(el){const p=el.dataset.input,v=Number(el.value);
   const bad=m=>{el.setCustomValidity?.(m);},blank=el.value.trim()==='',F=INP.funding;
@@ -93,6 +94,7 @@ onInput=function(el){const p=el.dataset.input,v=Number(el.value);
   if(['funding.r3','funding.r4'].includes(p)&&(blank||!Number.isFinite(v)||v<0)){bad('Enter an amount of 0 or more.');return;}
   if(['funding.multPat'].includes(p)&&(blank||!Number.isFinite(v)||v<=0)){bad('Enter a number above 0.');return;}
   if(p==='valuation.lead'&&(blank||!Number.isFinite(v)||v<0||v>+INP.valuation.ask)){bad('Enter the lead’s cheque: 0 up to the round 1 ask.');return;}
+  if(p==='valuation.r1Post'&&(blank||!Number.isFinite(v)||v<0||(v>0&&v<=+INP.valuation.ask))){bad('Enter round 1 post-money above the ask, or 0 to use the ARR multiple.');return;}
   if(p==='valuation.ask'&&Number.isFinite(v)&&v>=0&&v<+INP.valuation.lead){bad('The ask cannot be below the lead’s cheque.');return;}
   pcInput(el);
   /* the base check gives one generic message; name the rule this field broke instead */

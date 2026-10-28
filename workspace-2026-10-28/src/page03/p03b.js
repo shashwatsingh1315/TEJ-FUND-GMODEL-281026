@@ -182,6 +182,9 @@ function cxVal(W,D){
   pr.forEach((r,k)=>{const xa0=c.x(r.q),xb=k<pr.length-1?c.x(pr[k+1].q):c.x(15),ty=y(r.post);o.add({x:xa0,y:ty,w:xb-xa0,h:yb-ty});});
   let L='';
   pr.forEach((r,k)=>{L+=pcPlace(o,c,{px:c.x(r.q),py:y(r.post),lines:[`Round ${r.n} · ${pcAmt(r)}`,`${r0(r.post)} post-money`],bold:0,col:PC.fundTxt,c2:PC.fundTxt,w2:600,leader:false,gaps:[9,16,26,40],pref:k?['ul','u','ur','l']:['ur','u'],ymin:c.top+bandH+1});});
+  /* months between raises: a quiet label on each flat segment, just above the line, centred if free else slid to the nearest free spot */
+  pr.slice(0,-1).forEach((r,k)=>{const t=`${(pr[k+1].q-r.q)*3} months`,w=pcW(t,11,600),h=14,xa0=c.x(r.q)+10,xb=c.x(pr[k+1].q)-10,cx0=(xa0+xb)/2,by=y(r.post)-5;if(xb-xa0<w)return;
+    for(let d=0;d<=(xb-xa0-w)/2+.5;d+=3)for(const s of d?[-1,1]:[1]){const x=cx0+s*d-w/2;if(x<xa0-.5||x+w>xb+.5)continue;const b={x,y:by-h,w,h};if(!o.n(b,2)){o.add(b);L+=T(x+w/2,by-3,t,'slab-b','middle',`font-size:11px;font-weight:600;fill:${PC.fundTxt};opacity:.8;${halo}`);return;}}});
   /* the summary caption: beside the last round if there is clear space above the area, else at the top left (nothing is under it there) */
   const vL=[`Valuation ${r0(post[0])} → ${r0(post.at(-1))}`,`${fd(post.at(-1)/post[0],0)}× from round 1 to round ${pr.at(-1).n}`];
   L+=pcPlace(o,c,{px:c.x(15),py:y(post.at(-1)),lines:vL,col:PC.fundTxt,pref:['ul','u'],optional:true,ymin:c.top+bandH+1})||pcPlace(o,c,{px:c.ml+8,py:c.top+bandH+33,fs:11.5,lines:vL,col:PC.fundTxt,pref:['ur'],leader:false,gaps:[0,-6,-12,-18,-24,-30,-36,-42,-48,-56],ymin:c.top+bandH+1,optional:true});

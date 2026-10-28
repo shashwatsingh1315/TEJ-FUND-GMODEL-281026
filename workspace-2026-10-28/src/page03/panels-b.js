@@ -133,7 +133,7 @@ CX.ret=D=>{
   const c3=PK.card({col:PC.value,title:'Tejas at exit',body:PK.led(led),note:'Acquired revenue not included: upside.'});
   const others=RET_M.filter(([k])=>k!==cur).map(([k])=>{const [m,x]=k.split('-'),r=investorReturn(R,{q,m,mult:x?+x:undefined,ach:1}).lead;return [`At ${lb(k)}`,n0(r.val),`${pcXh(r.mult)} · IRR ${pctR(r.irr*100)}`];});
   const fold=pnbF(whyD('How the value is worked out',
-    `<p class="pnb-fn">The ${n0(L)} goes in at round 1’s price: ${n0(e.post)} post-money, ${f0(INP.valuation.multiple)}× today’s ARR of ${n0(e.arr)}. Every later round is priced the same way, at ${f0(INP.valuation.multiple)}× the ARR of its quarter, and all ${pr.length} rounds are counted. Each round row in the panel is the ${n0(L)} at that round’s post-money price.</p>`
+    `<p class="pnb-fn">The ${n0(L)} goes in at round 1’s price: ${n0(e.post)} post-money, ${pcX(e.post/e.arr)} today’s ARR of ${n0(e.arr)}. Every later round is priced at ${f0(INP.valuation.multiple)}× the ARR of its quarter, and all ${pr.length} rounds are counted. Each round row in the panel is the ${n0(L)} at that round’s post-money price.</p>`
     +`<p class="pnb-fn">The exit is fixed at ${qName(q)} (${QD[q].a}–${QD[q].z} ${QD[q].yz}, the last quarter): ${n0(ld.val)} is ${pcXh(ld.mult)} the money, ${pctR(ld.irr*100)} a year. Each bar in the chart is the same ${n0(L)} valued as if Tejas exited in that quarter.</p>`
     +cxLev(`The same ${qName(q)} exit, valued the other way`,others)
     +`<p class="pnb-fn">Rounds 3 and 4 are counted at cost: ${n0(R.acq.amt)} is held as cash at face value, and the revenue acquisitions may bring is upside, left out.</p>`));

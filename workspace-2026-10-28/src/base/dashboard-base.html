@@ -1472,6 +1472,7 @@ body[data-page="finance"] .ph-t{font-size:26px}
  "valuation": {
   "todayMRR": 1.6,
   "multiple": 12,
+  "r1Post": 300,
   "ask": 40,
   "lead": 25,
   "milestoneMRR": 12
@@ -2095,7 +2096,7 @@ function stats(V){
    Defaults live in the #inputs-default block. Edits on the Inputs page are kept in this browser,
    and "Download dashboard with these inputs" writes them into a copy of this file. */
 const INPUT_DEFAULT=JSON.parse(document.getElementById('inputs-default').textContent);
-const INPUT_KEY='tejas-dashboard-1041-operating-v3';
+const INPUT_KEY='tejas-dashboard-1041-operating-v4';
 let INP=(()=>{try{const s=JSON.parse(localStorage.getItem(INPUT_KEY)||'null');return s?mergeInputs(INPUT_DEFAULT,s):structuredClone(INPUT_DEFAULT);}catch(e){return structuredClone(INPUT_DEFAULT);}})();
 function mergeInputs(base,over){const out=structuredClone(base);for(const k in over){if(out[k]&&typeof out[k]==='object'&&!Array.isArray(out[k]))out[k]=mergeInputs(out[k],over[k]);else if(k in out)out[k]=over[k];}return out;}
 function saveInputs(){try{localStorage.setItem(INPUT_KEY,JSON.stringify(INP));}catch(e){}}

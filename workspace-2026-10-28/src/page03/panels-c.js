@@ -84,7 +84,7 @@ CX.raise=D=>{
   /* the fold: how the rounds are priced and the cash they leave */
   const peak=S.peak,low=R.organic.minCash,lowQ=R.organic.minQ,before=r2&&lowQ<r2.q,enough=orgAmt>=peak-1e-9;
   const more=whyD('Pricing and cash',
-    `<p class="cx-note">Round 1 is priced at ${fd(INP.valuation.multiple,0)}× today’s ARR (${R0(r1.post)} post-money). Every later round is priced at the same ${fd(INP.valuation.multiple,0)}× on the ARR of its quarter (12 × the quarter’s last month), so the valuation rises in step with ARR.${fn(NOTE_PRICE)}</p>`
+    `<p class="cx-note">Round 1 is set at ${R0(r1.post)} post-money (${pcX(r1.post/r1.arr)} today’s ARR). Every later round is priced at ${fd(INP.valuation.multiple,0)}× the ARR of its quarter (12 × the quarter’s last month), so from round 2 the valuation rises in step with ARR.${fn(NOTE_PRICE)}</p>`
     +cxLev(`Rounds ${rng(org)} and the organic plan`,[['Cash required, at its peak',Rs(peak),qName(S.pk)],[`Raised in rounds ${rng(org)}`,Rs(orgAmt),enough?`${Rs(orgAmt-peak)} above`:`${Rs(peak-orgAmt)} short`],['Lowest cash',low<0?`−${Rs(-low)}`:Rs(low),`${qName(lowQ)}${before?`, before round ${r2.n} lands`:''}`]])
     +`<p class="cx-note">Lowest cash is ${low>=P.buffer-1e-9?'above':'under'} the ${Rs(P.buffer)} floor.${acq.length?` Rounds ${rng(acq)} (${Rs(acqAmt)}) sit in the model as cash and count at face value at the exit; the acquisitions and their revenue are not modelled.`:''} ${R.D.on?`Debt is on: ${rc(R.D.bal[R.N-1])} outstanding at ${qName(R.N-1)}.`:'Debt is off.'}${fn(NOTE_FUND)}</p>`);
   return {lead:'',body:panel([c1,c2,c3].filter(Boolean),more,'pnc-c4')};
