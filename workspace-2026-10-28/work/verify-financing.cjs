@@ -22,20 +22,20 @@ for(const mode of ['none','wc','plant','both'])for(const share of [0,25,50,75,10
  }
  eq(sum(G.flows.capex),140,'End-state capex paid once');eq(sum(G.flows.pp),30,'Labs/systems paid once');eq(sum(G.flows.wc),G.K.wc[15],'WC cash flows telescope');
  eq(d.ret.eqv,12*baseS[15].net*10+R.cash[15]-D.bal[15],'Exit equity subtracts remaining debt');eq(d.ret.val,d.ret.eqv*d.ret.s,'Investor value accounts for debt and dilution');
- assert.ok(!/NaN|undefined/.test(d.controls));assert.ok(d.controls.includes(`data-finance-mode="${mode}" aria-pressed="true"`));assert.equal(d.controls.includes('disabled'),mode==='none');
+ assert.equal(d.controls,'','The debt financing bar is hidden on page 03');
  out.push({mode,coverage:share,equity:R.equity,debtQ16:D.bal[15],interest:totalInterest,cashQ16:R.cash[15],minCash:R.minCash,rounds:R.rounds.map(r=>({quarter:r.q+1,amount:r.amt}))});
 }
 // Exercise the actual event handlers, including the zero-coverage recovery case.
 run("A.page='finance';A.steps.finance=4;var financingRenders=0;refreshFinance=function(){financingRenders++;renderFinance();};setFinanceMode('none',50)");
 const click=events.click.find(f=>f.toString().includes("closest('[data-finance-mode]')"));assert.ok(click);
-click({target:{closest:()=>({dataset:{financeMode:'both'}})}});assert.equal(run('financeMode()'),'both');assert.equal(run('INP.funding.debtCapex'),50);assert.ok(elements['main-content'].innerHTML.includes('data-finance-mode="both" aria-pressed="true"'));
+click({target:{closest:()=>({dataset:{financeMode:'both'}})}});assert.equal(run('financeMode()'),'both');assert.equal(run('INP.funding.debtCapex'),50);assert.ok(!elements['main-content'].innerHTML.includes('data-finance-mode'));
 const input=events.input.find(f=>f.toString().includes("matches?.('[data-finance-share]')")),change=events.change.find(f=>f.toString().includes("matches?.('[data-finance-share]')"));assert.ok(input&&change);
-const target={value:'0',matches:()=>true,setAttribute:()=>{}};input({target});change({target});assert.equal(run('financeMode()'),'both');assert.equal(run('INP.funding.debtCapex'),0);assert.ok(!elements['main-content'].innerHTML.match(/id="finance-debt-share"[^>]*disabled/));target.value='75';input({target});change({target});assert.equal(run('INP.funding.debtWC'),75);click({target:{closest:()=>({dataset:{financeMode:'none'}})}});assert.equal(run('INP.funding.debtWC'),0);
+const target={value:'0',matches:()=>true,setAttribute:()=>{}};input({target});change({target});assert.equal(run('financeMode()'),'both');assert.equal(run('INP.funding.debtCapex'),0);target.value='75';input({target});change({target});assert.equal(run('INP.funding.debtWC'),75);click({target:{closest:()=>({dataset:{financeMode:'none'}})}});assert.equal(run('INP.funding.debtWC'),0);
 // Actual data-entry handler rejects invalid financial terms without corrupting INP.
 run(`(()=>{const el={value:'-1',dataset:{input:'funding.tenor'},setCustomValidity(){},closest(){return {classList:{toggle(){}}}}};onInput(el);if(INP.funding.tenor!==INPUT_DEFAULT.funding.tenor)throw Error('Invalid tenor accepted');return true;})()`);
-// All seven actual panels and all charts at all quarters under each borrowing mode.
+// All six actual panels and all charts at all quarters under each borrowing mode.
 const rendered=run(`(()=>{let n=0;for(const mode of ['none','wc','plant','both']){setFinanceMode(mode,50);const D=capData();for(let q=0;q<16;q++){A.cap.selQ=q;for(const key of CX_KEYS){const r=CX[key](D),s=r.body+r.lead+(r.pre||'');if(/NaN|undefined|Infinity/.test(s))throw Error(key+' invalid');n++;}for(const w of [560,900,1300])for(const fn of [cxMoney,cxRet,cxRoce])if(/NaN|undefined|Infinity/.test(fn(w,D)))throw Error('Invalid chart');}}setFinanceMode('none',50);A.cap.selQ=10;return n;})()`);
-assert.equal(rendered,448);
+assert.equal(rendered,4*16*run('CX_KEYS.length'));
 const modes=out.filter(x=>x.coverage===50),summary={status:'passed',arithmeticComparisons:comparisons,panelsRendered:rendered,scenariosChecked:out.length,annualWCPercent:60/365*100,workingCapital:{full:first.R.G.K.wcTotal[15],opening:first.R.G.K.openingWC,additional:first.R.G.K.wc[15]},modesAt50Percent:modes};
 fs.writeFileSync('work/wc-review/financing-checks.json',JSON.stringify(summary,null,2));
 const d=JSON.parse(JSON.stringify(run(query)));fs.writeFileSync('work/wc-review/updated-model.json',JSON.stringify(d,null,2));

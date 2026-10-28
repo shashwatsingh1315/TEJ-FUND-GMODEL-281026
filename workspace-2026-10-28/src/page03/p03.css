@@ -1,0 +1,184 @@
+/* Page 03 review, 28 Oct 2026: six chart layers, a data table under each chart, visual cards on the right, three takeaways per step */
+.cx-chart[data-layer="4"] .cx-s-m,.cx-chart[data-layer="5"] .cx-s-m{display:none}
+.cx-chart[data-layer="4"] .cx-s-r{display:block}
+.cx-chart[data-layer="5"] .cx-s-r{display:none}
+.cx-chart[data-layer="5"] .cx-s-o{display:block}
+.cx-chart[data-layer="6"] .cx-s-o{display:none}
+.cx-svg .ly{transition:opacity .35s ease,visibility 0s linear .35s}
+.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"],.cx-chart[data-layer="3"] .ly[data-show~="3"]{transition:opacity .35s ease,visibility 0s}
+.cx-leg{flex-wrap:wrap}
+.nw{white-space:nowrap}
+.cx-grid>*,.cx-s{min-width:0}
+
+/* the data table: its own card under the chart, one table for the step showing */
+.cx-dts{margin:0}
+.cx-dt{display:none}
+.cx-dtcard[data-layer="0"] .cx-dt[data-l="0"],.cx-dtcard[data-layer="1"] .cx-dt[data-l="1"],.cx-dtcard[data-layer="2"] .cx-dt[data-l="2"],.cx-dtcard[data-layer="3"] .cx-dt[data-l="3"],.cx-dtcard[data-layer="4"] .cx-dt[data-l="4"],.cx-dtcard[data-layer="5"] .cx-dt[data-l="5"]{display:block}
+.pc-dtt{margin:0 0 2px;font-family:var(--fd);font-size:17px;font-weight:500;color:var(--ink);letter-spacing:-.005em}
+.pc-dth{margin:0 0 6px;font-size:12px;color:var(--ink-3)}
+.pc-dtw{overflow-x:auto;border-top:1px solid var(--rule)}
+table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collapse;font-size:11.5px}
+.pc-dt th,.pc-dt td{padding:3px 3px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:400}
+.pc-dt thead th{font-family:var(--f);font-size:10.5px;font-weight:600;color:var(--ink-3);border-bottom:1.5px solid var(--ink);background:none}
+.pc-dt thead th:first-child,.pc-dt tbody th{text-align:left}
+.pc-dt thead th:first-child,.pc-dt tbody th:first-child{width:168px;padding-left:2px}
+.pc-dt tbody th{font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.pc-dt tbody th:first-child{position:sticky;left:0;background:#fff!important;z-index:1}
+.pc-dt .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.pc-dt td.neg{color:#B34641!important}
+.pc-dt tr.sub th,.pc-dt tr.sub td{font-weight:600;color:var(--ink)}
+.pc-dt tr.tot th,.pc-dt tr.tot td{font-weight:700;color:var(--ink);border-top:1.5px solid var(--ink)}
+
+/* the panel: small visual cards; chart box and panel box share one height (about 3 : 1) */
+.cx-kickrow{flex-wrap:wrap}
+.cx-side-p{padding:13px 14px 8px!important}
+.cx-side-p>.whyd{margin-top:10px}
+.pc-h{margin:12px 0 0;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.pc-cards{display:flex;flex-direction:column;gap:9px;margin-top:11px}
+.pc-h+.pc-cards{margin-top:7px}
+.pc-card{display:block;border:1px solid var(--rule);border-left:3px solid var(--c,#E8E6DC);border-radius:6px;background:var(--surface);padding:9px 11px 10px}
+.pc-card h4{margin:0 0 7px;font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.3}
+.pc-card p{margin:7px 0 0;font-size:12px;line-height:1.45;color:var(--ink-2)}
+.pc-svg{display:block;width:100%;height:auto;overflow:visible}
+.pc-eq{display:flex;flex-wrap:wrap;align-items:center;gap:4px 5px;margin:2px 0 5px}
+.pc-chip{display:inline-flex;flex-direction:column;padding:3px 7px;border:1px solid #DDDACF;border-radius:5px;background:#fff;line-height:1.25;min-width:0}
+.pc-chip small{font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.pc-chip b{font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pc-chip.cc{border-left:3px solid var(--c)}
+.pc-chip.res{background:var(--ct,#F3F2EC)}
+.pc-chip.res.cc{border:1px solid var(--c)}
+.pc-chip.res b{color:var(--c,var(--ink))}
+.pc-op{font-style:normal;font-weight:600;color:var(--ink-3);font-size:13px}
+.pc-strip{display:flex;height:22px;border-radius:4px;overflow:hidden;gap:1px;margin:4px 0}
+.pc-strip i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
+.pc-lg{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;color:var(--ink-2);margin:3px 0 5px}
+.pc-lg .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:0}
+.pc-ph{margin-top:7px}
+.pc-ph .hd{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.pc-ph .nm{font-weight:500;color:var(--ink)}
+.pc-ph .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.pc-ph b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.pc-ph small{display:block;font-size:10.5px;line-height:1.35;color:var(--ink-3);margin-top:1px}
+.pc-ph.pc-ax{margin:0 0 -3px}
+.pc-lines{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.pc-lines li{padding:4px 0;border-bottom:1px solid var(--rule)}
+.pc-lines .hd{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.35}
+.pc-lines b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.pc-lines small{display:block;font-size:10.5px;line-height:1.35;color:var(--ink-3);margin-top:1px}
+.pc-hb{display:grid;grid-template-columns:var(--lw,80px) minmax(0,1fr) auto;align-items:center;gap:6px;margin:4px 0;font-size:11.5px;color:var(--ink-2)}
+.pc-hb i{display:block;height:12px;background:var(--c,#9C998F);border-radius:2px}
+.pc-sep{height:1px;background:var(--rule);margin:7px 0 5px}
+.pc-card h4 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.pc-hb b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.pc-ctl{margin:8px 0 0}
+.pc-ctl .segmented{flex-wrap:wrap;max-width:100%}
+.pc-ctl .segmented button{padding:3px 7px;font-size:11.5px}
+/* two columns: the chart card and the panel are one fixed height (580, or 640 when the screen is 960 px tall or more); the data card sits under the chart */
+@media(min-width:1101px){
+ .cx-grid{grid-template-columns:minmax(0,3fr) minmax(335px,1fr);grid-template-rows:auto auto;align-items:start}
+ .cx-chart{grid-column:1;grid-row:1;position:static;display:flex;flex-direction:column;height:580px}
+ .cx-dtcard{grid-column:1;grid-row:2}
+ .cx-side{grid-column:2;grid-row:1;display:flex;flex-direction:column;height:580px}
+ .cx-side>.cx-step:not([hidden]){flex:1;min-height:0;display:flex;flex-direction:column}
+ .cx-side-p{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .cx-side-p>.pc-cards{flex:none!important;justify-content:flex-start;gap:12px}
+ .pc-card{flex:none}
+ .cx-plot{flex:1 1 0;min-height:0}
+}
+@media(min-width:1101px) and (min-height:960px){.cx-chart,.cx-side{height:640px}}
+@media(max-width:1100px){.cx-grid{grid-template-columns:minmax(0,1fr)}.cx-plot{height:464px}}
+@media(min-width:701px) and (max-width:1100px){.cx-side{max-width:560px}}
+
+/* three takeaways per step, above the assumptions */
+.pc-takes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.pc-takes[hidden]{display:none}
+.pc-take{border:1px solid var(--rule);border-top:3px solid var(--c,#E8E6DC);border-radius:6px;background:var(--surface);padding:14px 16px 15px}
+.pc-take b{display:block;font-family:var(--fd);font-weight:500;font-size:21px;line-height:1.2;color:var(--ct,var(--ink));letter-spacing:-.005em}
+.pc-take p{margin:7px 0 0;font-family:var(--ft);font-feature-settings:normal;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+@media(max-width:700px){.pc-takes{grid-template-columns:1fr;gap:10px}.pc-take b{font-size:19px}}
+
+/* model assumptions drawer */
+.pc-grp{margin:14px 0 2px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.pc-grp span{text-transform:none;letter-spacing:0;font-weight:400}
+.cap-drawer-b .pc-grp:first-of-type{margin-top:10px}
+.cap-drawer .cap-ingrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0 30px}
+@media(max-width:1000px){.cap-drawer .cap-ingrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){.cap-drawer .cap-ingrid{grid-template-columns:1fr!important}}
+/* six steps: let the longest step name wrap instead of truncating */
+.step-host[data-steps="finance"] .stepbar .st{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.12}
+/* phones: the chart keeps a readable size and scrolls sideways; the KPI strip and stepper fit */
+.cx-legs::before{display:none}
+@media(max-width:700px){
+ .cx-chart .cbox>.s-svg{min-width:660px}
+ .cx-legs::before{display:block;content:"Swipe the chart sideways to see all 16 quarters";font-size:11px;color:var(--ink-3);margin:0 0 4px}
+ .cap-kpi{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .cap-kpi>div{padding:8px 14px;border-left:0;border-top:1px solid var(--rule)}
+ .cap-kpi>div:first-child{grid-column:1/-1;border-top:0}
+ .cap-kpi strong{font-size:21px}
+ .cap-kpi strong small{display:block;margin:0}
+ .step-host[data-steps="finance"] .stepbar li:not(.on){flex:0 0 40px}
+ .step-host[data-steps="finance"] .stepbar li.on{flex:1 0 140px}
+ .step-host[data-steps="finance"] .stepbar li:not(.on) button{padding:0!important;justify-content:center}
+}
+.pc-term{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pc-ph .nm small{font-size:10.5px;color:var(--ink-3);font-weight:400;margin-left:2px}
+.pc-dt thead th:first-child,.pc-dt tbody th:first-child{width:182px}
+.pc-card p{font-size:11.5px;line-height:1.42}
+.pc-lines li{padding:3px 0}
+.pc-lines small{font-size:10px}
+.pc-ph{margin-top:5px}
+.cx-step.on{animation:none}
+/* swatches of light colours keep a hairline so they read on white */
+.cx-leg i.sw,.pc-dt .sw,.pc-lg .sw,.pc-card h4 .sw,.pc-ph .sw{box-shadow:inset 0 0 0 1px rgba(20,20,19,.14)}
+.pc-dt tr.ind th{padding-left:19px}
+/* inside the panels orange is kept for funding: the kicker and the "more" pill are neutral */
+.cx-side-p .cx-kick{color:var(--ink-3)}
+.cx-side-p .whyd>summary{background:#fff!important;color:var(--ink)!important;border:1px solid #DDDACF}
+.cx-side-p .whyd>summary::before{color:var(--ink)!important;border-color:var(--ink)!important}
+.cx-side-p .whyd>summary:hover,.cx-side-p .whyd[open]>summary{background:var(--rule)!important;color:var(--ink)!important}
+/* guide: the working-capital chip's icon is drawn dark so it can be read; a sand tile behind it carries the bucket colour */
+.key-wide .chip:nth-child(3) .cap-ic{background:#E6CFAE;border-radius:4px;padding:2px;margin:-2px 0}
+/* the Next button wraps inside a narrow panel instead of running past its edge */
+.cx-side-p .cx-nav{display:inline-flex;max-width:100%;gap:6px}
+.cx-side-p .cx-nx{min-width:0;white-space:normal;text-align:left;line-height:1.25}
+
+/* the chart card: a fixed heading and key, so the plot is the same on every step */
+.cx-heads{flex:none;height:70px;overflow:hidden}
+.cx-legs{flex:none;min-height:46px}
+@media(max-width:1279px){.cx-heads{height:90px}}
+@media(min-width:1600px){.cx-legs{min-height:28px}}
+.cx-plot{position:relative}
+.cx-svg{display:block}
+
+/* the animated parts of the shared chart (steps 1-4); nothing is redrawn on a step change */
+.cx-svg .mv-rev{fill:var(--pc-rev);fill-opacity:1;transition:fill .4s ease,fill-opacity .4s ease}
+.cx-chart[data-layer="1"] .mv-rev{fill-opacity:0}
+.cx-chart[data-layer="2"] .mv-rev,.cx-chart[data-layer="3"] .mv-rev{fill:var(--pc-revbg)}
+.cx-svg .mv-revo{fill:none;stroke:var(--pc-rev);stroke-width:1.8;stroke-opacity:0;pointer-events:none;transition:stroke-opacity .4s ease}
+.cx-chart[data-layer="1"] .mv-revo{stroke-opacity:1}
+.cx-svg .gr,.cx-svg .gd{transform-box:fill-box;transform:scaleY(0);opacity:0;transition:transform .4s ease,opacity .3s ease}
+.cx-svg .gr{transform-origin:50% 100%}
+.cx-svg .gd{transform-origin:50% 0}
+.cx-chart[data-layer="0"] [data-in~="0"],.cx-chart[data-layer="1"] [data-in~="1"],.cx-chart[data-layer="2"] [data-in~="2"],.cx-chart[data-layer="3"] [data-in~="3"]{transform:none;opacity:1;transition:transform .4s ease var(--dl,0s),opacity .4s ease var(--dl,0s)}
+.cx-svg .cl{fill:none;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .6s ease}
+.cx-chart[data-layer="3"] .cl{stroke-dashoffset:0}
+.cx-svg .ly{transition:opacity .3s ease,visibility 0s linear .3s}
+.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"],.cx-chart[data-layer="3"] .ly[data-show~="3"]{transition:opacity .4s ease var(--dl,0s),visibility 0s}
+
+/* laptop screens: a tighter header so the stepper, the chart card and the panel are on screen together */
+@media(min-width:1101px) and (max-height:959px){
+ #main-content:has(.cx-host){padding-top:6px}
+ #main-content:has(.cx-host) .ph{padding:0 0 6px!important;margin:0 0 8px!important}
+ #main-content:has(.cx-host) .ph h1{font-size:26px}
+ #main-content:has(.cx-host) .cap-kpi{padding:7px 0;margin:0 0 8px}
+ #main-content:has(.cx-host) .cap-kpi strong{font-size:20px;margin:0}
+ #main-content:has(.cx-host) .cap-kpi span{font-size:11.5px}
+ #main-content:has(.cx-host) .cap-kpi strong small{font-size:11.5px}
+ .cx-host .stepbar{margin:0 0 8px}
+ .cx-host .stepbar li button{height:44px}
+}
+/* an open fold scrolls inside the panel, so the box keeps its size and the page does not jump (any panel, any fold) */
+.cx-side-p:has(.whyd[open]){overflow-y:auto}
+.cx-kickrow{flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:8px}
+.cx-kickrow .cx-kick{white-space:nowrap}
+.cx-kickrow .cx-nav{flex:0 1 auto;min-width:0}
