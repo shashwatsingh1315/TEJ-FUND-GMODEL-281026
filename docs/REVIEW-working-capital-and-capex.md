@@ -4,7 +4,10 @@
 
 ```bash
 node tools/audit-wc-capex.cjs
+node tools/step-capex.cjs
 ```
+
+Tax and depreciation are out of scope for this review.
 
 ## Short answer
 
@@ -16,7 +19,7 @@ Three findings each move the equity needed by ₹20 Cr or more:
 |---|---|---|---|---|
 | W1 | Working capital uses a flat 60 days. The dashboard's own evidence gives about 41. | ₹200 Cr equity | ₹130 Cr | ₹70 Cr less equity, a smaller round 2 |
 | C1 | Plants are paid for as sales arrive, not before. | ₹200 Cr, round 2 in Q4 | ₹220 Cr, round 2 in Q2 (plants built 2 quarters ahead) | ₹20 Cr more equity; round 2 two quarters sooner |
-| T1 | No income tax anywhere in the cash line. | Cash ₹22.8 Cr at Q16 | −₹29.6 Cr | The plan runs out of cash in Q14 |
+| C5 | Every asset is spread smoothly with sales. Real plants, labs, centres and systems are bought in whole steps. | ₹200 Cr, round 2 in Q4 | ₹235 Cr, round 2 in Q2 (placeholder steps) | ₹35 Cr more equity; ₹20.5 Cr of capex in Q1 instead of ₹0.4 Cr |
 
 ## What is already right
 
@@ -65,9 +68,24 @@ These are lower bounds, because the end state stays at ₹140 Cr. Waterproofing 
 
 **C4. Budgets don't respond to the revenue plan.** Capex stays ₹170 Cr whether revenue comes in 30% lower or higher. Revenue stresses therefore move working capital but not capex. That is conservative on the downside and optimistic on the upside.
 
-## Outside the question, in the same cash line: income tax
+**C5. Assets are spread smoothly when they are actually bought in steps.** For every item, spent to date = budget × (driver now ÷ driver at Q16), where the driver is sales, units opened, plant spend or MRR. That has three consequences that don't hold in practice:
+- It buys fractions of assets. Q1 holds ₹0.23 Cr of centres (under half a ₹50 L centre), ₹1 L of labs and ₹3 L of systems.
+- Each quarter's capex is just that quarter's sales increase scaled to the budget. It is not a build plan.
+- Capacity arrives in the same quarter as the sales it serves.
 
-Operating profit is before tax, and no tax is paid anywhere in the plan. At 25.17% on operating profit less depreciation, with losses carried forward, tax starts in Q8 and reaches **₹52 Cr by Q16**. The live ₹200 Cr plan then goes below zero in Q14 and ends Q16 at −₹29.6 Cr. The gap peaks in Q15, when profit and tax are largest, so the tax lands right on the peak.
+`tools/step-capex.cjs` rebuilds capex as whole steps, each paid one quarter before the demand it serves. Step capacity = Q16 demand ÷ number of steps, and steps in place = ceil(demand next quarter ÷ step capacity). The spec budgets are unchanged. Only centres have a real step size (20 × ₹50 L, from the spec). The others are placeholders: plants in ₹10 Cr phases (tile + waterproofing 4, wood 3, uPVC 5), labs 4 × ₹2.5 Cr arriving with plant phases, systems 4 × ₹5 Cr and misc 4 × ₹2.5 Cr on MRR.
+
+| Case (60-day WC) | Capex Q1–Q5 | Peak gap | Equity | Rounds |
+|---|---|---|---|---|
+| Live: smooth spread | 33.2 | 187.3 (Q15) | 200 | Q1 40 + Q4 125 + Q11 35 |
+| Steps, paid 1 quarter ahead | 42.0 | 220.4 (Q14) | 235 | Q1 40 + Q2 105 + Q9 90 |
+| Steps, plants paid 2 quarters ahead | 42.0 | 228.7 (Q13) | 240 | Q1 40 + Q2 115 + Q9 85 |
+| Half as many steps (bigger phases) | 73.7 | 228.7 (Q13) | 240 | Q1 40 + Q2 115 + Q9 85 |
+| Twice as many steps (smaller phases) | 22.0 | 215.4 (Q14) | 230 | Q1 40 + Q4 135 + Q11 55 |
+
+The two 240 rows take different paths but reach the same capex by Q13, which sets both the peak and, after ₹5 Cr rounding, the rounds. Whatever the step sizes, buying in steps costs ₹30–40 Cr more equity than the smooth spread. Step size decides whether round 2 lands in Q2 or Q4.
+
+**C6. Distribution points have no capex.** City dark stores are rented, and their rent is in operating cost ("Godown rent and expenses", ₹1 L a month at Q1 rising to ₹1.04 Cr a month at Q16). Their set-up cost (fit-out, racking, deposits) is not modelled. Dealer zones are revenue units with no depot or set-up cost at all. Applying the file's own dark-store throughput (₹80 L a month per store) to city revenue gives 2 stores in Q1, 22 in Q8 and 113 in Q16, so set-up cost per store matters.
 
 ## Sensitivities
 
@@ -94,6 +112,9 @@ Each change moves the ask, so each needs founder inputs before it replaces the p
 
 1. **Build working capital from its parts.** Stock days on cost of goods, customer credit by channel, supplier days, and uPVC's own terms. Keep flat 60 and 90 days as stress cases.
    *Inputs needed:* debtor days by channel, stock days, creditor days, and uPVC advance, stage-billing and retention terms.
-2. **Make capex capacity-led.** For each plant: capacity, cost per unit of capacity, build lead time, and the utilisation that triggers the next phase. Spend comes before the sales it serves. Show the capacity in place at Q16 against Q17–Q18 demand.
+2. **Make capex capacity-led.** For each plant: capacity, cost per unit of capacity, and build lead time. Spend comes before the sales it serves. Show the capacity in place at Q16 against Q17–Q18 demand.
    *Inputs needed:* wood and uPVC capacity and quotes, build lead times, and whether niche runs on the tile lines or is outsourced.
-3. **Add income tax to the cash line,** after depreciation and losses carried forward.
+3. **Buy assets in steps.** Use the engine in `tools/step-capex.cjs`.
+   *Inputs needed:* for each plant, the phases (cost and capacity each); the number of labs, what each serves and its cost; the systems roll-out phases; what misc covers.
+4. **Add distribution points.** Count them by quarter, with set-up cost per point.
+   *Inputs needed:* whether "distribution centres" means the city dark stores, dealer-zone depots or both; the set-up cost of each; and the stores' real throughput.

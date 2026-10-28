@@ -5,17 +5,8 @@
    inside the VM only.
    Usage: node tools/audit-wc-capex.cjs [dashboard.html]
    Default: workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html */
-const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const file=process.argv[2]||path.join(__dirname,'..','workspace-2026-10-28','outputs','Tejas_Revenue_Dashboard_1041_Updated.html');
-
-function load(f){
- const html=fs.readFileSync(f,'utf8'),defaults=html.match(/<script type="application\/json" id="inputs-default">([\s\S]*?)<\/script>/)[1],noop=()=>{},elements={};
- const el=()=>({innerHTML:'',textContent:'',classList:{add:noop,remove:noop,toggle:noop},querySelectorAll:()=>[],style:{},dataset:{},setAttribute:noop});
- const ctx=vm.createContext({structuredClone,console,document:{getElementById:id=>id==='inputs-default'?{textContent:defaults}:elements[id]??=(el()),addEventListener:noop,querySelector:()=>null},localStorage:{getItem:()=>null,setItem:noop},innerWidth:1384,addEventListener:noop,window:{innerHeight:988},MutationObserver:class{observe(){}},setTimeout:()=>1,clearTimeout:noop,requestAnimationFrame:f=>f()});
- for(const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(m[1].replace(/^routeApp\(\);$/m,''),ctx,{timeout:3000});
- return s=>vm.runInContext(s,ctx,{timeout:15000});
-}
-const run=load(file);
+const load=require('./load-dashboard.cjs');
+const run=load(process.argv[2]);
 
 /* o.wcMode='channel': WC = stock days on all sales + dealer credit days on dealer-zone (DD) sales − supplier days on cost of goods.
    Defaults are the figures the dashboard itself quotes: ~21 days of stock, ~52 days of dealer credit, direct orders prepaid.
@@ -80,11 +71,3 @@ console.log(`  Niche adhesive: ARR ₹${f1(cx.niche)} Cr with no plant line of i
 console.log(`  File's own line economics: ${cx.cap} T/month per line × ₹${cx.real}/kg = ₹${cx.line.toFixed(2)} Cr/month per ₹${cx.cost} Cr line (one shift)`);
 console.log(`  → tile + waterproofing + niche at Q16 need ~${f1(cx.lines)} lines one shift (₹${f1(cx.lines*cx.cost)} Cr), ~${f1(cx.lines/2)} on two shifts, inside the ₹${cx.tile[0]} Cr budget`);
 console.log(`  Revenue still growing ${(cx.g16*100).toFixed(1)}% a quarter at Q16, while every plant reaches exactly its Q16 budget (share ${cx.share.toFixed(2)}): no headroom, no capex after Q16`);
-
-/* 4 · outside WC/capex but in the same cash line: income tax */
-const tx=run(`(()=>{const R=raisePlan(),G=R.G,K=G.K,F=INP.funding,rate=0.2517;let cf=0,ct=0;
- const dep=K.cum.map(c=>c.factory/(4*F.lifePlant)+(c.pp+c.misc)/(4*F.lifeOther));
- const tax=G.pat.map((p,q)=>{let b=p-dep[q];if(b<0){cf-=b;return 0;}const u=Math.min(cf,b);cf-=u;return rate*(b-u);}),cum=tax.map(v=>ct+=v),cash=R.cash.map((c,q)=>c-cum[q]);
- return {cum16:cum[15],first:tax.findIndex(v=>v>0)+1,neg:cash.findIndex(v=>v<0)+1,cash16:cash[15],min:Math.min(...cash)};})()`);
-console.log('\nINCOME TAX (not in the model; 25.17% on operating profit less depreciation, losses carried forward)');
-console.log(`  First tax in Q${tx.first}; ₹${f1(tx.cum16)} Cr paid by Q16. On the live ₹${base.equity} Cr plan, cash goes below zero in Q${tx.neg} and ends Q16 at ${rs(tx.cash16)} Cr`);
