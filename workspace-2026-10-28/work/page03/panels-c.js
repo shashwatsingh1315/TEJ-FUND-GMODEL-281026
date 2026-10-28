@@ -60,12 +60,11 @@ const timeline=(marks)=>{const X=q=>(3+94*q/15).toFixed(2);
   return h+'</div>';};
 CX.raise=D=>{
   const R=D.R,G=D.G,K=G.K,P=R.P,rs=R.rounds,r1=rs[0],r2=rs[1],S=cxSeries(D),pk=S.pk,m=P.cadenceQ*3,col=PC.fund;
-  const c1=card(`Round 1 · ${qName(r1.q)}`,tx('The ask; it funds the start.'),col,big(r1.amt,PC.fundTxt));
+  const c1=card(`Round 1 · ${qName(r1.q)}`,`<p class="pnc-when">${roundWhen(R,0).text}</p>`+tx('The ask; it funds the start.'),col,big(r1.amt,PC.fundTxt));
   let c2;
   if(r2){
-    const b=r2.trigger,gap=b-r2.q,only1=b>=0?r1.amt+R.base[b]:null;
-    const before=gap===1?'the quarter before':gap>1?`${gap} quarters before`:gap===0?'in that quarter':`as early as it can, in ${qName(r2.q)}`;
-    const why=b>=0?`With round 1 alone, cash ${only1<0?'runs out':`falls under ${Rs(P.buffer)}`} in ${qName(b)}, so round 2 closes ${before}.`:`Round 2 closes in ${qName(r2.q)}.`;
+    const b=r2.trigger;
+    const note=b>=0?`Without this round, projected cash breaches the floor in ${qName(b)}.`:`Round 2 closes in ${qName(r2.q)}.`;
     /* to the peak quarter: what was spent, what paid for it, what is left */
     const cp=K.cum[pk],eq=add(rs.filter(r=>r.q<=pk).map(r=>r.amt)),earn=G.cumPat[pk]-(R.D.on?R.D.cumInt[pk]:0),loan=R.D.on?R.D.bal[pk]:0,left=R.cash[pk],raised=eq;
     const uses=[{v:cp.capex,c:PC.capex,t:`Capex ${fd(cp.capex,0)}`,s:fd(cp.capex,0),n:`Capex · ${Rs(cp.capex)}`},{v:cp.pp,c:PC.labs,tc:PC.ink,s:fd(cp.pp,0),n:`Labs / systems · ${Rs(cp.pp)}`},{v:cp.wc,c:PC.wc,tc:PC.ink,t:`Working capital ${fd(cp.wc,0)}`,s:fd(cp.wc,0),n:`Working capital · ${Rs(cp.wc)}`}];
@@ -76,10 +75,8 @@ CX.raise=D=>{
     rs.filter(r=>r.q<=pk).forEach((r,i)=>src.push({v:r.amt,c:i?PC.fund:pcTint(PC.fund,.45),tc:PC.ink,t:`Round ${i+1} · ${fd(r.amt,0)}`,s:fd(r.amt,0),n:`Round ${i+1} · ${Rs(r.amt)}`}));
     if(loan>0)src.push({v:loan,c:PC.int,t:`Loans ${fd(loan,0)}`,s:fd(loan,0),n:`Loans · ${Rs(loan)}`});
     if(left<0)src.push({v:-left,c:PC.fundBg,tc:PC.fundTxt,o:PC.fund,t:`Short ${fd(-left,0)}`,s:fd(-left,0),n:`Short · ${Rs(-left)}`});
-    const spare=raised-S.peak,dot=`<i class="pnc-dot" style="--d:${PC.cash}"></i>`;
-    const sum=spare>=0?`${R0(raised)} raised against a ${R0(S.peak)} peak in ${qName(pk)}: <span class="pnc-nw">${dot}${R0(spare)} to spare.</span>`:`${R0(raised)} raised against a ${R0(S.peak)} peak in ${qName(pk)}: ${R0(-spare)} short until the later rounds.`;
-    c2=card(`Why round 2 is ${Rs(r2.amt)} in ${qName(r2.q)}`,tx(why)
-      +`<div class="pnc-st"><span>Spent</span>${bar(uses)}</div><div class="pnc-st"><span>Paid by</span>${bar(src)}</div>`+tx(sum),col);
+    c2=card(`Round 2 · ${Rs(r2.amt)} in ${qName(r2.q)}`,`<p class="pnc-when">${roundWhen(R,1).text}</p>`+tx(`Protects the ${Rs(P.buffer)} cash floor. ${note}`)
+      +`<div class="pnc-st"><span>Spent</span>${bar(uses)}</div><div class="pnc-st"><span>Paid by</span>${bar(src)}</div>`,col);
   }else c2=card('Round 2',tx(`Not needed: round 1 keeps cash above ${Rs(P.buffer)} to ${qName(G.N-1)}.`),col);
   const noMore=!r2;
   const marks=rs.map((r,i)=>({q:r.q,t:`R${i+1}`,on:1})).concat((R.later||[]).map(q=>({q,t:'',on:0})));
@@ -106,14 +103,14 @@ CX.roce=D=>{
     +eqRow('÷',`₹${F(l.ce)}<small>${NB}Cr</small>`,'capital employed',PC.capex)
     +eqRow('=',pc0(l.pre*100),'return on capital',PC.profit,' res')+`</div>`,PC.profit);
   const parts=[{l:'Capex',v:c.capex,c:PC.capex},{l:'Labs / systems',v:c.pp,c:PC.labs,tc:PC.ink},{l:'Working capital',v:wcT,c:PC.wc,tc:PC.ink}];
-  const c2=card('What counts as capital',bar(parts.map(p=>({v:p.v,c:p.c,n:`${p.l} · ${Rs(p.v)}`})))+partsRow(parts),PC.capex,`<span class="pnc-to">₹ Cr at ${qName(L)}</span>`);
+  const c2=card('Capital included',bar(parts.map(p=>({v:p.v,c:p.c,n:`${p.l} · ${Rs(p.v)}`})))+partsRow(parts),PC.capex,`<span class="pnc-to">₹ Cr at ${qName(L)}</span>`);
   const c3=card('Why it starts low',`<div class="pnc-tot"><span class="pnc-big" style="color:${PC.profit}">${pc0(ro[0].pre*100)} → ${pc0(l.pre*100)}<small>${NB}${qName(0)} to ${qName(L)}</small></span></div>`+tx('Capital goes in ahead of the sales it serves.'),PC.profit);
   /* the fold: the depreciation-adjusted figure, what moves it, and what it leaves out */
   const rq=o=>roceFin(gapFin(o))[L].pre*100,v45=rq({capital:{wcDays:45}}),v90=rq({capital:{wcDays:90}}),vp=rq({plantMult:1.2}),pts=x=>fd(x,1)+' pts';
   const more=whyD('After depreciation, and what-ifs',
     cxLev(`${qName(L)} return, before and after depreciation`,[['Before depreciation',pc1(l.pre*100),''],[`Depreciation a year<small>straight line: plants and centres over ${fd(Fd.lifePlant,0)} years; labs, systems and misc over ${fd(Fd.lifeOther,0)}</small>`,rc(4*l.dep),''],['After depreciation',pc1(l.post*100),'']])
     +cxLev(`${qName(L)} return before depreciation if…`,[['Working-capital target is 45 days',pc1(v45),dlt(v45,l.pre*100,pts)],['Working-capital target is 90 days',pc1(v90),dlt(v90,l.pre*100,pts)],['Plants cost 20% more',pc1(vp),dlt(vp,l.pre*100,pts)]])
-    +`<p class="cx-note">A gross-capital proxy, before tax, not a complete company ROCE: existing fixed assets are not in the books supplied, so they are left out. Working capital is the full ${fd(K.days(),0)}-day target, including its ${rc(K.openingWC)} opening balance.${fn(NOTE_RET)}</p>`);
+    +`<p class="cx-note">Forecast assets and the full working-capital target. Existing fixed assets are excluded. This is not complete company ROCE. Working capital is the full ${fd(K.days(),0)}-day target, including its ${rc(K.openingWC)} opening balance.${fn(NOTE_RET)}</p>`);
   return {lead:'',body:panel([c1,c2,c3],more,'pnc-c6')};
 };
 })();

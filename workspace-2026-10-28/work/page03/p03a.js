@@ -42,4 +42,7 @@ const pcInput=onInput;
 onInput=function(el){const p=el.dataset.input,v=Number(el.value);
   if(p==='funding.cadenceQ'&&(el.value.trim()===''||!Number.isInteger(v)||v<1||v>16)){el.setCustomValidity?.('Enter a whole number from 1 to 16.');return;}
   if(p==='funding.round2'&&(el.value.trim()===''||!Number.isFinite(v)||v<0)){el.setCustomValidity?.('Enter an amount of 0 or more.');return;}
-  pcInput(el);};
+  pcInput(el);
+  /* the base check gives one generic message; name the rule this field broke instead */
+  if(el.validationMessage==='Enter a number of 0 or more.'){const q=['funding.tenor','funding.window'].includes(p),n=['funding.moratorium','funding.lead'].includes(p),pct=p==='capital.firstPhase'||p.startsWith('operating.products.'),pos=['funding.roundTo','funding.lifePlant','funding.lifeOther','valuation.todayMRR','valuation.multiple'].includes(p);
+    el.setCustomValidity?.(q?'Enter at least 1 whole quarter.':n?'Enter a whole number of quarters, 0 or more.':pct?'Enter a percentage from 0 to 100.':pos?'Enter a number above 0.':p.startsWith('operating.anchors.')?'Enter anchors that increase from left to right.':p.startsWith('funding.blend')?'Enter a blend range where the low end is below the high end.':'Enter a number of 0 or more.');}};

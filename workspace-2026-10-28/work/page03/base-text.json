@@ -1,0 +1,254 @@
+[
+ [
+  "data-page=\"finance\">03 Capital Utilisation</a>",
+  "data-page=\"finance\">03 Funding &amp; returns</a>"
+ ],
+ [
+  "Capital Utilisation",
+  "Funding & returns"
+ ],
+ [
+  "<title>Tejas · Revenue chain dashboard</title>",
+  "<title>Tejas · Financial model</title>"
+ ],
+ [
+  "<span>Revenue chain<br>dashboard</span>",
+  "<span>Financial<br>model</span>"
+ ],
+ [
+  "Tejas · Revenue chain dashboard · <a href=\"#inputs\">",
+  "Tejas · Financial model · <a href=\"#inputs\">"
+ ],
+ [
+  "Annualised operating return on gross modelled capital by quarter",
+  "Operating return on capital by quarter"
+ ],
+ [
+  "['Running total: the accumulated funding shortfall'",
+  "['Funding gap before financing'"
+ ],
+ [
+  "The line accumulates the quarterly cash flows from step 3. The area below zero is the funding shortfall before equity or debt.",
+  "Growth investment less accumulated operating earnings."
+ ],
+ [
+  "Cash in the bank, with the raises",
+  "Projected cash balance"
+ ],
+ [
+  "Each arrow is a round coming in. The grey dashed line is step 4’s running total, with no raises; cash has to stay above the ₹${fl} Cr floor.",
+  "Cash remaining after investment, equity and debt."
+ ],
+ [
+  "Each arrow adds a funding round. The grey line is closing cash without equity raises; the plan targets at least ₹${floor} Cr at quarter ends.",
+  "Cash remaining after investment, equity and debt."
+ ],
+ [
+  "What the first ₹${ask} Cr is worth, by exit quarter",
+  "Potential investor return"
+ ],
+ [
+  "A new scale: each bar is the first investor’s stake if Tejas is sold or listed in that quarter; the row is the multiple of the ₹${ask} Cr. Click a bar to pick the exit.",
+  "Exit equity value × ownership after dilution. Exit equity value includes projected cash less outstanding debt."
+ ],
+ [
+  "Each bar values the investor’s diluted stake at that exit, adding estimated cash and subtracting debt. This is a valuation scenario.",
+  "Exit equity value × ownership after dilution. Exit equity value includes projected cash less outstanding debt."
+ ],
+ [
+  "Revenue a month at each quarter end",
+  "Monthly revenue"
+ ],
+ [
+  "Each bar is the final month of a quarter, in ₹ Cr/month. Click a quarter to see the city/retail and dealer-zone split on the right. GST is ignored.",
+  "Revenue in the final month of each quarter."
+ ],
+ [
+  "Where each month’s revenue goes",
+  "Costs and operating profit"
+ ],
+ [
+  "The same monthly bars split into product costs, selling costs, common overhead and operating profit. Product and RT/DD margins are weighted by their revenue.",
+  "Revenue split into product costs, selling costs, overhead and profit."
+ ],
+ [
+  "Quarterly cash flow before funding",
+  "Quarterly cash flow"
+ ],
+ [
+  "Operating earnings less growth spending in each quarter. The row below shows the resulting surplus or deficit.",
+  "Operating earnings less growth investment, before financing."
+ ],
+ [
+  "'Annualised operating return on modelled capital'",
+  "'Operating return on capital'"
+ ],
+ [
+  "Quarter-end monthly operating profit × 12 ÷ gross capital deployed to date. Dots deduct depreciation.",
+  "Annualised monthly operating profit ÷ modelled capital. Dots show return after depreciation."
+ ],
+ [
+  "<span>Equity raised · ${R.rounds.length} round",
+  "<span>Planned equity · ${R.rounds.length} round"
+ ],
+ [
+  "Equity raised",
+  "Planned equity"
+ ],
+ [
+  "<span>Q16 capital + early losses</span>",
+  "<span>Growth investment + operating losses</span>"
+ ],
+ [
+  "<small>gross capital proxy</small>",
+  "<small>Forecast assets + full working capital</small>"
+ ],
+ [
+  "<span>Plan achieved</span>",
+  "<span>Exit revenue vs plan</span>"
+ ],
+ [
+  "['model','Round method']",
+  "['model','Round-pricing method']"
+ ],
+ [
+  "<summary>Model assumptions and loan terms</summary>",
+  "<summary>Assumptions &amp; loan terms</summary>"
+ ],
+ [
+  "whyD('Scenarios and sensitivities',html)",
+  "whyD('Sensitivity analysis',html)"
+ ],
+ [
+  "<summary>Sources and notes (${NOTES.length})</summary>",
+  "<summary>Sources &amp; assumptions</summary>"
+ ],
+ [
+  "<h3>How these two inputs work together</h3><p>Market size sets the local base. Product size scales it for each line.</p>",
+  "<h3>Revenue drivers</h3><p>Location count × market size × product size × market share.</p>"
+ ],
+ [
+  "secHead('Elements present in the dashboard')",
+  "secHead('Chart guide')"
+ ],
+ [
+  "This dashboard is a companion to the Tejas investor deck. It shows the 16-quarter revenue forecast, from Oct 2026 to Sep 2030; how every rupee of it is built; the capital it takes; how much of each rupee Tejas keeps; and what the business is worth.",
+  "<b>Tejas financial model.</b> Revenue, funding and investor returns from Oct 2026 to Sep 2030."
+ ],
+ [
+  "const box=(k,v,what,why,res)=>`<div class=\"eq-f${res?' res':''}\"><span class=\"k\">${k}</span><p class=\"w\"><b>What it is.</b> ${what}</p><p class=\"w\"><b class=\"acc\">${res?'What it means.':'Why it is here.'}</b> ${why}</p><span class=\"v\">${v}</span></div>`;",
+  "const box=(k,v,what,why,res,wl,yl)=>`<div class=\"eq-f${res?' res':''}\"><span class=\"k\">${k}</span><p class=\"w\"><b>${wl||'What it is.'}</b> ${what}</p><p class=\"w\"><b class=\"acc\">${yl||(res?'What it means.':'Why it is here.')}</b> ${why}</p><span class=\"v\">${v}</span></div>`;"
+ ],
+ [
+  "box('Units open','1 city',`Cities and dealer zones Tejas sells in: 4 today, ${Math.round(n)} by Q16.`,'Revenue is earned unit by unit.')",
+  "box('Units open','1 city',`4 today → ${Math.round(n)} by Q16.`,'City and dealer-zone sales add up to the revenue forecast.',false,'Cities and dealer zones','Location revenue')"
+ ],
+ [
+  "<b>How to read this table.</b> Each row is one city or dealer zone; each number is its revenue in ₹ Cr a month at the end of that quarter, and darker cells earn more. Click a name to split it by product line; click any number to see on the right how it is built. Use City / Dealer / Both to filter, and “Show unopened units” to add the cities and zones not yet opened.<br><b class=\"acc\">Why it matters.</b> No revenue in the forecast appears without a named city or dealer zone behind it, so each number can be checked unit by unit.",
+  "<b>Revenue by planning unit.</b> City and dealer-zone sales contribute to product revenue. Future locations are planning allocations; only the four live locations are named."
+ ],
+ [
+  "<b>How to read this page.</b> Each card is one product line’s revenue, in ₹ Cr a month, from Q1 to Q16, across all cities and dealer zones. Every card uses the same scale, so heights compare directly. The two bars under each chart show reach: of the cities, and dealer zones, open at the chosen quarter, how many already sell this line. Change the quarter with “Coverage at”.<br><b class=\"acc\">Why it matters.</b> Lines beyond tile adhesive bring ${Math.round((1-view(SCOPE.core).M.tile[15]/view(SCOPE.core).T[15])*100)}% of Q16 revenue; this page shows when each one starts and how far it has reached.",
+  "<b>Revenue by product.</b> Launch timing and channel coverage explain the sales mix. All charts use the same scale. Coverage counts locations selling each product."
+ ],
+ [
+  "All chart and split values are ₹ Cr/month. Display amounts are rounded; CSV exports retain full precision. Equivalent MoM is inferred as (current-quarter MRR ÷ previous-quarter MRR)^(1/3) − 1. Annual ARR at Q16 = Q16 MRR × 12. Revenue values are quarter-end monthly run rates. Cash estimates interpolate the intervening months separately.",
+  "Revenue basis. ₹ Cr/month at quarter end. ARR = monthly revenue × 12. Cash calculations estimate the intervening months separately."
+ ],
+ [
+  "These are numbered planning allocations, not named-city forecasts. Rounded row values can sum differently from rounded totals; portfolio totals always read the existing forecast directly. A dash means zero.",
+  "Future locations. Numbered planning units for the expansion forecast. Figures are rounded; a dash means zero."
+ ],
+ [
+  "These totals are the model of record shared in the revenue chain. The unit mechanics on this page reproduce them within ${fd(allocationAudit().tie*100,2)}% in every product and quarter; each unit row is scaled by that small factor so units add up exactly.",
+  "<b>Product revenue targets.</b> Unit allocations are adjusted to match the fixed targets."
+ ],
+ [
+  "<b>Cost assumptions:</b> ₹${fd(low,1)} L/month budget floor below ₹${fd(A[0]/100,1)} Cr MRR; line-by-line interpolation between supplied anchors; above ₹${fd(A.at(-1)/100,1)} Cr, each line continues at its marginal growth from ₹${fd(A[ref]/100,1)} Cr to ₹${fd(A.at(-1)/100,1)} Cr (₹${fd(marginal,2)} of additional overhead per ₹100 additional revenue). Waterproofing copies wood’s RT/DD costs. Blank discounts are zero. Component calculations retain the 0.5 percentage points rounded in the supplied CM2 display.",
+  "<b>Common overhead.</b> Monthly costs linked to revenue levels. Assumption: ₹${fd(low,0)} lakh/month floor. Above ₹${fd(A.at(-1)/100,0)} Cr monthly revenue, costs extend the supplied ₹${fd(A[ref]/100,0)}–${fd(A.at(-1)/100,0)} Cr trend."
+ ],
+ [
+  "${howRead('Follow steps 1 to 7. Pick any city or dealer zone and quarter in step 3; the other panels show how its revenue is built and how it adds up to the total.','Any number on page 02 can be rebuilt by hand from these steps; nothing is scaled to fit.')}",
+  "<div class=\"how-read\"><p><b>Unit revenue calculation.</b> Revenue inputs for the selected planning unit and quarter.</p><p><b class=\"acc\">Forecast reconciliation.</b> Unit allocations are adjusted to match product revenue targets. Current maximum adjustment: 1.16%.</p></div>"
+ ],
+ [
+  "<strong>No units match these filters</strong><p>Try a different name or include unopened planning units.</p>",
+  "<strong>No matching units</strong><p>Clear the search or show unopened units.</p>"
+ ],
+ [
+  "{title:'Valuation',intro:'The ask, the multiple and the ARR milestone.',",
+  "{title:'First-round assumptions',intro:'Raise amount, entry valuation multiple and revenue milestone.',"
+ ],
+ [
+  "{title:'Round pricing and return',intro:'ARR multiple glide after round 1, the profit multiple and blend, and depreciation lives for ROCE.',",
+  "{title:'Later-round valuation',intro:'ARR and profit multiples determine later entry prices. Keep depreciation lives under capital-return assumptions.',"
+ ],
+ [
+  "['funding.moratorium','Plant loan moratorium','quarters']",
+  "['funding.moratorium','Plant principal grace period','quarters. Interest still applies.']"
+ ],
+ [
+  "<h3>Product and income-stream margins</h3>",
+  "<h3>Margins by product and channel</h3>"
+ ],
+ [
+  "<h3>Common monthly overhead anchors</h3><p class=\"meta\">₹ lakh · revenue anchors drive costs, independent of dates · retained ₹128 L total at ₹600 L revenue</p>",
+  "<h3>Monthly overhead</h3><p class=\"meta\">Costs at each monthly revenue level.</p>"
+ ],
+ [
+  "Cost of revenue · capex",
+  "Growth investment"
+ ],
+ [
+  "Spend to Q16, ₹ Cr, is fixed. Each item is bought in whole phases. A phase adds capacity in proportion to its cost and is paid ${K.leadQ} quarter${K.leadQ===1?'':'s'} before demand would pass the capacity already built. Labs follow the plant phases.",
+  "Capex and other investment required for the expansion plan."
+ ],
+ [
+  "End state at Q16, ₹ Cr. Each item is built quarter by quarter in step with what it is built with.",
+  "Investment schedule. Spending follows product sales and rollout. Wood and uPVC include spending before launch."
+ ],
+ [
+  "Edits are kept in this browser only. To send them, use <b>Download dashboard with these inputs</b>: it saves a copy of this file with your values as the defaults. Changed fields are marked in orange.",
+  "<b>Scenario storage.</b> Changes are saved in this browser. Download a dashboard copy to share the assumptions."
+ ],
+ [
+  "inputs:'Back office · inputs and model trace'",
+  "inputs:'Assumptions & calculations'"
+ ],
+ [
+  "pageHead('Back office','Inputs and model trace',",
+  "pageHead('Back office','Assumptions & calculations',"
+ ],
+ [
+  "Cash falls below ${rc(P.buffer)} in ${qName(r.trigger)} before this round. Required funding at ${qName(r.needQ)}: ${rc(r.need)} + ${rc(P.buffer)} buffer − ${rc(r.raised)} already raised = ${rc(r.raw)}; rounded up to ${rc(r.amt)}.",
+  "Protects the ${rc(P.buffer)} cash floor. Without this round, projected cash breaches the floor in ${qName(r.trigger)}."
+ ],
+ [
+  "Debt proceeds are financing, not earnings. Plant principal is repaid after the grace period; the WC facility follows the selected share of additional working capital.",
+  "Debt funding. Borrowing reduces the equity required and adds repayment costs."
+ ],
+ [
+  "Debt coverage applies to additional working capital and/or the three factories. Experience centres, labs, systems and misc are excluded from plant borrowing. Rates are illustrative; interest uses average quarterly debt balances.",
+  "Debt eligibility. Added working capital and the three factories. Other investment stays equity-funded."
+ ],
+ [
+  "NOTES[NOTE_DEBT-1]='Debt scenario: coverage applies to growth in the working-capital target and the three factories only. Default rates are 11% for plants and 10.5% for WC, as illustrative assumptions. Plant principal has four full quarters of grace after draw and sixteen quarterly instalments; interest uses average quarterly outstanding balances. Lender terms are not verified.'",
+  "NOTES[NOTE_DEBT-1]='Illustrative loan terms. 11% plant interest · 10.5% WC interest. Plant principal: four-quarter grace, then 16 quarterly instalments. Lender terms are unverified.'"
+ ],
+ [
+  "NOTES[NOTE_WC-1]='Working-capital policy: target = days / 365 × annualised revenue (12 × quarter-end monthly revenue). At 60 days this is 16.44% of ARR. Additional funding deducts the modelled opening target, assumed already funded; quarter cash uses changes in that additional target. This is not a receivables-only or customer-credit assumption.'",
+  "NOTES[NOTE_WC-1]='Working-capital target. Cash tied up in growth increases the funding need. Calculation: ARR × days ÷ 365. Opening WC is assumed funded. This is a planning ratio, not customer credit terms.'"
+ ],
+ [
+  "Enter a valid model value. Days and costs must be non-negative; lives and periods positive; percentages within 0–100; anchors and thresholds increasing.",
+  "Enter a number of 0 or more."
+ ],
+ [
+  "alert('That file is not a valid inputs file.')",
+  "alert('Import failed. Choose a Tejas inputs JSON file.')"
+ ],
+ [
+  "confirm('Reset every input to the plan values?')",
+  "confirm('Reset assumptions. Replace saved browser edits with the base case.')"
+ ]
+]

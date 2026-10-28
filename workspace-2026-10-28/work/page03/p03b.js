@@ -53,7 +53,7 @@ const pcFs=(c,labs,base=10.5)=>Math.max(8.5,Math.min(base,base*(c.slot-3)/Math.m
 function pcVal(o,x,y,s,on,col,fs,o2){fs=fs||(on?12:11);const w=pcW(s,fs,600);o.add({x:x-w/2,y:y-fs,w,h:fs+2});if(o2)o2.add({x:x-w/2,y:y-fs,w,h:fs+2});return T(x,y,s,'smono','middle',`font-size:${fs.toFixed(1)}px;font-weight:${on?700:600};fill:${col||(on?PC.fundTxt:PC.ink)};${halo}`);}
 /* a callout: first line bold, an optional second line; tries positions near the point until one is clear (text and stem) */
 function pcPlace(o,c,p){
-  const fs=p.fs||12,lh=fs+2,L=p.lines,w=Math.max(...L.map((s,i)=>pcW(s,i?fs-.5:fs,i?(p.w2||500):700))),h=L.length*lh,px=p.px,py=p.py,col=p.col||PC.ink;
+  const fs=p.fs||12,lh=fs+2,L=p.lines,B=p.bold??0,sz=i=>i===B?fs:fs-.5,wt=i=>i===B?700:(p.w2||500),cl=i=>i===B?(p.col||PC.ink):(p.c2||pcMuted),w=Math.max(...L.map((s,i)=>pcW(s,sz(i),wt(i)))),h=L.length*lh,px=p.px,py=p.py,col=p.col||PC.ink;
   const G={u:g=>[-w/2,-(h+g)],ur:g=>[-3,-(h+g)],ul:g=>[-w+3,-(h+g)],d:g=>[-w/2,g],dr:g=>[-3,g],dl:g=>[-w+3,g],r:g=>[g+3,-h/2],l:g=>[-w-g-3,-h/2]},AN={u:'middle',d:'middle',ur:'start',dr:'start',r:'start',ul:'end',dl:'end',l:'end'};
   const x0=p.xmin??c.ml+2,x1=p.xmax??c.ml+c.pw-1,y0=p.ymin??c.top-10,y1=p.ymax??c.top+c.h-1;
   const stem=r=>{const qx=Math.max(r.x,Math.min(px,r.x+r.w)),qy=Math.max(r.y,Math.min(py,r.y+r.h)),d=Math.hypot(qx-px,qy-py);return {qx,qy,d,box:d>10&&p.leader!==false?{x:Math.min(qx,px+(qx-px)*6/d)-1,y:Math.min(qy,py+(qy-py)*6/d)-1,w:Math.abs(qx-px-(qx-px)*6/d)+2,h:Math.abs(qy-py-(qy-py)*6/d)+2}:null};};
@@ -65,7 +65,7 @@ function pcPlace(o,c,p){
   const r=best.r,an=AN[best.k],tx=an==='end'?r.x+r.w:an==='middle'?r.x+r.w/2:r.x,st=stem(r);o.add(r);let s='';
   if(p.leader!==false&&st.d>10){const l=`x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${(st.qx-(st.qx-px)/st.d*2).toFixed(1)}" y2="${(st.qy-(st.qy-py)/st.d*2).toFixed(1)}"`;s+=`<line ${l} stroke="#fff" stroke-width="3.4"/><line ${l} stroke="${col}" stroke-width="1.3"/>`;if(st.box)o.add(st.box);}
   if(p.dot)s+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4" fill="#fff" stroke="${col}" stroke-width="1.8"/>`;
-  L.forEach((t,i)=>{s+=T(tx,r.y+fs*.92+i*lh,t,'slab-b',an,`font-size:${i?fs-.5:fs}px;font-weight:${i?(p.w2||500):700};fill:${i?(p.c2||pcMuted):col};${halo}`);});
+  L.forEach((t,i)=>{s+=T(tx,r.y+fs*.92+i*lh,t,'slab-b',an,`font-size:${sz(i)}px;font-weight:${wt(i)};fill:${cl(i)};${halo}`);});
   return s;
 }
 
@@ -78,6 +78,8 @@ const pcLy=(show,body,dl)=>`<g class="ly" data-show="${show}"${dl?` style="--dl:
 const pcBar=(o,up,show,x,y,w,h,fill,title,dl)=>{if(o&&h>0)o.add({x,y,w,h});return `<rect class="${up?'gr':'gd'}" data-in="${show}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(h,.5).toFixed(1)}" fill="${fill}"${dl?` style="--dl:${dl}s"`:''}>${title?`<title>${title}</title>`:''}</rect>`;};
 /* the colours the CSS needs (from PC, so there is one list) */
 const pcVars=()=>`--pc-rev:${PC.rev};--pc-revbg:${PC.revBg}`;
+/* when a round happens: its quarter's first month, and the whole months after round 1 (round 1 is "now") */
+const roundWhen=(R,i)=>{const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],at=q=>QD[q].ya*12+M.indexOf(QD[q].a),d=QD[R.rounds[i].q],date=`${d.a} ${d.ya}`;if(!i)return {date,now:true,text:`Now · ${date}`};const m=at(R.rounds[i].q)-at(R.rounds[0].q),rel=m===1?'1 month from now':`${m} months from now`;return {date,months:m,rel,text:`${date} · ${rel}`};};
 cxMoney=function(W,D){
   const S=cxSeries(D),R=D.R,c=pcFrame(W),id=++cxN,Q=operatingModel().S,bw=c.bw,PL=R.P;
   /* the top covers revenue, cash and the peak cash required; the bottom covers the largest quarterly growth-spending bar */
@@ -106,9 +108,9 @@ cxMoney=function(W,D){
     parts.forEach(([p0,p1,col,l,v],i)=>{seg+=pcBar(null,true,'1',xl(q),y(p1),bw,y(p0)-y(p1),col,`${qLong(q)} · ${l}: ${rc(v)}`,i*.06);});
     if(w.pat<0){const h=Math.max(3,Math.min(12,-w.pat/(ax.hi-ax.lo)*c.h));seg+=pcBar(null,true,'1',xl(q),y0-h,bw,h,PC.loss,`${qLong(q)} · operating loss ${sr(w.pat)} a month`,.2);}
     tops[q]=y(d+Math.max(w.pat,0));});
-  {const pos=Q.findIndex(r=>r.pat>=0.005),worst=-Math.min(0,...Q.map(r=>r.pat)),f=Q[0],l=Q[15],q2=9,mid=y(Q[q2].cogs+Q[q2].variable+Q[q2].fixed/2);
+  {const pos=Q.findIndex(r=>r.pat>=0.005),f=Q[0],l=Q[15],q2=9,mid=y(Q[q2].cogs+Q[q2].variable+Q[q2].fixed/2);
    L1+=pcPlace(o[1],c,{px:c.x(15),py:y(top1[15])-5-2*fs1-8,lines:[`Q16: ${pctR(l.patP)} operating margin`,`${rc(l.pat)} profit on ${rc(l.net)} a month`],col:PC.profit,pref:['ul','u','l'],ymin:c.top-22});
-   if(pos>=0)L1+=pcPlace(o[1],c,{px:c.x(pos),py:y(top1[pos])-5-2*fs1-8,lines:[pos?`Operating profit turns positive in Q${pos+1}`:'Operating profit positive from Q1',worst>0.005?`after a worst month of −${rc(worst)}`:'every month'],col:PC.profit,pref:['ul','u','ur','l']});
+   if(pos>=0)L1+=pcPlace(o[1],c,{px:c.x(pos),py:y(top1[pos])-5-2*fs1-8,lines:[pos?`Operating profit turns positive in Q${pos+1}`:'Operating profit positive from Q1'],col:PC.profit,pref:['ul','u','ur','l']});
    else L1+=pcPlace(o[1],c,{px:c.x(15),py:y(top1[15])-60,lines:['Operating loss through Q16'],col:PC.loss});
    L1+=pcPlace(o[1],c,{px:c.x(q2)-bw/2-3,py:mid,lines:[`Common overhead: ${pctR(f.fixP)} → ${pctR(l.fixP)} of revenue`],col:PC.oh,dot:true,pref:['ul','u','l','dl']});}
 
@@ -147,7 +149,8 @@ cxMoney=function(W,D){
   arrows.forEach(([q,xs,from,to])=>o[3].add({x:xs-4,y:y(to),w:8,h:y(from)-y(to)}));
   arrows.forEach(([q,xs,from,to,a])=>{const i=R.rounds.findIndex(r=>r.q===q);
     arr+=`<line x1="${xs.toFixed(1)}" x2="${xs.toFixed(1)}" y1="${y(from).toFixed(1)}" y2="${(y(to)+4).toFixed(1)}" stroke="${PC.fund}" stroke-width="3.6" marker-end="url(#pcarr${id})"/>`;
-    arr+=pcPlace(o[3],c,{px:xs,py:y(to)-4,lines:[`Round ${i+1}`,pcR(a)],c2:PC.fundTxt,w2:700,col:PC.fundTxt,leader:false,gaps:[3,10,20,32],pref:['ur','u','ul','r','l']});});
+    /* a tall arrow takes its label beside the shaft (where the cash line is clear); a short one takes it above the tip */
+    arr+=pcPlace(o[3],c,{px:xs,py:y(from)-y(to)>80?(y(from)+y(to))/2:y(to)-4,lines:[roundWhen(R,i).text,`Round ${i+1}`,pcR(a)],bold:1,c2:PC.fundTxt,w2:700,col:PC.fundTxt,leader:false,gaps:[3,10,20,32],pref:y(from)-y(to)>80?['r','l','ur','ul']:['l','ul','u','ur','r']});});
 
   const titles=['₹ Cr a month, total revenue','₹ Cr a month · the full bar is revenue','₹ Cr in the quarter · cash required shaded · revenue a month, light bars','₹ Cr · cash at quarter end · revenue a month, light bars'].map((t,i)=>pcLy(String(i),pcTitle(t)));
   return `<svg class="s-svg cx-svg" viewBox="0 0 ${c.W} ${c.H}" style="${pcVars()}" role="img" aria-label="Revenue, margins, growth spending with the cash required, and cash with the funding rounds, by quarter">${defs}${ax.svg}${need}<g>${rev}</g>${pcLy('2',needEdge)}${seg}<g>${revo}</g>${sh}${line}${titles.join('')}${pcLy('0 1',tot)}${pcLy('0',L0)}${pcLy('1',L1)}${pcLy('2',L2)}${pcLy('3',dots,.45)}${pcLy('3',L3,.5)}${pcLy('3',arr,.2)}${pcAxisX(c)}</svg>`;
@@ -186,5 +189,5 @@ cxRoce=function(W,D){
   if(first>0)s+=pcPlace(o,c,{px:c.x(first),py:y(pre[first])-19,lines:[`Return turns positive in ${qName(first)}`],col:PC.profit,pref:['ur','u','ul']});
   if(ofs.length)s+=pcPlace(o,c,{px:c.x(ofs.at(-1))+bw/2,py:yf-6,lines:[`Off scale: ${ofs.map(q=>`${qName(q)} ${pctR(pre[q])}`).join(', ')}`,'capital is built ahead of sales'],col:PC.loss,pref:['r','dr','ur'],ymax:c.top+c.h+2});
   s+=pcAxisX(c);
-  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Annualised operating return on gross modelled capital by quarter">${s}</svg>`;
+  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Operating return on capital by quarter">${s}</svg>`;
 };

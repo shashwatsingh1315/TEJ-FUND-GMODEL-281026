@@ -111,17 +111,18 @@ CX.mar=D=>{
 /* ---------------------------------------------------------------- step 5: Investor return ---------------------------------------------------------------- */
 CX.ret=D=>{
   const R=D.R,X=D.X,ret=D.ret,pr=ret.pr,q=X.q,e=pr[0],Fd=INP.funding,cur=X.m==='arr'?`arr-${X.mult}`:X.m,held=pr.filter(r=>r.q<=q),last=held[held.length-1],n=held.length;
-  const lb=k=>k==='pat'?`${f0(Fd.multPat)}× profit`:k==='model'?'Round method':(RET_M.find(x=>x[0]===k)||[0,`${X.mult}× ARR`])[1];
-  const pre=`<div class="pnb-ctl"><div class="pnb-cr"><span>Exit valued at</span>${seg(RET_M.map(([k])=>[k,lb(k)]),cur,'exitm','Exit valued at')}</div><div class="pnb-cr"><span>Plan achieved</span>${seg([[1,'100%'],[0.7,'70%'],[0.5,'50%']],X.ach,'ach','Share of the revenue plan achieved')}</div></div>`;
+  const lb=k=>k==='pat'?`${f0(Fd.multPat)}× profit`:k==='model'?'Round-pricing method':(RET_M.find(x=>x[0]===k)||[0,`${X.mult}× ARR`])[1];
+  const pre=`<div class="pnb-ctl"><div class="pnb-cr"><span>Exit valued at</span>${seg(RET_M.map(([k])=>[k,lb(k)]),cur,'exitm','Exit valued at')}</div><div class="pnb-cr" title="Changes exit valuation only; funding and operating cash stay fixed."><span>Exit revenue vs plan</span>${seg([[1,'100%'],[0.7,'70%'],[0.5,'50%']],X.ach,'ach','Share of the revenue plan achieved')}</div></div>`;
   /* card 1: the stake after round 1, and what is left of it after the last round counted (solid = kept, pale = sold on) */
   const kept=last.stake/e.stake;
   const c1=pnbCard('Your stake',`<div class="pnb-st"><div><small>round 1</small><b>${pct2(e.stake)}</b></div><div class="pnb-bar" title="${fd(kept*100,0)}% of the round 1 stake is kept"><i style="width:${kept*100}%"></i></div><div class="r"><small>after round ${n}</small><b>${pct2(last.stake)}</b></div></div>`,PC.value,n>1?`round ${n} sells ${fd(last.sold*100,0)}% of Tejas`:'');
   /* card 2: ARR × multiple + cash − debt = equity value; × stake = value of the first ₹40 Cr; and the multiple on it (₹ Cr) */
   const arr=12*D.T[q]*X.ach,pat4=12*R.G.patMonthly[q]*X.ach,base=X.m==='pat'?['Profit a year',pat4]:['ARR',arr],mult=base[1]>0?ret.ev/base[1]:0;
-  const c2=pnbCard('What the exit is worth',
+  const c2=pnbCard(`Potential proceeds · ${pnbR(ret.val)}`,
     pnbEq([pnbChip(base[0],fd(base[1],0)),pnbOp('×'),pnbChip('Multiple',xS(mult)),pnbOp('+'),pnbChip('Cash',fd(ret.cash,0)),pnbOp('−'),pnbChip('Debt',fd(ret.debt,0))],'fit')
     +pnbEq([pnbOp('='),pnbChip('Equity value',fd(ret.eqv,0),{grow:1}),pnbOp('×'),pnbChip('Your stake',pct2(ret.s),{grow:1})],'fit')
-    +pnbEq([pnbOp('='),pnbChip(`First ${pnbR(e.amt)} becomes`,fd(ret.val,0),{res:1,col:PC.value,grow:1}),pnbChip('Times the money',xS(ret.mult),{res:1,col:PC.value})]),PC.value,`₹ Cr, exit in ${qName(q)}`);
+    +pnbEq([pnbOp('='),pnbChip(`First ${pnbR(e.amt)} becomes`,fd(ret.val,0),{res:1,col:PC.value,grow:1}),pnbChip('Times the money',xS(ret.mult),{res:1,col:PC.value})])
+    +pnbText(`${qName(q)} exit at ${cur==='model'?'the round-pricing method':lb(cur)}, after dilution.`),PC.value,`${xS(ret.mult)} on ${pnbR(e.amt)} invested.`);
   const c3=pnbCard('Not counted',pnbText(`Later ${R.P.cadenceQ*3}-monthly rounds dilute further.`),PC.fund);
   const others=RET_M.filter(([k])=>k!==cur).map(([k])=>{const [m,x]=k.split('-'),r=investorReturn(R,{q,m,mult:x?+x:undefined,ach:X.ach});return [k==='model'?'On the round method':`At ${lb(k)}`,rc(r.val),`${xS(r.mult)} · IRR ${pct1(r.irr*100)}`];});
   const fold=pnbF(whyD('How the stake and the value are worked out',
