@@ -1,34 +1,32 @@
 # Working capital and capex: model review
 
-28 October 2026. Reviewed: `workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html`, the live (last-defined) `capModel`, `gapFin`, `debtFin` and `raisePlan`. Every figure below comes from that file's own code. Re-run them with:
+29 October 2026. Reviewed: `workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html`, the live (last-defined) `capModel`, `gapFin`, `debtFin` and `raisePlan`, including the whole-phase capex layer added on 29 October. Every figure below comes from that file's own code. Re-run them with:
 
 ```bash
 node tools/audit-wc-capex.cjs
-node tools/step-capex.cjs
 ```
 
 Tax and depreciation are out of scope for this review.
 
 ## Short answer
 
-The arithmetic is sound. The drivers are not there yet. Working capital and capex are both fixed assumptions spread over time. Neither is derived from how Tejas actually ties up cash or adds capacity. That matters because working capital is ₹249 Cr of the ₹419 Cr of capex, intangibles and working capital consumed by Q16, and it largely sets the ₹200 Cr equity figure.
+The arithmetic is sound. Capex is now bought in whole phases, paid ahead of the demand each phase serves, within the fixed ₹170 Cr spend to Q16. Working capital is still one flat assumption rather than something built from how Tejas actually ties up cash. It is ₹249 Cr of the ₹419 Cr of capex, intangibles and working capital consumed by Q16, and it largely sets the ₹230 Cr equity figure.
 
-Three findings each move the equity needed by ₹20 Cr or more:
-
-| # | Finding | Live plan | Changed | Effect |
+| # | Finding | Before | Now or changed | Effect |
 |---|---|---|---|---|
-| W1 | Working capital uses a flat 60 days. The dashboard's own evidence gives about 41. | ₹200 Cr equity | ₹130 Cr | ₹70 Cr less equity, a smaller round 2 |
-| C1 | Plants are paid for as sales arrive, not before. | ₹200 Cr, round 2 in Q4 | ₹220 Cr, round 2 in Q2 (plants built 2 quarters ahead) | ₹20 Cr more equity; round 2 two quarters sooner |
-| C5 | Every asset is spread smoothly with sales. Real plants, labs, centres and systems are bought in whole steps. | ₹200 Cr, round 2 in Q4 | ₹235 Cr, round 2 in Q2 (placeholder steps) | ₹35 Cr more equity; ₹20.5 Cr of capex in Q1 instead of ₹0.4 Cr |
+| C5 | Capex was spread smoothly with sales. It is now bought in whole phases (done, 29 Oct). | ₹200 Cr, round 2 in Q4 | ₹230 Cr, round 2 in Q3 | ₹30 Cr more equity; this is the new base |
+| W1 | Working capital uses a flat 60 days. The dashboard's own evidence gives about 41. | ₹230 Cr equity | ₹165 Cr | ₹65 Cr less equity, a smaller round 2 |
+| C2 | Wood and uPVC plant sizes and phases have no capacity or quote behind them. | – | – | Decides when the big phases land |
 
 ## What is already right
 
-- Working capital is treated as a balance: only the increase is funded, the opening balance is excluded, and the 365-day convention is correct (fixed on 28 Oct).
-- Capex reconciles to the spec's ₹170 Cr end state and is not dumped into Q16. Every quarterly flow is positive. Wood and uPVC get a pre-launch build.
+- Working capital is treated as a balance: only the increase is funded, the opening balance is excluded, and the 365-day convention is correct.
+- Capex reaches exactly the spec's ₹170 Cr at Q16 (fixed, as the founders set it). Each item is bought in whole phases, each paid one quarter before demand would pass the capacity already built.
 - Burn is not counted twice against operating profit.
 - Stress cases run through the same engine with the P&L held fixed.
 - Plant debt excludes centres, labs, systems and misc.
 - The tile and waterproofing plant budget passes a capacity check against the file's own line costs (C2).
+- `work/verify-step-capex.cjs` (1,312 checks) and `work/audit-review.cjs` (937 checks) re-derive capex, cash and the gap independently and reconcile every quarter.
 
 ## Working capital
 
@@ -38,11 +36,11 @@ Three findings each move the equity needed by ₹20 Cr or more:
 - Stock turns in about 21 days.
 - The 41% of orders from dealers carry about 52 days of credit.
 
-The revenue model already splits every quarter into cities (RT) and dealer zones (DD). Combining the two gives WC = 21 days × all sales + 52 days × dealer sales. That rebuilds **42.7 days at Q1**, which matches the 41 days the file quotes for today. As dealers fall from 42% to 29% of revenue, it drifts down to **36 days by Q16**. On this basis the peak gap is ₹115 Cr and equity is **₹130 Cr**, against ₹187 Cr and ₹200 Cr today.
+The revenue model already splits every quarter into cities (RT) and dealer zones (DD). Combining the two gives WC = 21 days × all sales + 52 days × dealer sales. That rebuilds **42.7 days at Q1**, which matches the 41 days the file quotes for today. As dealers fall from 42% to 29% of revenue, it drifts down to **36 days by Q16**. On this basis the peak gap is ₹154 Cr and equity is **₹165 Cr**, against ₹219 Cr and ₹230 Cr today.
 
-So 60 days sits 46–66% above the business's own figures (41 days today, 36 at Q16) and adds about ₹70 Cr of equity, which means dilution. Either 60 days rests on something the file doesn't show (uPVC project terms, a planned dealer push, stock for new lines), and it should be built from those parts, or it is a cushion and belongs in the stress cases. Two caveats: the 21 and 52 days appear in the file without a cited source, and the mapping of cities to direct orders and dealer zones to dealer credit needs confirming. The Q1 split of 58% cities lines up with 59% direct.
+So 60 days sits 46–66% above the business's own figures (41 days today, 36 at Q16) and adds about ₹65 Cr of equity, which means dilution. Either 60 days rests on something the file doesn't show (uPVC project terms, a planned dealer push, stock for new lines), and it should be built from those parts, or it is a cushion and belongs in the stress cases. Two caveats: the 21 and 52 days appear in the file without a cited source, and the mapping of cities to direct orders and dealer zones to dealer credit needs confirming. The Q1 split of 58% cities lines up with 59% direct.
 
-**W2. No split into stock, customer credit and supplier credit.** Stock and supplier credit move with cost of goods, about 50% of revenue, while customer credit moves with the invoice. Measuring everything in days of revenue overstates stock and leaves supplier credit at zero. With 30 days of supplier credit, equity falls to ₹95 Cr. Actual creditor days are needed.
+**W2. No split into stock, customer credit and supplier credit.** Stock and supplier credit move with cost of goods, about 50% of revenue, while customer credit moves with the invoice. Measuring everything in days of revenue overstates stock and leaves supplier credit at zero. With 30 days of supplier credit, equity falls to ₹125 Cr. Actual creditor days are needed.
 
 **W3. uPVC doors, windows and façades is treated like adhesive.** It is the largest line at Q16: ₹42.5 Cr a month, a third of revenue. Window and façade work is usually ordered and billed by project, with advances, stage billing and retention, so its cash profile can differ a lot from bagged adhesive in either direction. It needs its own terms.
 
@@ -53,39 +51,40 @@ So 60 days sits 46–66% above the business's own figures (41 days today, 36 at 
 
 ## Capex
 
-**C1. Plants are paid for as sales arrive.** Each plant's spend is its Q16 budget × (sales this quarter ÷ sales at Q16). Apart from 30% of wood and uPVC in the quarter before launch, capacity appears in the same quarter as the sales it serves. In practice capacity and vendor payments come first.
-- 1 quarter ahead: ₹210 Cr of equity, with round 2 in Q3.
-- 2 quarters ahead: ₹220 Cr, with round 2 in Q2. Round 1 then carries the business alone for one quarter instead of three.
+**C5. Capex in whole phases (built into the dashboard on 29 Oct).** The spend to Q16 is fixed. What is modelled is when each phase is bought:
 
-These are lower bounds, because the end state stays at ₹140 Cr. Waterproofing gets no pre-launch build at all: it shares the tile plant, which tracks combined sales, so that plant grows ₹3.4 Cr in Q10, the launch quarter itself.
+- **Capacity per phase** = Q16 demand × phase cost ÷ item budget. The full budget therefore serves exactly Q16 demand.
+- **Phases in place** in a quarter = the fewest phases whose capacity covers demand one quarter later (`capital.leadQ`, default 1).
+- **Spend to date** = the cost of the phases in place. Labs follow the plant phases in the same quarter.
 
-**C2. Plant size is a budget, not a capacity calculation.** The spec asks for "required capacity → existing capacity gap → investment timing". The live model uses the spec's fixed budgets (₹40 / 30 / 50 Cr) with no capacity input.
+Demand is measured in what each item serves, using the same drivers as before.
+
+| Item | ₹ Cr to Q16 | Plan phases (assumptions, editable) | Bought in |
+|---|---|---|---|
+| Tile adhesive + waterproofing plant | 40 | 8 × ₹5 Cr (modular dry-mix lines, about ₹1.65 Cr each on the ledger) | Q1 · Q7 · Q9 · Q10 · Q12 · Q13 · Q14 ×2 |
+| Wood adhesive plant | 30 | ₹9 Cr (30%) before launch, then 2 × ₹10.5 Cr | Q3 · Q8 · Q12 |
+| uPVC plant | 50 | ₹15 Cr (30%) before launch, then 2 × ₹17.5 Cr | Q5 · Q9 · Q13 |
+| Experience centres | 10 | 20 × ₹50 L (spec) | 1–2 a quarter, Q1–Q15 |
+| Labs | 10 | 4 × ₹2.5 Cr, one with each ₹30 Cr of plant | Q1 · Q7 · Q9 · Q13 |
+| Systems | 20 | 4 × ₹5 Cr on revenue | Q1 · Q8 · Q11 · Q13 |
+| Misc capex | 10 | 10 × ₹1 Cr on revenue | Q1 · Q6 · Q8–Q15 |
+
+Capex plus intangibles by quarter (₹ Cr): Q1 14.0 · Q2 0.5 · Q3 9.5 · Q4 0.5 · Q5 15.0 · Q6 2.0 · Q7 8.0 · Q8 17.0 · Q9 26.5 · Q10 7.0 · Q11 6.5 · Q12 17.5 · Q13 32.0 · Q14 12.0 · Q15 2.0 · Q16 0.
+
+Against the old smooth spread, the base case moves from ₹200 Cr of equity (Q1 40 + Q4 125 + Q11 35) to **₹230 Cr (Q1 40 + Q3 130 + Q10 60)**. The peak gap moves from ₹187 Cr in Q15 to ₹219 Cr in Q14. Phase counts, the first-phase share and the lead are all in Edit inputs.
+
+**C1. Timing.** Spend now comes before the sales it serves. Paying phases in the quarter they are needed instead gives ₹220 Cr; paying 2 quarters ahead gives ₹240 Cr. Waterproofing shares the tile plant, so its capacity comes from that plant's phases rather than a pre-launch build of its own.
+
+**C2. Plant size is a budget, not a capacity calculation.** The spec asks for "required capacity → existing capacity gap → investment timing". The model uses the spec's fixed budgets (₹40 / 30 / 50 Cr) and placeholder phases.
 - **Tile, waterproofing and niche pass.** The file's own line costs are ₹1.65 Cr for 2,100 T a month at ₹16.5 a kg, one shift. Q16 sales on these products need about 16.5 lines on one shift (₹27 Cr) or about 8 on two. The ₹40 Cr covers that.
-- **Wood (₹30 Cr for ₹335 Cr of ARR, 11×) and uPVC (₹50 Cr for ₹509 Cr of ARR, 10×) have nothing behind them**: no tonnage, no capacity and no quote in the file. They are ₹80 Cr of the ₹120 Cr plant spend and 55% of Q16 revenue. This is open decision D11.
+- **Wood (₹30 Cr for ₹335 Cr of ARR, 11×) and uPVC (₹50 Cr for ₹509 Cr of ARR, 10×) have nothing behind them**: no tonnage, no capacity and no quote in the file. They are ₹80 Cr of the ₹120 Cr plant spend and 55% of Q16 revenue. Their phase sizes decide when the largest single payments land (open decision D11).
 - Niche adhesive reaches ₹93 Cr of ARR with no plant line of its own. That is fine if it runs on the tile lines (it fits above) or is outsourced, but the model should say which.
 
-**C3. No headroom at Q16, and nothing after it.** Every plant reaches 100% of its budget exactly at Q16 sales, while revenue is still growing 13.8% a quarter. The exit valuation assumes that growth continues, but the capacity to deliver Q17 onward isn't paid for in the Q16 cash. There is no maintenance capex either.
+**C3. No headroom at Q16, and nothing after it.** Every plant's capacity is sized to exactly Q16 demand, while revenue is still growing 13.8% a quarter. The exit valuation assumes that growth continues, but the capacity to deliver Q17 onward isn't paid for in the Q16 cash. There is no maintenance capex either.
 
-**C4. Budgets don't respond to the revenue plan.** Capex stays ₹170 Cr whether revenue comes in 30% lower or higher. Revenue stresses therefore move working capital but not capex. That is conservative on the downside and optimistic on the upside.
+**C4. Budgets don't respond to the revenue plan.** Capex stays ₹170 Cr whether revenue comes in 30% lower or higher. Phase timing follows planned dates even when revenue runs late. That is conservative on the downside and optimistic on the upside.
 
-**C5. Assets are spread smoothly when they are actually bought in steps.** For every item, spent to date = budget × (driver now ÷ driver at Q16), where the driver is sales, units opened, plant spend or MRR. That has three consequences that don't hold in practice:
-- It buys fractions of assets. Q1 holds ₹0.23 Cr of centres (under half a ₹50 L centre), ₹1 L of labs and ₹3 L of systems.
-- Each quarter's capex is just that quarter's sales increase scaled to the budget. It is not a build plan.
-- Capacity arrives in the same quarter as the sales it serves.
-
-`tools/step-capex.cjs` rebuilds capex as whole steps, each paid one quarter before the demand it serves. Step capacity = Q16 demand ÷ number of steps, and steps in place = ceil(demand next quarter ÷ step capacity). The spec budgets are unchanged. Only centres have a real step size (20 × ₹50 L, from the spec). The others are placeholders: plants in ₹10 Cr phases (tile + waterproofing 4, wood 3, uPVC 5), labs 4 × ₹2.5 Cr arriving with plant phases, systems 4 × ₹5 Cr and misc 4 × ₹2.5 Cr on MRR.
-
-| Case (60-day WC) | Capex Q1–Q5 | Peak gap | Equity | Rounds |
-|---|---|---|---|---|
-| Live: smooth spread | 33.2 | 187.3 (Q15) | 200 | Q1 40 + Q4 125 + Q11 35 |
-| Steps, paid 1 quarter ahead | 42.0 | 220.4 (Q14) | 235 | Q1 40 + Q2 105 + Q9 90 |
-| Steps, plants paid 2 quarters ahead | 42.0 | 228.7 (Q13) | 240 | Q1 40 + Q2 115 + Q9 85 |
-| Half as many steps (bigger phases) | 73.7 | 228.7 (Q13) | 240 | Q1 40 + Q2 115 + Q9 85 |
-| Twice as many steps (smaller phases) | 22.0 | 215.4 (Q14) | 230 | Q1 40 + Q4 135 + Q11 55 |
-
-The two 240 rows take different paths but reach the same capex by Q13, which sets both the peak and, after ₹5 Cr rounding, the rounds. Whatever the step sizes, buying in steps costs ₹30–40 Cr more equity than the smooth spread. Step size decides whether round 2 lands in Q2 or Q4.
-
-**C6. Distribution points have no capex.** City dark stores are rented, and their rent is in operating cost ("Godown rent and expenses", ₹1 L a month at Q1 rising to ₹1.04 Cr a month at Q16). Their set-up cost (fit-out, racking, deposits) is not modelled. Dealer zones are revenue units with no depot or set-up cost at all. Applying the file's own dark-store throughput (₹80 L a month per store) to city revenue gives 2 stores in Q1, 22 in Q8 and 113 in Q16, so set-up cost per store matters.
+**C6. Distribution points have no capex of their own.** City dark stores are rented, and their rent is in operating cost ("Godown rent and expenses", ₹1 L a month at Q1 rising to ₹1.04 Cr a month at Q16). Dealer zones are revenue units with no depot cost. The file's own dark-store throughput (₹80 L a month per store) implies 2 stores in Q1, 22 in Q8 and 113 in Q16. With the ₹170 Cr fixed, any set-up cost for them has to come out of misc (₹10 Cr).
 
 ## Sensitivities
 
@@ -93,28 +92,25 @@ Same P&L and same raise policy (₹10 Cr buffer, 1-quarter lead, 8-quarter windo
 
 | Case | WC at Q16 | Days at Q16 | Capex + intangibles at Q5 | Peak gap | Equity | Rounds |
 |---|---|---|---|---|---|---|
-| **Live: flat 60 days** | 251.8 | 60.0 | 33.2 | 187.3 (Q15) | **200** | Q1 40 + Q4 125 + Q11 35 |
-| Flat 90 days | 377.7 | 90.0 | 33.2 | 301.5 (Q16) | 315 | Q1 40 + Q4 175 + Q11 100 |
-| Flat 45 days | 188.8 | 45.0 | 33.2 | 138.9 (Q14) | 150 | Q1 40 + Q4 95 + Q11 15 |
-| Flat 41 days (file: cycle today) | 172.1 | 41.0 | 33.2 | 128.3 (Q13) | 140 | Q1 40 + Q4 90 + Q11 10 |
-| Flat 33.6 days (file: target) | 141.0 | 33.6 | 33.2 | 108.8 (Q13) | 120 | Q1 40 + Q4 75 + Q11 5 |
-| **Channel: 21d stock + 52d dealer credit** | 151.9 | 36.2 | 33.2 | 115.2 (Q13) | **130** | Q1 40 + Q4 80 + Q11 10 |
-| Channel + 30d supplier credit | 89.7 | 21.4 | 33.2 | 80.2 (Q11) | 95 | Q1 40 + Q4 55 |
-| Channel: 30d stock + 75d dealer credit | 217.9 | 51.9 | 33.2 | 159.4 (Q14) | 170 | Q1 40 + Q4 110 + Q11 20 |
-| Plants built 1Q ahead of sales | 251.8 | 60.0 | 36.9 | 199.3 (Q15) | 210 | Q1 40 + Q3 110 + Q10 60 |
-| **Plants built 2Q ahead of sales** | 251.8 | 60.0 | 41.6 | 209.8 (Q14) | **220** | Q1 40 + Q2 100 + Q9 80 |
-| Plants, centres, labs 2Q ahead | 251.8 | 60.0 | 43.3 | 213.9 (Q14) | 225 | Q1 40 + Q2 100 + Q9 85 |
-| Plants +20% | 251.8 | 60.0 | 38.8 | 209.0 (Q15) | 220 | Q1 40 + Q4 135 + Q11 45 |
+| **Live: flat 60 days, phased capex** | 251.8 | 60.0 | 39.5 | 219.4 (Q14) | **230** | Q1 40 + Q3 130 + Q10 60 |
+| Flat 90 days | 377.7 | 90.0 | 39.5 | 314.1 (Q15) | 325 | Q1 40 + Q3 170 + Q10 115 |
+| Flat 45 days | 188.8 | 45.0 | 39.5 | 177.2 (Q13) | 190 | Q1 40 + Q3 105 + Q10 45 |
+| Flat 41 days (file: cycle today) | 172.1 | 41.0 | 39.5 | 166.7 (Q13) | 180 | Q1 40 + Q3 100 + Q10 40 |
+| Flat 33.6 days (file: target) | 141.0 | 33.6 | 39.5 | 147.3 (Q13) | 160 | Q1 40 + Q4 95 + Q11 25 |
+| **Channel: 21d stock + 52d dealer credit** | 151.9 | 36.2 | 39.5 | 153.7 (Q13) | **165** | Q1 40 + Q3 95 + Q10 30 |
+| Channel + 30d supplier credit | 89.7 | 21.4 | 39.5 | 113.2 (Q13) | 125 | Q1 40 + Q4 75 + Q12 10 |
+| Channel: 30d stock + 75d dealer credit | 217.9 | 51.9 | 39.5 | 194.8 (Q13) | 205 | Q1 40 + Q3 115 + Q10 50 |
+| Phases paid in the quarter needed | 251.8 | 60.0 | 24.5 | 207.4 (Q14) | 220 | Q1 40 + Q3 120 + Q10 60 |
+| Phases paid 2 quarters ahead | 251.8 | 60.0 | 41.5 | 228.7 (Q13) | 240 | Q1 40 + Q3 135 + Q10 65 |
+| Equal phases for wood and uPVC | 251.8 | 60.0 | 44.7 | 219.4 (Q14) | 230 | Q1 40 + Q3 130 + Q10 60 |
+| Plants +20% | 251.8 | 60.0 | 45.3 | 243.4 (Q14) | 255 | Q1 40 + Q2 125 + Q9 90 |
 
 ## What to change, in order
 
-Each change moves the ask, so each needs founder inputs before it replaces the plan. Until then the file's own figures can stand in, labelled as placeholders.
+Each change moves the ask, so each needs founder inputs before it replaces the plan. Until then the file's own figures stand in, labelled as placeholders.
 
 1. **Build working capital from its parts.** Stock days on cost of goods, customer credit by channel, supplier days, and uPVC's own terms. Keep flat 60 and 90 days as stress cases.
    *Inputs needed:* debtor days by channel, stock days, creditor days, and uPVC advance, stage-billing and retention terms.
-2. **Make capex capacity-led.** For each plant: capacity, cost per unit of capacity, and build lead time. Spend comes before the sales it serves. Show the capacity in place at Q16 against Q17–Q18 demand.
-   *Inputs needed:* wood and uPVC capacity and quotes, build lead times, and whether niche runs on the tile lines or is outsourced.
-3. **Buy assets in steps.** Use the engine in `tools/step-capex.cjs`.
-   *Inputs needed:* for each plant, the phases (cost and capacity each); the number of labs, what each serves and its cost; the systems roll-out phases; what misc covers.
-4. **Add distribution points.** Count them by quarter, with set-up cost per point.
-   *Inputs needed:* whether "distribution centres" means the city dark stores, dealer-zone depots or both; the set-up cost of each; and the stores' real throughput.
+2. **Replace the placeholder phases with real ones.** The engine is in the dashboard (Edit inputs → Cost of revenue · capex).
+   *Inputs needed:* for each plant, its phases (cost, capacity and build time of each), and whether niche runs on the tile lines or is outsourced; the number of labs and what each serves; the systems roll-out phases; what misc covers, including any dark-store set-up.
+3. **Show capacity headroom at Q16** against Q17–Q18 demand.

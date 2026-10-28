@@ -2,7 +2,7 @@
    from source inputs, then reconcile to the dashboard, rather than reproducing
    its displayed totals or comparing only with its prior output. */
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const root='/Users/shashwat/Documents/Codex/2026-10-28/c',file=root+'/outputs/Tejas_Revenue_Dashboard_1041_Updated.html',html=fs.readFileSync(file,'utf8');
+const root=require('node:path').join(__dirname,'..'),file=root+'/outputs/Tejas_Revenue_Dashboard_1041_Updated.html',html=fs.readFileSync(file,'utf8');
 const defaults=html.match(/<script type="application\/json" id="inputs-default">([\s\S]*?)<\/script>/)[1],noop=()=>{},main={innerHTML:'',classList:{add:noop,remove:noop},querySelectorAll:()=>[],style:{},dataset:{}},ctx=vm.createContext({structuredClone,document:{getElementById:id=>id==='inputs-default'?{textContent:defaults}:main,addEventListener:noop},localStorage:{getItem:()=>null,setItem:noop},innerWidth:1384,addEventListener:noop,window:{innerHeight:988},MutationObserver:class{observe(){}}});
 for(const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(m[1].replace(/^routeApp\(\);$/m,''),ctx,{timeout:2500});
 const run=s=>vm.runInContext(s,ctx,{timeout:10000}),data=JSON.parse(JSON.stringify(run(`(()=>{const D=capData();return {INP,MODEL,UNIT_META,OP_LINES,OP_COSTS,P,rt:view(SCOPE.core,'city'),dd:view(SCOPE.core,'dist'),O:operatingModel(),G:D.G,R:D.R,ro:roceFin(D.G),ret:D.ret,pr:D.pr,exit:D.X};})()`)));
@@ -19,14 +19,16 @@ for(let q=0;q<16;q++){
  for(let m=1;m<=3;m++){const t=m/3,x=Object.fromEntries(['city','dist'].map(ch=>[ch,Object.fromEntries(P.map(p=>[p,a[ch][p]*(1-t)+b[ch][p]*t]))]));const e=earning(x,Math.max(0,q-1+t));months.push(e);near(e.pat,data.O.months[q*3+m-1].pat,`Q${q+1} month ${m} earnings`);}
  const earned=sums(months.slice(q*3,q*3+3).map(x=>x.pat));quarter.push(earned);near(earned,data.G.pat[q],`Q${q+1} quarterly earnings`);
 }
-// Build end-state deployment independently, with each cumulative asset target
-// applied once to the applicable completion fraction.
+// Build deployment independently: each item's fixed Q16 budget is bought in whole phases. A phase adds
+// capacity in proportion to its cost and is paid leadQ quarters before demand passes the capacity built.
 const X=I.capital.capex,T=data.rt.T.map((x,q)=>x+data.dd.T[q]),product=p=>data.rt.M[p].map((v,q)=>v+data.dd.M[p][q]),tm=product('tile'),pm=product('p5'),wood=product('wood'),upvc=product('upvc'),opening=I.valuation.todayMRR,phase=I.capital.firstPhase/100;
 const units=T.map((_,q)=>M.live.length+sums(Object.values(M.openings).map(a=>sums(a.slice(0,q+1))))),capital=[];let opCum=0,flowCum=0,burn=0;
+const lead=I.capital.leadQ,phases=k=>{const n=k==='centres'?I.capital.centresN:I.capital.phases[k],w=k==='wood'||k==='upvc';return w&&phase>=1?[X[k]]:w&&phase>0&&n>1?[X[k]*phase,...Array(n-1).fill(X[k]*(1-phase)/(n-1))]:Array(n).fill(X[k]/n);};
+const deploy=(k,D,ld)=>{const cs=phases(k),B=sums(cs),top=D[15];return D.map((_,q)=>{if(q===15)return B;const need=D[Math.min(15,q+ld)];let acc=0,j=0;while(j<cs.length&&need>acc/B*top+1e-9)acc+=cs[j++];return acc;}).map((v,q,a)=>Math.max(v,...a.slice(0,q)));};
+const above=(a,b)=>a.map((v,q)=>Math.max(0,v-(Array.isArray(b)?b[q]:b))),stepItems={tileP5:deploy('tileP5',above(tm.map((v,q)=>v+pm[q]),tileLive),lead),wood:deploy('wood',wood,lead),upvc:deploy('upvc',upvc,lead),centres:deploy('centres',above(units,M.live.length),lead),systems:deploy('systems',above(T,opening),lead),misc:deploy('misc',above(T,opening),lead)};
+stepItems.labs=deploy('labs',T.map((_,q)=>stepItems.tileP5[q]+stepItems.wood[q]+stepItems.upvc[q]),0);
 for(let q=0;q<16;q++){
- const f=p=>q<M.products[p].launch-2?0:phase+(1-phase)*(p==='wood'?wood:upvc)[q]/(p==='wood'?wood:upvc)[15],revFrac=clamp((T[q]-opening)/(T[15]-opening));
- const items={tileP5:X.tileP5*clamp((tm[q]+pm[q]-tileLive)/(tm[15]+pm[15]-tileLive)),wood:X.wood*f('wood'),upvc:X.upvc*f('upvc'),centres:X.centres*clamp((units[q]-M.live.length)/(units[15]-M.live.length)),systems:X.systems*revFrac,misc:X.misc*revFrac};
- items.labs=X.labs*(items.tileP5+items.wood+items.upvc)/(X.tileP5+X.wood+X.upvc);
+ const items=Object.fromEntries(Object.keys(stepItems).map(k=>[k,stepItems[k][q]]));
  const c={capex:items.tileP5+items.wood+items.upvc+items.centres+items.misc,pp:items.labs+items.systems,wc:(T[q]-opening)*12*I.capital.wcDays/365},prev=capital[q-1]||{capex:0,pp:0,wc:0},delta=Object.fromEntries(Object.keys(c).map(k=>[k,c[k]-prev[k]]));
  capital.push(c);for(const k of Object.keys(c)){near(c[k],data.G.K.cum[q][k],`Q${q+1} closing ${k}`);near(delta[k],data.G.flows[k][q],`Q${q+1} change in ${k}`);}
  opCum+=quarter[q];flowCum+=quarter[q]-sums(Object.values(delta));burn+=sums(months.slice(q*3,q*3+3).map(x=>Math.max(0,-x.pat)));

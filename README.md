@@ -37,8 +37,6 @@ NODE_PATH=$(npm root -g) node tools/check-burn-table-units.js "$PWD/dashboard/te
 # Working-capital and capex review of the latest dashboard (no browser needed; compare with docs/REVIEW-working-capital-and-capex.md)
 node tools/audit-wc-capex.cjs
 
-# Capex bought in whole steps instead of spread with sales; edit PLAN at the top to set real phase sizes
-node tools/step-capex.cjs
 
 # Design tokens, functions and classes in the dashboard
 python3 -I tools/inspect-dashboard.py dashboard/tejas-revenue-dashboard.html
