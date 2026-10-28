@@ -3,6 +3,9 @@
 .review-inputs h3{margin:0 0 6px;font-size:16px}
 .review-inputs p{margin:0;font-family:var(--ft);font-size:14px;line-height:1.5;max-width:95ch}
 .review-inputs .review-formula{margin-top:9px}
+.cap-kpi .kpi-sub{display:block;margin-top:2px;font-size:12px;line-height:1.35;font-weight:400;color:var(--ink-3)}
+.cap-kpi .kpi-lbl{color:var(--ink-2);font-weight:600}
+.cx-ctl .cx-ctl-note{flex-basis:100%}
 .review-logic{margin:14px 0 4px;padding:13px 15px;background:#f8f6f2;border:1px solid var(--rule)}
 .review-logic h4{margin:0 0 4px;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
 .review-logic p{margin:0;font-family:var(--ft);font-size:13px;line-height:1.45}
@@ -29,6 +32,7 @@
 .review-round header{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .review-round h4{margin:0 0 2px;font-size:14px;font-weight:600}
 .review-round header span{font-size:12px;color:var(--ink-3)}
+.review-round header span.review-round-when{display:block;margin-top:2px;font-weight:600;color:var(--accent)}
 .review-round header strong{font-family:var(--fd);font-weight:500;font-size:28px;color:var(--accent);white-space:nowrap}
 .review-round header strong small{font-family:var(--f);font-size:12px;margin-left:5px}
 .review-round-period{margin:10px 0 5px;font-size:11px;color:var(--ink-3)}

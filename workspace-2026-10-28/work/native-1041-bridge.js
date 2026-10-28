@@ -6,12 +6,12 @@ cxSeries=function(D){
   return {Q,cashQ:D.I.Q,net:Q.map(r=>r.net),pat,patMonthly:Q.map(r=>r.pat),sp,ncf,cum,cash:R.cash,base:R.base,fl,pk,peak:-cum[pk],back,cross};
 };
 cxHeads=function(D){const ask=f0(D.pr[0].amt),floor=f0(D.R.P.buffer);return [
-  ['Revenue a month at each quarter end','Each bar is the final month of a quarter, in ₹ Cr/month. Click a quarter to see the city/retail and dealer-zone split on the right. GST is ignored.'],
-  ['Where each month’s revenue goes','The same monthly bars split into product costs, selling costs, common overhead and operating profit. Product and RT/DD margins are weighted by their revenue.'],
+  ['Monthly revenue','Each bar is the final month of a quarter, in ₹ Cr/month. Click a quarter to see the city/retail and dealer-zone split on the right. GST is ignored.'],
+  ['Costs and operating profit','The same monthly bars split into product costs, selling costs, common overhead and operating profit. Product and RT/DD margins are weighted by their revenue.'],
   ['Operating cash earnings against growth spending','From this step, bars show cash flows during each quarter: estimated operating earnings above zero and growth investment below. Earnings sum the intervening months; they are not three times the closing month.'],
-  ['Running total: the accumulated funding shortfall','The line accumulates the quarterly cash flows from step 3. The area below zero is the funding shortfall before equity or debt.'],
-  ['Cash in the bank, with the raises',`Each arrow adds a funding round. The grey line is closing cash without equity raises; the plan targets at least ₹${floor} Cr at quarter ends.`],
-  [`What the first ₹${ask} Cr is worth, by exit quarter`,'Each bar values the investor’s diluted stake at that exit, adding estimated cash and subtracting debt. This is a valuation scenario.'],
+  ['Funding gap before financing','The line accumulates the quarterly cash flows from step 3. The area below zero is the funding shortfall before equity or debt.'],
+  ['Projected cash balance',`Each arrow adds a funding round. The grey line is closing cash without equity raises; the plan targets at least ₹${floor} Cr at quarter ends.`],
+  ['Potential investor return','Exit equity value × ownership after dilution.<br><small>Exit equity value includes projected cash less outstanding debt.</small>'],
   ['Return on capital employed, quarter by quarter','Annualised quarter-end monthly operating profit (×12) divided by capital employed. The dots deduct modelled depreciation. This is a simple return before interest and tax.']
 ];};
 const nativeLegends=cxLegends;
