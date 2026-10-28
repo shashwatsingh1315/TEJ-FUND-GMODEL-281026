@@ -15,21 +15,21 @@
     "workingCapitalOpening": 83.10575342465754,
     "workingCapitalClosing": 107.2504109589041,
     "workingCapitalCash": 24.144657534246562,
-    "capexCash": 11.19008109923719
+    "capexCash": 1.5
   },
   "operatingEarningsOver48Months": 241.4540910369863,
-  "peakFundingGap": 187.34007120511026,
-  "peakQuarter": 15,
-  "equity": 200,
-  "closingCash": 22.82724172191797,
+  "peakFundingGap": 219.41058750698642,
+  "peakQuarter": 14,
+  "equity": 230,
+  "closingCash": 52.82724172191797,
   "roceProxy": {
     "before": 58.69185400084452,
     "after": 53.71299062371365
   },
   "exit10ARR": {
-    "stake": 10.11951154831478,
-    "value": 1552.2953501944887,
-    "multiple": 38.807383754862215,
-    "irr": 1.4959081048719591
+    "stake": 9.366538492488747,
+    "value": 1439.6020517479196,
+    "multiple": 35.99005129369799,
+    "irr": 1.4493204943117117
   }
 }
