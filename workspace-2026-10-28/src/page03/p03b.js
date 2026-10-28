@@ -16,8 +16,8 @@ Object.assign(CAP4C,{capex:PC.capex,pp:PC.labs,wc:PC.wc,interest:PC.int,loss:PC.
 const pcTint=(hex,a)=>{const n=parseInt(hex.slice(1),16),m=k=>Math.round(255-(255-((n>>k)&255))*a).toString(16).padStart(2,'0');return '#'+m(16)+m(8)+m(0);};
 
 /* ---------- six steps: growth spending and funding need are one ---------- */
-CAP_BEATS.splice(0,CAP_BEATS.length,[['rev','4 year revenues scale up']],[['mar','Net margins expansion']],[['spend','Capital Utilisation Plan']],[['raise','Capital Raising roadmap']],[['ret','Investor returns over 4 years']],[['roce','ROCE machinery']]);
-STEPS.finance=['4 year revenues scale up','Net margins expansion','Capital Utilisation Plan','Capital Raising roadmap','Investor returns over 4 years','ROCE machinery'];
+CAP_BEATS.splice(0,CAP_BEATS.length,[['rev','4 year revenues scale up']],[['mar','Net margins expansion']],[['spend','Capital Utilisation Plan']],[['raise','Capital Raising roadmap']],[['ret','Investor return (4Y)']],[['roce','ROCE machinery']]);
+STEPS.finance=['4 year revenues scale up','Net margins expansion','Capital Utilisation Plan','Capital Raising roadmap','Investor return (4Y)','ROCE machinery'];
 CX_KEYS.splice(0,CX_KEYS.length,'rev','mar','spend','raise','ret','roce');
 A.cap.beat=[0,0,0,0,0,0];
 A.cap.exitQ=15;

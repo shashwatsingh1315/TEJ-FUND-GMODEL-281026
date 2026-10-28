@@ -31,22 +31,22 @@ CX.spend=D=>{
   const St=K.steps,item=k=>add(St[k].costs),plants=item('tileP5')+item('wood')+item('upvc');
   const nLab=St.labs.costs.length,nCen=St.centres.costs.length,nSys=St.systems.costs.length,nMis=St.misc.costs.length;
   const perPlant=plants/nLab,perCity=(K.units[L]-4)/nCen,dRev=D.T[L]-K.m0;
-  const ahead=lead>1?`${lead} quarters ahead`:lead===1?'a quarter ahead':'as sales need it';
+  const plantRule=lead>1?`Plants: expand ${lead} quarters before sales need it`:lead===1?'Plants: expand a quarter before sales need it':'Plants: expand when sales need it';
   const before=lead>1?`${lead} quarters before`:lead===1?'a quarter before':'when';
   const seg=(v,col,n)=>({v,c:col,n:`${n} · ${Rs(v)}`});
   const trig=[
-    {sh:'▲',h:'Sales outgrow capacity',rule:`Plant phases bought ${ahead} of sales; a lab per ${Rs(perPlant)} of plant`,
+    {sh:'▲',h:'Plants and labs',rule:[plantRule,`Labs: one per ${Rs(perPlant)} of plant`],
       seg:[seg(plants,PC.capex,'Plants'),seg(item('labs'),PC.labs,'Labs')]},
-    {sh:'●',h:'New cities open',rule:`A centre per ~${fd(perCity,0)} new cities or zones`,
+    {sh:'●',h:'Experience centres',rule:[`One per ~${fd(perCity,0)} new cities or dealer zones`],
       seg:[seg(item('centres'),PC.capex,'Experience centres')]},
-    {sh:'■',h:'Revenue grows',rule:`Working capital at ${fd(days,0)} days; systems and misc in steps`,
+    {sh:'■',h:'Working capital, systems, misc',rule:[`Working capital: ${fd(days,0)} days of revenue`,'Systems, misc: added as revenue grows'],
       seg:[seg(item('misc'),PC.capex,'Misc'),seg(item('systems'),PC.labs,'Systems'),seg(c.wc,PC.wc,'Working capital')]}];
   trig.forEach(t=>t.v=add(t.seg.map(x=>x.v)));
   const tot=add(trig.map(t=>t.v)),tmax=Math.max(...trig.map(t=>t.v),1e-9);
-  const trow=t=>`<div class="pnc-tg"><div class="pnc-tg-h"><span><i>${t.sh}</i>${t.h}</span><b>${Rs(t.v)}</b></div><p>${t.rule}</p>`
+  const trow=t=>`<div class="pnc-tg"><div class="pnc-tg-h"><span><i>${t.sh}</i>${t.h}</span><b>${Rs(t.v)}</b></div>${t.rule.map(r=>`<p>${r}</p>`).join('')}`
     +`<div class="pnc-tr"><div class="pnc-tb" role="img" aria-label="${t.seg.map(x=>x.n).join(', ')}" style="width:${(100*t.v/tmax).toFixed(1)}%">${t.seg.map(x=>`<i style="flex:${x.v} 1 0;background:${x.c}" title="${x.n}"></i>`).join('')}</div></div></div>`;
-  const c2=PK.card({title:`Three triggers pace the ${Rs(tot)}`,body:PK.vis(trig.map(trow).join('')),col:PC.capex});
-  const rule={tileP5:`paid ${before} sales pass built capacity`,wood:`paid ${before} sales pass built capacity`,upvc:`paid ${before} sales pass built capacity`,
+  const c2=PK.card({title:`What triggers the ${Rs(tot)}`,body:PK.vis(trig.map(trow).join('')),col:PC.capex});
+  const rule={tileP5:`bought ${before} sales need it`,wood:`bought ${before} sales need it`,upvc:`bought ${before} sales need it`,
     centres:`one per ~${fd(perCity,0)} new cities or dealer zones`,labs:`one per ${Rs(perPlant)} of plant, same quarter`,
     systems:`one per ~${Rs(dRev/nSys)} of added monthly revenue`,misc:`one per ~${Rs(dRev/nMis)} of added monthly revenue`};
   /* the fold: the per-item rules and phase plan, and what moves the peak */

@@ -105,7 +105,7 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 
 ## Design rules (agreed with the founders; keep them)
 
-- **Numbers are always computed** from the model, never typed into text.
+- **Numbers are always computed** from the model, never typed into text. The exceptions are page 03's chart headlines and step 2's three takeaways: the founders' wording, typed.
 - **Text style:**
   - a short label naming the thing (e.g. "Projected cash balance");
   - one supporting line;
@@ -132,7 +132,7 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 
 - **Page 03 layout:**
   - steps 1–3 are one chart on one shared ₹ axis; steps 4–6 each keep their own scale in the same frame (step 4 is a log scale);
-  - each data table sits in its own card below the chart;
+  - each data table sits in its own card below the chart's three takeaways;
   - the chart card and the right-hand panel are the same fixed height: 580 px on screens under 960 px tall, 640 px otherwise;
   - each right panel has 2–3 cards and exactly one fold, with text 13.5 px or larger, and must fit without scrolling. `check-all.sh` and the scripts above enforce parts of this.
 
