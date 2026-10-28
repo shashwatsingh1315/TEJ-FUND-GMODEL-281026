@@ -1,11 +1,13 @@
 /* Page 03 review, 28 Oct 2026: six chart layers, a data table under each chart, visual cards on the right, three takeaways per step */
-.cx-chart[data-layer="4"] .cx-s-m,.cx-chart[data-layer="5"] .cx-s-m{display:none}
+.cx-s-v{display:none}
+.cx-chart[data-layer="3"] .cx-s-m,.cx-chart[data-layer="4"] .cx-s-m,.cx-chart[data-layer="5"] .cx-s-m{display:none}
+.cx-chart[data-layer="3"] .cx-s-v{display:block}
 .cx-chart[data-layer="4"] .cx-s-r{display:block}
 .cx-chart[data-layer="5"] .cx-s-r{display:none}
 .cx-chart[data-layer="5"] .cx-s-o{display:block}
 .cx-chart[data-layer="6"] .cx-s-o{display:none}
 .cx-svg .ly{transition:opacity .35s ease,visibility 0s linear .35s}
-.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"],.cx-chart[data-layer="3"] .ly[data-show~="3"]{transition:opacity .35s ease,visibility 0s}
+.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"]{transition:opacity .35s ease,visibility 0s}
 .cx-leg{flex-wrap:wrap}
 .nw{white-space:nowrap}
 .cx-grid>*,.cx-s{min-width:0}
@@ -77,11 +79,12 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 @media(min-width:1101px){
  .cx-grid{grid-template-columns:minmax(0,3fr) minmax(335px,1fr);grid-template-rows:auto auto;align-items:start}
  .cx-chart{grid-column:1;grid-row:1;position:static;display:flex;flex-direction:column;height:580px}
- .cx-dtcard{grid-column:1;grid-row:2}
+ .cx-dtcard{grid-column:1/-1;grid-row:2}   /* the data table runs the full width, under the chart and the panel */
  .cx-side{grid-column:2;grid-row:1;display:flex;flex-direction:column;height:580px}
  .cx-side>.cx-step:not([hidden]){flex:1;min-height:0;display:flex;flex-direction:column}
  .cx-side-p{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
- .cx-side-p>.pc-cards{flex:none!important;justify-content:flex-start;gap:12px}
+ /* the cards fill the panel's height and share the space left over evenly, above, between and below them */
+ .cx-side-p>.pc-cards{flex:1 0 auto!important;justify-content:space-evenly;gap:12px}
  .pc-card{flex:none}
  .cx-plot{flex:1 1 0;min-height:0}
 }
@@ -104,8 +107,8 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 .cap-drawer .cap-ingrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0 30px}
 @media(max-width:1000px){.cap-drawer .cap-ingrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:620px){.cap-drawer .cap-ingrid{grid-template-columns:1fr!important}}
-/* six steps: let the longest step name wrap instead of truncating */
-.step-host[data-steps="finance"] .stepbar .st{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.12}
+/* six steps: let the longer step names wrap instead of truncating, in two even lines */
+.step-host[data-steps="finance"] .stepbar .st{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.12;text-wrap:balance}
 /* phones: the chart keeps a readable size and scrolls sideways; the KPI strip and stepper fit */
 .cx-legs::before{display:none}
 @media(max-width:700px){
@@ -123,6 +126,8 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 .pc-term{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .pc-ph .nm small{font-size:10.5px;color:var(--ink-3);font-weight:400;margin-left:2px}
 .pc-dt thead th:first-child,.pc-dt tbody th:first-child{width:182px}
+/* on two-column screens the table runs the full width, so the row names have room to show in full */
+@media(min-width:1101px){.pc-dt thead th:first-child,.pc-dt tbody th:first-child{width:300px}}
 .pc-card p{font-size:11.5px;line-height:1.42}
 .pc-lines li{padding:3px 0}
 .pc-lines small{font-size:10px}
@@ -142,28 +147,32 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 .cx-side-p .cx-nav{display:inline-flex;max-width:100%;gap:6px}
 .cx-side-p .cx-nx{min-width:0;white-space:normal;text-align:left;line-height:1.25}
 
-/* the chart card: a fixed heading and key, so the plot is the same on every step */
-.cx-heads{flex:none;height:70px;overflow:hidden}
+/* the chart card: the heading and key keep one height on every step, so the plot is the same on every step.
+   All six headings sit in one grid cell and only the current one is visible, so the box is as tall as the
+   tallest heading at this width: nothing is clipped and no space is wasted. */
+.cx-heads{flex:none;display:grid}
+.cx-heads .cx-head{display:block;grid-area:1/1;visibility:hidden}
+.cx-chart[data-layer="0"] .cx-head[data-l="0"],.cx-chart[data-layer="1"] .cx-head[data-l="1"],.cx-chart[data-layer="2"] .cx-head[data-l="2"],
+.cx-chart[data-layer="3"] .cx-head[data-l="3"],.cx-chart[data-layer="4"] .cx-head[data-l="4"],.cx-chart[data-layer="5"] .cx-head[data-l="5"]{visibility:visible}
+.cx-head h3{font-size:24px;font-weight:600;line-height:1.2;letter-spacing:-.015em;text-wrap:balance}
+.cx-head p{margin-top:6px}
 .cx-legs{flex:none;min-height:46px}
-@media(max-width:1279px){.cx-heads{height:90px}}
 @media(min-width:1600px){.cx-legs{min-height:28px}}
 .cx-plot{position:relative}
 .cx-svg{display:block}
 
-/* the animated parts of the shared chart (steps 1-4); nothing is redrawn on a step change */
+/* the animated parts of the shared chart (steps 1-3); nothing is redrawn on a step change */
 .cx-svg .mv-rev{fill:var(--pc-rev);fill-opacity:1;transition:fill .4s ease,fill-opacity .4s ease}
 .cx-chart[data-layer="1"] .mv-rev{fill-opacity:0}
-.cx-chart[data-layer="2"] .mv-rev,.cx-chart[data-layer="3"] .mv-rev{fill:var(--pc-revbg)}
+.cx-chart[data-layer="2"] .mv-rev{fill:var(--pc-revbg)}
 .cx-svg .mv-revo{fill:none;stroke:var(--pc-rev);stroke-width:1.8;stroke-opacity:0;pointer-events:none;transition:stroke-opacity .4s ease}
 .cx-chart[data-layer="1"] .mv-revo{stroke-opacity:1}
 .cx-svg .gr,.cx-svg .gd{transform-box:fill-box;transform:scaleY(0);opacity:0;transition:transform .4s ease,opacity .3s ease}
 .cx-svg .gr{transform-origin:50% 100%}
 .cx-svg .gd{transform-origin:50% 0}
-.cx-chart[data-layer="0"] [data-in~="0"],.cx-chart[data-layer="1"] [data-in~="1"],.cx-chart[data-layer="2"] [data-in~="2"],.cx-chart[data-layer="3"] [data-in~="3"]{transform:none;opacity:1;transition:transform .4s ease var(--dl,0s),opacity .4s ease var(--dl,0s)}
-.cx-svg .cl{fill:none;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .6s ease}
-.cx-chart[data-layer="3"] .cl{stroke-dashoffset:0}
+.cx-chart[data-layer="0"] [data-in~="0"],.cx-chart[data-layer="1"] [data-in~="1"],.cx-chart[data-layer="2"] [data-in~="2"]{transform:none;opacity:1;transition:transform .4s ease var(--dl,0s),opacity .4s ease var(--dl,0s)}
 .cx-svg .ly{transition:opacity .3s ease,visibility 0s linear .3s}
-.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"],.cx-chart[data-layer="3"] .ly[data-show~="3"]{transition:opacity .4s ease var(--dl,0s),visibility 0s}
+.cx-chart[data-layer="0"] .ly[data-show~="0"],.cx-chart[data-layer="1"] .ly[data-show~="1"],.cx-chart[data-layer="2"] .ly[data-show~="2"]{transition:opacity .4s ease var(--dl,0s),visibility 0s}
 
 /* laptop screens: a tighter header so the stepper, the chart card and the panel are on screen together */
 @media(min-width:1101px) and (max-height:959px){

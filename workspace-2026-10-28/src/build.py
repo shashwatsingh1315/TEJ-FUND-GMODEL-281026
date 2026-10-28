@@ -17,8 +17,8 @@ def put(html,anchor,new):
     assert html.count(anchor)==1,('anchor must occur exactly once',anchor[:60],html.count(anchor))
     return html.replace(anchor,new)
 
-PAGE03_JS=['p03a.js','p03b.js','p03c.js','panels-b.js','panels-c.js']   # load order matters: later code overrides earlier
-PAGE03_CSS=['p03.css','panels-b.css','panels-c.css']
+PAGE03_JS=['p03a.js','p03b.js','p03c.js','panel-kit.js','panels-b.js','panels-c.js']   # load order matters: later code overrides earlier
+PAGE03_CSS=['p03.css','panels-b.css','panels-c.css','panel-kit.css']                  # the panel kit loads last so its card anatomy wins
 OPEN,CLOSE='/* >>> step capex layer */','/* <<< step capex layer */'
 
 h=src('base','dashboard-base.html')

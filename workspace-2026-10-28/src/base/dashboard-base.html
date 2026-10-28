@@ -1450,6 +1450,7 @@ body[data-page="finance"] .ph-t{font-size:26px}
   "todayMRR": 1.6,
   "multiple": 16,
   "ask": 40,
+  "lead": 25,
   "milestoneMRR": 12
  },
  "capital": {
@@ -1556,7 +1557,7 @@ body[data-page="finance"] .ph-t{font-size:26px}
   "multQ4": 8,
   "multQ8": 4,
   "multQ16": 3,
-  "multPat": 15,
+  "multPat": 100,
   "blendLo": 20,
   "blendHi": 30,
   "lifePlant": 10,
@@ -1564,7 +1565,14 @@ body[data-page="finance"] .ph-t{font-size:26px}
   "debtMode": "none",
   "debtCoverage": 50,
   "cadenceQ": 2,
-  "round2": 200
+  "round2": 200,
+  "round2Q": 3,
+  "r3Q": 7,
+  "r3Usd": 50,
+  "r4Q": 11,
+  "r4Usd": 175,
+  "fx": 88,
+  "roundMult": 10
  },
  "operating": {
   "products": {
@@ -3872,11 +3880,11 @@ function stepKey(e){
 /* ---------- how to read: compact layers beside the colour key ---------- */
 function renderGuide(){
   const chip=(sw,l)=>`<span class="chip">${sw}${l}</span>`,sq=(c,extra='')=>`<i style="background:${c};${extra}"></i>`;
-  const F=fin(),c=F.cols,D=qFin(),V=view(SCOPE.core),T=V.T,Q=D.Q,y4=Q.slice(12,16),beyond=Math.round((1-V.M.tile[15]/T[15])*100),FP=raisePlan(),FX=investorReturn(FP,{q:15,m:'arr',mult:3,ach:1});
+  const F=fin(),c=F.cols,D=qFin(),V=view(SCOPE.core),T=V.T,Q=D.Q,y4=Q.slice(12,16),beyond=Math.round((1-V.M.tile[15]/T[15])*100),FP=raisePlan(),FX=capData().ret.lead;
   const pages=[
     ['01','Model basis','basis','The market and product sizes; the formula and how a line’s share grows; a check against today and a worked example.','Shows the forecast is built bottom-up from measured units, not set top-down.','Its formula produces the revenue on 02.',`Every rupee traces to units × market × size × share, starting from ₹${fd(INP.valuation.todayMRR,1)} Cr a month today.`],
     ['02','4Y Revenue Scale-up','revenue','The 16-quarter revenue chart by product line or by city and dealer zone, with every quarter’s numbers.','The forecast itself: the number every other page explains.','Adds up 04’s units and 05’s lines; 03 and 06 build on it.',`₹${fd(INP.valuation.todayMRR,1)} Cr a month today, ₹${fd(T[15],1)} Cr by Q16: exit ARR ₹${f0(T[15]*12)} Cr.`],
-    ['03','Funding & returns','finance','One chart built up in six steps: revenue, margins, growth spending and the funding need it creates, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.equity)} Cr raised in ${FP.rounds.length} rounds; the first ₹${f0(INP.valuation.ask)} Cr returns ${fd(FX.mult,1)}× at Q16.`],
+    ['03','Funding & returns','finance','One chart built up in six steps: revenue, margins, growth spending and the funding need it creates, the raises and cash in the bank, what the first investor gets, and return on capital.','What the plan needs, why, and what the money returns.','Takes 02’s revenue and 06’s Operating profit; its funding rows feed 06.',`₹${f0(D.total)} Cr of capital to Q16; the gap peaks at ₹${f0(FP.G.peak)} Cr; ₹${f0(FP.organic.equity)} Cr organic in rounds 1–2, plus $${f0(FP.acq.usd)}M for acquisitions in rounds 3–4; ₹${f0(FX.amt)} Cr in this round returns ${fd(FX.mult,1)}× at Q16.`],
     ['04','Cities & Dealers','cities','Every city and dealer zone, quarter by quarter, split by product line on a click.','Lets any number be checked city by city.','Splits 02’s total by city and dealer zone.',`${f0(Q[15].units)} cities and dealer zones by Q16; every rupee has a named unit behind it.`],
     ['05','Products','products','One card per product line on a shared scale, with how many cities and dealer zones each has reached.','Shows how much rests on lines not yet launched.','Splits 02’s total by product line.',`Lines beyond tile adhesive bring ${beyond}% of Q16 revenue.`],
     ['06','Financials','audit','Revenue, the income statement and the capital it takes, every quarter, with year totals and a CSV download.','Every figure in one table, ready to take away.','Brings 02 and 03 together, quarter by quarter.',`Q16 monthly revenue ₹${fd(operatingModel().S[15].net,1)} Cr and monthly operating profit ₹${fd(operatingModel().S[15].pat,1)} Cr.`]];

@@ -20,16 +20,16 @@
   "operatingEarningsOver48Months": 241.4540910369863,
   "peakFundingGap": 219.41058750698642,
   "peakQuarter": 14,
-  "equity": 240,
-  "closingCash": 62.82724172191797,
+  "equity": 2220,
+  "closingCash": 2042.827241721918,
   "roceProxy": {
     "before": 58.69185400084452,
     "after": 53.71299062371365
   },
   "exit10ARR": {
-    "stake": 8.47191168250419,
-    "value": 1302.9484370170358,
-    "multiple": 32.57371092542589,
-    "irr": 1.3890036290976209
+    "stake": 7.12596207629231,
+    "value": 1237.0404538308123,
+    "multiple": 30.92601134577031,
+    "irr": 1.3582018607854716
   }
 }

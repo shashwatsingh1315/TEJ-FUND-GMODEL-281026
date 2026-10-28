@@ -1,66 +1,54 @@
-/* Page 03, right-hand panels for steps 1, 2 and 5 (Agent B). Prefix pnb-.
-   Sizes: card titles 15.5px, body 13.5px, key figures 22-26px, labels inside a visual 11.5px and up. */
-.pc-card.pnb-card{display:block;min-width:0;border:1px solid var(--rule);border-left:3px solid var(--c,var(--rule));border-radius:6px;background:var(--surface,#fff);padding:7px 11px 7px}
-.pc-card.pnb-card h4{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 0 6px;font-family:var(--fd);font-size:15.5px;font-weight:600;line-height:1.2;color:var(--ink)}
-.pc-card.pnb-card h4 em{font-family:var(--f);font-style:normal;font-weight:400;font-size:13.5px;line-height:1.2;color:var(--ink-3);text-align:right}
-.pc-card.pnb-card p.pnb-p{margin:6px 0 0;font-family:var(--ft);font-feature-settings:normal;font-size:13.5px;line-height:1.4;color:var(--ink-2)}
-.pc-card.pnb-card p.pnb-p b{font-family:var(--f);font-weight:600;color:var(--ink)}
+/* Page 03, right-hand panels for steps 1, 2 and 5 (Agent B). Prefix pnb-/pnr-. Cards come from panel-kit.css; this file adds only
+   the pieces the kit has no component for (launch chart, waterfall, round bars, exit control) and the restyled folds. All text is the sans. */
 .pc-cards.pnb-cards{gap:6px}
-.pc-card.pnb-card p.pnb-p+p.pnb-p{margin-top:0}
+.pnb-svg{display:block;width:100%;height:auto;overflow:visible}
 .cx-side-p>.whyd.pnb-fold{margin-top:7px}
 .cx-side-p .whyd.pnb-fold>summary{padding-top:4px!important;padding-bottom:4px!important}
-.pnb-svg{display:block;width:100%;height:auto;overflow:visible}
 
-/* chips: a small label over a figure; the equation is a row of them */
-.pnb-eq{display:flex;align-items:stretch;gap:0}
-.pnb-eq+.pnb-eq{margin-top:4px}
-.pnb-op{flex:none;display:flex;align-items:center;justify-content:center;width:14px;font-family:var(--fd);font-style:normal;font-size:16px;font-weight:500;color:var(--ink-3)}
-.pnb-chip{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:2px 5px 3px;border:1px solid var(--rule-2);border-radius:6px;background:#fff}
-.pnb-chip.grow{flex:1.35 1 0}
-.pnb-eq.fit .pnb-chip{flex:1 1 auto}
-.pnb-eq.fit .pnb-chip.grow{flex:1.35 1 auto}
-.pnb-chip small{display:block;font-size:11.5px;line-height:1.15;color:var(--ink-3)}
-.pnb-chip b{display:block;font-family:var(--fd);font-weight:500;font-size:22px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pnb-chip b small,.pnb-res b small{display:inline;font-family:var(--f);font-size:13.5px;font-weight:400;color:var(--ink-3)}
-.pnb-chip.res{background:var(--ct);border-color:var(--cc);border-left:3px solid var(--cc)}
-.pnb-chip.res b{font-size:24px;line-height:1.1;color:var(--cc)}
-.pnb-res{display:flex;align-items:center;margin-top:5px;padding:3px 6px 3px 0;border-radius:6px;background:var(--ct)}
-.pnb-res b{font-family:var(--fd);font-weight:500;font-size:24px;line-height:1.2;color:var(--c)}
+/* step 1: the launch chart sits in .pk-vis; nothing else needed */
 
-/* step 2: the waterfall, one row per step; subtotals are outlined */
-.pnb-wf{display:grid;grid-template-columns:112px minmax(0,1fr) 46px;align-items:center;gap:8px;height:15px;font-size:13.5px;line-height:1.1;color:var(--ink-2)}
-.pnb-wf>span:first-child{white-space:nowrap}
-.pnb-wf .t{position:relative;display:block;height:10px;background:linear-gradient(var(--rule),var(--rule)) center/100% 1px no-repeat}
-.pnb-wf .t i{position:absolute;top:0;bottom:0;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(20,20,19,.12)}
-.pnb-wf.sub .t i{background:#fff}
-.pnb-wf.sub>span:first-child,.pnb-wf.tot>span:first-child{font-weight:600;color:var(--ink)}
-.pnb-wf b{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
-.pnb-wf.tot{height:26px}
-.pnb-wf.tot .t{height:14px}
-.pnb-wf.tot b{font-family:var(--fd);font-weight:500;font-size:22px;line-height:1}
-.pnb-gr{display:flex;flex-direction:column;gap:2px}
-.pnb-gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.pnb-gh>span{display:inline-flex;align-items:center;font-size:14px;font-weight:600;line-height:1.25;color:var(--ink);white-space:nowrap}
-.pnb-gh .sw{width:10px;height:10px;margin-right:7px;border-radius:2px;flex:none;box-shadow:inset 0 0 0 1px rgba(20,20,19,.14)}
-.pnb-gh b{font-family:var(--fd);font-weight:600;font-size:15.5px;line-height:1.3;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pnb-g small{display:block;font-size:13.5px;line-height:1.25;color:var(--ink-3)}
+/* step 2: the waterfall: 22 px rows, 4 px apart, 118 px label column, 10 px track; subtotals outlined and muted, profit bold */
+.cx-side-p .pk-card .pnb-wfs{display:flex;flex-direction:column;gap:2px}
+.cx-side-p .pk-card .pnb-wf{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;align-items:center;gap:8px;min-height:20px;font-family:var(--f);font-size:13.5px;line-height:1.2;color:var(--ink-2)}
+.cx-side-p .pk-card .pnb-wf>span:first-child{white-space:nowrap}
+.cx-side-p .pk-card .pnb-wf .t{position:relative;display:block;height:10px;background:linear-gradient(var(--rule),var(--rule)) center/100% 1px no-repeat}
+.cx-side-p .pk-card .pnb-wf .t i{position:absolute;top:0;bottom:0;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(20,20,19,.12)}
+.cx-side-p .pk-card .pnb-wf.sub .t i{background:#fff}
+.cx-side-p .pk-card .pnb-wf.sub>span:first-child{color:var(--ink-3)}
+.cx-side-p .pk-card .pnb-wf.sub b{color:var(--ink-2)}
+.cx-side-p .pk-card .pnb-wf b{text-align:right;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.cx-side-p .pk-card .pnb-wf.tot{margin-top:2px}
+.cx-side-p .pk-card .pnb-wf.tot>span:first-child{font-weight:700;color:var(--ink)}
+.cx-side-p .pk-card .pnb-wf.tot b{font-size:15px;font-weight:700}
 
-/* step 5 */
-.pnb-ctl{margin:7px 0 1px;display:flex;flex-direction:column;gap:4px}
-.pnb-cr{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
-.pnb-cr>span{flex:none;margin-right:4px;font-size:12.5px;color:var(--ink-3)}
+/* step 5: the exit control above the cards */
+.pnb-ctl{margin:7px 0 1px}
+.pnb-cr{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pnb-cr>span{flex:none;margin-right:4px;font-family:var(--f);font-size:13px;color:var(--ink-3)}
 .pnb-ctl .segmented{display:contents}
-.pnb-ctl .segmented button{padding:1px 9px;font-size:12.5px;line-height:1.5;border:1px solid var(--rule-2);border-radius:999px;background:#fff;color:var(--ink-2)}
+.pnb-ctl .segmented button{padding:5px 11px;font-family:var(--f);font-size:13px;line-height:1.3;border:1px solid var(--rule-2);border-radius:999px;background:#fff;color:var(--ink-2)}
 .pnb-ctl .segmented button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
-.pnb-st{display:flex;align-items:flex-end;gap:10px}
-.pnb-st small{display:block;font-size:11.5px;line-height:1.15;color:var(--ink-3)}
-.pnb-st b{display:block;font-family:var(--fd);font-weight:500;font-size:26px;line-height:1.15;color:var(--c);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pnb-st .r{text-align:right}
-.pnb-bar{flex:1 1 0;min-width:24px;height:14px;margin-bottom:8px;border-radius:3px;background:var(--ct);overflow:hidden}
-.pnb-bar i{display:block;height:100%;background:var(--c)}
 
-/* the fold */
-.pnb-fk{display:flex;align-items:center;margin:12px 0 4px;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+/* step 5: the round rows: label · bar · value · multiple */
+/* step 1: the product lines as chips, in launch order */
+.cx-side-p .pk-card .pnb-lc{display:flex;flex-wrap:wrap;gap:5px}
+.cx-side-p .pk-card .pnb-lc span{display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 7px;border:1px solid #E4E1D8;border-radius:999px;font-family:var(--f);font-size:13px;line-height:1.35;font-weight:600;color:var(--ink);white-space:nowrap}
+.cx-side-p .pk-card .pnb-lc i{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.cx-side-p .pk-card .pnb-lc em{font-style:normal;font-weight:500;color:var(--ink-3)}
+.cx-side-p .pk-card .pnr-rows{display:flex;flex-direction:column;gap:2px}
+.cx-side-p .pk-card .pnr-r{display:grid;grid-template-columns:96px minmax(0,1fr) 62px 48px;align-items:center;gap:0 6px;min-height:22px;font-family:var(--f);font-size:13.5px;line-height:1.3;color:var(--ink-2)}
+.cx-side-p .pk-card .pnr-r span{white-space:nowrap}
+.cx-side-p .pk-card .pnr-r>i{display:block;height:12px;border-radius:2px;background:color-mix(in srgb,var(--c) 16%,#fff)}
+.cx-side-p .pk-card .pnr-r>i u{display:block;height:100%;border-radius:2px;background:var(--c);text-decoration:none}
+.cx-side-p .pk-card .pnr-r b,.cx-side-p .pk-card .pnr-r em{font-style:normal;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.cx-side-p .pk-card .pnr-r b{font-weight:600;color:var(--ink)}
+.cx-side-p .pk-card .pnr-r em{font-weight:500;color:var(--ink-3)}
+.cx-side-p .pk-card .pnr-r.end,.cx-side-p .pk-card .pnr-r.end span,.cx-side-p .pk-card .pnr-r.end em{font-weight:700;color:var(--ink)}
+.cx-side-p .pk-card .pnr-r.end b{font-weight:700;color:var(--c)}
+
+/* the folds: sans throughout */
+.pnb-fold .whyd-b,.pnb-fold .whyd-b *{font-family:var(--f)}
+.pnb-fk{display:flex;align-items:center;margin:12px 0 4px;font-size:13px;font-weight:600;color:var(--ink)}
 .pnb-fk:first-child{margin-top:0}
 .pnb-fk .sw{margin-right:6px}
 .pnb-fn{margin:6px 0 0;font-size:13px;line-height:1.45;color:var(--ink-2)}
@@ -68,10 +56,9 @@
 .pnb-fl li{padding:4px 0;border-bottom:1px solid var(--rule)}
 .pnb-fh{display:flex;justify-content:space-between;gap:8px;font-size:13px;line-height:1.35;color:var(--ink)}
 .pnb-fh b{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-.pnb-fl small{display:block;font-size:12px;line-height:1.35;color:var(--ink-3);margin-top:1px}
+.pnb-fl small{display:block;font-size:12.5px;line-height:1.35;color:var(--ink-3);margin-top:1px}
 .pnb-hb{display:grid;grid-template-columns:96px minmax(0,1fr) 36px;align-items:center;gap:6px;margin:4px 0;font-size:13px;color:var(--ink-2)}
 .pnb-hb i{display:block;height:11px;border-radius:2px}
 .pnb-hb b{text-align:right;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 .pnb-sep{height:1px;background:var(--rule);margin:8px 0 6px}
 .cx-side-p .whyd-b .cx-lev{margin-top:10px}
-

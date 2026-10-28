@@ -45,11 +45,12 @@ Files load in this order, and a later file overrides an earlier one.
 
 | File | What it holds |
 |---|---|
-| `p03a.js` | Raise policy: round 1 is the ask; round 2 is a fixed amount placed by the cash rule; rounds every 6 months after that are shown but not sized. It also holds the input validation messages. |
-| `p03b.js` | The chart toolkit and the **colour system** (`PC`). It draws the four-step money chart, the investor-return and return-on-capital charts, labels and callouts, and the round-timing helper (`roundWhen`). |
+| `p03a.js` | Funding model: four rounds (round 1 the ask; round 2 fixed amount and quarter; rounds 3–4 in US$ for acquisitions), round pricing, the exit (10× ARR or 100× operating profit) and the lead investor's return; also the input fields and validation messages for these. |
+| `p03b.js` | The chart toolkit and the **colour system** (`PC`). It draws the steps 1–3 money chart, the step 4 valuation staircase (`cxVal`: ARR bars and post-money after each round, log scale), and the step 5 and step 6 charts, with labels and callouts, and the round-timing helper (`roundWhen`). |
 | `p03c.js` | Page layout: the key-figures strip, stepper, chart/table cards, data tables, takeaways, headings (`cxHeads`), chart keys (`cxLegends`), the "Assumptions & loan terms" drawer, and `renderFinance`/`setStep`. |
-| `panels-b.js`, `panels-b.css` | Right-hand panels for step 1 (Revenue), step 2 (Margins) and step 5 (Investor return). |
-| `panels-c.js`, `panels-c.css` | Right-hand panels for step 3 (Growth spending & funding need), step 4 (Raises and cash) and step 6 (Return on capital). |
+| `panel-kit.js`, `panel-kit.css` | The one card design every right-hand panel uses (`PK.card`, `PK.rows`, `PK.led`, …): title, hero figure, visual, note; one type scale and one spacing system. The CSS loads last. Panel files style only the visuals inside cards, never card spacing. |
+| `panels-b.js`, `panels-b.css` | Right-hand panels for step 1 (Revenue), step 2 (Margins) and step 5 (what ₹25 Cr in this round becomes). It also sets the founders' names for the cost lines (`OP_LINES`/`OP_COSTS` labels), which every page uses. |
+| `panels-c.js`, `panels-c.css` | Right-hand panels for step 3 (Capital Utilisation Plan), step 4 (the funding flywheel and the four rounds) and step 6 (ROCE machinery). |
 | `p03.css` | Page 03 layout and chart styles. |
 
 ## The one thing that will trip you up: the last definition wins
@@ -98,6 +99,8 @@ The script runs five checks in order:
    - `work/audit-review.cjs` re-derives earnings and capital, writes `outputs/Tejas_Capital_Cash_Audit.csv`, and checks page 03's structure.
 5. **`work/smoke-test.cjs`** opens all pages (page 03 step by step) at the three laptop sizes. It fails on any console error or a "NaN"/"undefined" on screen.
 
+In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The five steps can then be run one by one, as listed above.
+
 `node work/export-financing-review.cjs` regenerates `outputs/Tejas_Financing_Scenarios.csv` and `outputs/Tejas_Working_Capital_and_Financing_Review.html`. Run it after any change to the funding model.
 
 ## Design rules (agreed with the founders; keep them)
@@ -107,7 +110,9 @@ The script runs five checks in order:
   - a short label naming the thing (e.g. "Projected cash balance");
   - one supporting line;
   - at most a small note;
-  - plain finance language, no "how to read / why it matters" paragraphs.
+  - plain finance language, no "how to read / why it matters" paragraphs;
+  - on page 03, "Fixed costs" is the founders' name for common overhead;
+  - step 5 shows what the investor's money becomes (×); it never discusses their stake, dilution or selling.
 - **Number labels on charts:**
   - one style per chart: ≥ 10 → no decimals, < 10 → one decimal, never a trailing ".0", percentages whole;
   - every bar in a chart carries the same labels;
@@ -126,7 +131,7 @@ The script runs five checks in order:
   | Investor value (step 5 only) | purple `#6C5798` |
 
 - **Page 03 layout:**
-  - steps 1–4 are one chart that changes between steps, on one shared ₹ axis; steps 5–6 keep their own scale in the same frame;
+  - steps 1–3 are one chart on one shared ₹ axis; steps 4–6 each keep their own scale in the same frame (step 4 is a log scale);
   - each data table sits in its own card below the chart;
   - the chart card and the right-hand panel are the same fixed height: 580 px on screens under 960 px tall, 640 px otherwise;
   - each right panel has 2–3 cards and exactly one fold, with text 13.5 px or larger, and must fit without scrolling. `check-all.sh` and the scripts above enforce parts of this.
@@ -134,11 +139,13 @@ The script runs five checks in order:
 ## Model facts worth knowing
 
 - Revenue grows from ₹1.6 Cr a month today to ₹127.6 Cr in Q16 (Q1 = Oct–Dec 2026).
-- **Funding:**
-  - round 1 is the ₹40 Cr ask in Q1;
-  - round 2 is a fixed ₹200 Cr (input `funding.round2`), placed a quarter before cash would fall under the ₹10 Cr floor, which is Q3;
-  - rounds every 6 months after that are shown on the timeline but not sized;
-  - in total, ₹240 Cr covers the ₹219 Cr peak cash required (Q14).
+- Round 1 is the ₹40 Cr ask in Q1, priced at 16× today's ARR (₹307.2 Cr post-money); the lead investor's cheque inside it is ₹25 Cr (input `valuation.lead`).
+- Round 2 is ₹200 Cr in Q4 (inputs `funding.round2`, `funding.round2Q`; quarters are 0-based, 0 = Q1) and funds organic growth.
+- Round 3 is $50M in Q8 and round 4 is $175M in Q12, for strategic acquisitions (inputs `funding.r3Q`, `r3Usd`, `r4Q`, `r4Usd`; ₹88 per $ in `funding.fx`). The acquisitions themselves are not modelled: their cash stays on the balance sheet and counts at face value in the exit value. Acquired revenue is upside, not in the plan.
+- Rounds 2–4 are priced at 10× ARR of their quarter (`funding.roundMult`). Every round counts in cash and in the returns.
+- Rounds 1–2 (₹240 Cr) cover the ₹219 Cr peak cash required (Q14). The lowest closing cash is ₹11.7 Cr in Q3, before round 2 lands, above the ₹10 Cr floor.
+- The exit is at Q16, valued at 10× ARR or at 100× annual operating profit (`funding.multPat`): ₹25 Cr in round 1 becomes ₹773 Cr (30.9×) or ₹1,194 Cr (47.7×).
+- The old unsized "round every 6 months" markers are gone (`funding.cadenceQ` is unused).
 - **Capex:** ₹170 Cr to Q16 is fixed (plants 40 + 30 + 50, centres 10, labs 10, systems 20, misc 10), bought in whole phases a quarter ahead of demand. Phase sizes are placeholders until the founders send real ones.
 - **Working capital** is 60 days of annualised revenue on the revenue added since today. **GST** is ignored by instruction.
 
@@ -149,6 +156,8 @@ The script runs five checks in order:
 - **Missing reasons:** some cost lines have no stated reason in the model: discounts, NPAs/returns, customer acquisition, marketing, and finance and legal fees. Ask the founders.
 - **Downloads in the viewer:** the Download buttons don't work when the dashboard is viewed inside the claude.ai artifact viewer. They work when the HTML file is opened directly.
 - **Earlier funding plan:** `docs/REVIEW-working-capital-and-capex.md` (repo root) describes an earlier funding plan (₹230 Cr in three rounds).
+- **Saved inputs:** a browser that saved inputs before 28 Oct 2026 keeps its old values (for example the exit profit multiple of 15); use "Reset to plan values" on the inputs page to pick up the new defaults.
+- **Footnotes on page 03:** footnotes carry typed round figures; update them in `p03a.js` if the round inputs change.
 
 ## Where it is published
 

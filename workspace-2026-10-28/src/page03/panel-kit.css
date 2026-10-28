@@ -1,0 +1,41 @@
+/* Page 03 right-hand panel kit: one card anatomy, one type scale and one spacing system for all six panels. Loaded last, so it wins.
+   A card reads top to bottom: title (15 px) · optional sub (13.5 px, muted) · optional hero figure (26 px, its unit beside it) · one visual, rows or ledger · optional note.
+   All text is the sans (--f) except titles and hero figures (--fd). Nothing in a panel is under 13 px, except chart tick labels (12.5 px).
+   Spacing: card padding 12/15/13; 6 px from title to hero, 10 px to a visual, 8 px to a note. The page spreads the cards evenly down the panel.
+   Rules are scoped to .cx-side-p so they outrank the older .pc-card defaults; panel files must not override the card spacing. */
+.cx-side-p>.pc-cards{gap:10px;margin-top:8px}
+.cx-side-p .pk-card{display:block;min-width:0;background:#fff;border:1px solid #E4E1D8;border-left:3px solid var(--c,#E4E1D8);border-radius:8px;padding:12px 15px 13px}
+.cx-side-p .pk-card .pk-title{margin:0;font-family:var(--fd);font-size:15px;font-weight:600;line-height:1.3;letter-spacing:0;color:var(--ink)}
+.cx-side-p .pk-card .pk-sub{margin:2px 0 0;font-family:var(--f);font-size:13.5px;line-height:1.4;color:var(--ink-3)}
+/* the hero: one big figure with its unit beside it (the unit wraps within its own column) */
+.cx-side-p .pk-card .pk-hero{display:flex;align-items:center;gap:10px;margin:6px 0 0}
+.cx-side-p .pk-card .pk-hero b{flex:none;font-family:var(--fd);font-size:26px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:var(--hc,var(--c));font-variant-numeric:tabular-nums;white-space:nowrap}
+.cx-side-p .pk-card .pk-hero span{min-width:0;font-family:var(--f);font-size:13.5px;line-height:1.3;color:var(--ink-3)}
+.cx-side-p .pk-card .pk-note{margin:8px 0 0;font-family:var(--f);font-size:13.5px;line-height:1.42;color:var(--ink-2)}
+.cx-side-p .pk-card .pk-note b{font-weight:600;color:var(--ink)}
+.cx-side-p .pk-card .pk-vis{margin:10px 0 0}
+.cx-side-p .pk-card .pk-sw{display:inline-block;flex:none;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:0;box-shadow:inset 0 0 0 1px rgba(20,20,19,.14)}
+/* rows: a name on the left, a figure on the right, an optional reason under them; hairlines between rows */
+.cx-side-p .pk-card .pk-rows{display:flex;flex-direction:column;margin:8px 0 0}
+.cx-side-p .pk-card .pk-row{padding:7px 0;border-top:1px solid #EFEDE6}
+.cx-side-p .pk-card .pk-row:first-child{border-top:0;padding-top:2px}
+.cx-side-p .pk-card .pk-row:last-child{padding-bottom:0}
+.cx-side-p .pk-card .pk-rh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-family:var(--f);font-size:13.5px;line-height:1.35;color:var(--ink)}
+.cx-side-p .pk-card .pk-rh>span{min-width:0;font-weight:600}
+.cx-side-p .pk-card .pk-rh>b{flex:none;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+.cx-side-p .pk-card .pk-why{display:block;margin-top:2px;font-family:var(--f);font-size:13px;line-height:1.4;color:var(--ink-3)}
+/* a ledger: label left, value right, rows 22 px; a total row is ruled and carries the card's colour */
+.cx-side-p .pk-card .pk-led{margin:8px 0 0}
+.cx-side-p .pk-card .pk-li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-height:22px;font-family:var(--f);font-size:13.5px;line-height:1.35;color:var(--ink-2)}
+.cx-side-p .pk-card .pk-li>span{min-width:0}
+.cx-side-p .pk-card .pk-li>b{flex:none;white-space:nowrap;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.cx-side-p .pk-card .pk-li i.pk-op{display:inline-block;width:14px;font-style:normal;color:var(--ink-3)}
+.cx-side-p .pk-card .pk-li.tot{margin-top:3px;padding-top:6px;border-top:1.5px solid var(--ink);font-weight:600;color:var(--ink)}
+.cx-side-p .pk-card .pk-li.tot>b{font-family:var(--fd);font-size:17px;color:var(--hc,var(--c))}
+/* no single word left alone on a last line */
+.cx-side-p .pk-card .pk-sub,.cx-side-p .pk-card .pk-hero span,.cx-side-p .pk-card .pk-note,.cx-side-p .pk-card .pk-why{text-wrap:pretty}
+/* the panel's one fold: a single-line pill */
+.cx-side-p>.whyd{margin-top:10px}
+.cx-side-p>.whyd>summary{font-size:13.5px;white-space:nowrap}
+/* large screens (the 640 px panel): everything in the panel a size up, so the cards use the height instead of floating in it */
+@media(min-width:1700px) and (min-height:960px){.cx-side-p>*{zoom:1.1}}

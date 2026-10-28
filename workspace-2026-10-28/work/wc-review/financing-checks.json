@@ -13,29 +13,37 @@
     {
       "mode": "none",
       "coverage": 50,
-      "equity": 240,
+      "equity": 2220,
       "debtQ16": 0,
       "interest": 0,
-      "cashQ16": 62.82724172191797,
-      "minCash": 20.589412493013583,
+      "cashQ16": 2042.827241721918,
+      "minCash": 11.677649935378685,
       "rounds": [
         {
           "quarter": 1,
           "amount": 40
         },
         {
-          "quarter": 3,
+          "quarter": 4,
           "amount": 200
+        },
+        {
+          "quarter": 8,
+          "amount": 440
+        },
+        {
+          "quarter": 12,
+          "amount": 1540
         }
       ]
     },
     {
       "mode": "wc",
       "coverage": 50,
-      "equity": 240,
+      "equity": 2220,
       "debtQ16": 124.31342465753418,
       "interest": 15.676126027397256,
-      "cashQ16": 171.46454035205488,
+      "cashQ16": 2151.464540352055,
       "minCash": 12.93410541483074,
       "rounds": [
         {
@@ -45,16 +53,24 @@
         {
           "quarter": 4,
           "amount": 200
+        },
+        {
+          "quarter": 8,
+          "amount": 440
+        },
+        {
+          "quarter": 12,
+          "amount": 1540
         }
       ]
     },
     {
       "mode": "plant",
       "coverage": 50,
-      "equity": 240,
+      "equity": 2220,
       "debtQ16": 47.953125,
       "interest": 11.03072265625,
-      "cashQ16": 99.74964406566798,
+      "cashQ16": 2079.749644065668,
       "minCash": 18.443899935378685,
       "rounds": [
         {
@@ -64,16 +80,24 @@
         {
           "quarter": 4,
           "amount": 200
+        },
+        {
+          "quarter": 8,
+          "amount": 440
+        },
+        {
+          "quarter": 12,
+          "amount": 1540
         }
       ]
     },
     {
       "mode": "both",
       "coverage": 50,
-      "equity": 240,
+      "equity": 2220,
       "debtQ16": 172.2665496575342,
       "interest": 26.706848683647255,
-      "cashQ16": 208.38694269580492,
+      "cashQ16": 2188.386942695805,
       "minCash": 19.700355414830742,
       "rounds": [
         {
@@ -83,6 +107,14 @@
         {
           "quarter": 4,
           "amount": 200
+        },
+        {
+          "quarter": 8,
+          "amount": 440
+        },
+        {
+          "quarter": 12,
+          "amount": 1540
         }
       ]
     }
