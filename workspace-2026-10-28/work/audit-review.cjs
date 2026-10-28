@@ -39,8 +39,8 @@ for(let q=0;q<16;q++){
 }
 for(const k of ['capex','pp','wc'])near(sums(data.G.flows[k]),capital[15][k],`All quarterly ${k} changes telescope to Q16 balance`);
 near(capital[15].capex,X.tileP5+X.wood+X.upvc+X.centres+X.misc,'Capex targets deployed once');near(capital[15].pp,X.labs+X.systems,'Labs/systems targets deployed once');near(capital[15].wc,(T[15]-opening)*12*I.capital.wcDays/365,'Q16 additional working capital');
-// Independently compound round dilution and value the final stake at 10x ARR.
-let stake=data.pr[0].amt/data.pr[0].post;for(const r of data.pr.slice(1))stake*=r.pre/r.post;near(stake,data.ret.s,'Investor dilution');const exitEquity=10*T[15]*12+data.R.cash[15]-data.R.D.bal[15];near(stake*exitEquity,data.ret.val,'10x ARR investor value');assert.equal(data.exit.mult,10);checks++;
+// Independently compound round dilution and value the final stake at the round ARR multiple (valuation.multiple, read from the loaded dashboard inputs).
+let stake=data.pr[0].amt/data.pr[0].post;for(const r of data.pr.slice(1))stake*=r.pre/r.post;near(stake,data.ret.s,'Investor dilution');const exitEquity=I.valuation.multiple*T[15]*12+data.R.cash[15]-data.R.D.bal[15];near(stake*exitEquity,data.ret.val,'ARR-multiple investor value');assert.equal(data.exit.mult,I.valuation.multiple);checks++;
 // Run alternative capital settings and reconcile every quarter's capital and cash.
 const cases=run(`(()=>{return [{capital:{wcDays:45}},{capital:{wcDays:90}},{capital:{firstPhase:0}},{capital:{firstPhase:100}},{plantMult:1.2},{lateQ:2},{funding:{debtCapex:50,debtWC:50}}].map(o=>{const R=raisePlan(o);return {o,R};});})()`);
 for(const {o,R} of cases){let prev={capex:0,pp:0,wc:0},cum=0;for(let q=0;q<16;q++){const c=R.G.K.cum[q];for(const k of ['capex','pp','wc'])near(c[k]-prev[k],R.G.flows[k][q],JSON.stringify(o)+` Q${q+1} Δ${k}`);cum+=R.G.pat[q]-['capex','pp','wc'].reduce((s,k)=>s+c[k]-prev[k],0);near(cum,-R.G.gap[q],`Scenario Q${q+1} cumulative cash`);const raised=sums(R.rounds.filter(r=>r.q<=q).map(r=>r.amt));near(raised+cum+R.D.bal[q]-R.D.cumInt[q],R.cash[q],`Scenario Q${q+1} funded cash`);prev=c;}}

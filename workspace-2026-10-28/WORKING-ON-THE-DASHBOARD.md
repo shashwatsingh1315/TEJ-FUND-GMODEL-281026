@@ -45,7 +45,7 @@ Files load in this order, and a later file overrides an earlier one.
 
 | File | What it holds |
 |---|---|
-| `p03a.js` | Funding model: four rounds (round 1 the ask; round 2 fixed amount and quarter; rounds 3–4 in US$ for acquisitions), round pricing, the exit (10× ARR or 100× operating profit) and the lead investor's return; also the input fields and validation messages for these. |
+| `p03a.js` | Funding model: four rounds (round 1 the ask; round 2 fixed amount and quarter; rounds 3–4 fixed amounts and quarters in ₹ Cr for organic growth & acquisition), round pricing at the valuation multiple, the exit (the round ARR multiple, 16× by default, or 100× operating profit) and the lead investor's return; also the input fields and validation messages for these. |
 | `p03b.js` | The chart toolkit and the **colour system** (`PC`). It draws the steps 1–3 money chart, the step 4 valuation staircase (`cxVal`: ARR bars and post-money after each round, log scale), and the step 5 and step 6 charts, with labels and callouts, and the round-timing helper (`roundWhen`). |
 | `p03c.js` | Page layout: the key-figures strip, stepper, chart/table cards, data tables, takeaways, headings (`cxHeads`), chart keys (`cxLegends`), the "Assumptions & loan terms" drawer, and `renderFinance`/`setStep`. |
 | `panel-kit.js`, `panel-kit.css` | The one card design every right-hand panel uses (`PK.card`, `PK.rows`, `PK.led`, …): title, hero figure, visual, note; one type scale and one spacing system. The CSS loads last. Panel files style only the visuals inside cards, never card spacing. |
@@ -105,7 +105,7 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 
 ## Design rules (agreed with the founders; keep them)
 
-- **Numbers are always computed** from the model, never typed into text.
+- **Numbers are always computed** from the model, never typed into text. The exceptions are page 03's chart headlines and step 2's three takeaways: the founders' wording, typed.
 - **Text style:**
   - a short label naming the thing (e.g. "Projected cash balance");
   - one supporting line;
@@ -132,7 +132,7 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 
 - **Page 03 layout:**
   - steps 1–3 are one chart on one shared ₹ axis; steps 4–6 each keep their own scale in the same frame (step 4 is a log scale);
-  - each data table sits in its own card below the chart;
+  - each data table sits in its own card below the chart's three takeaways;
   - the chart card and the right-hand panel are the same fixed height: 580 px on screens under 960 px tall, 640 px otherwise;
   - each right panel has 2–3 cards and exactly one fold, with text 13.5 px or larger, and must fit without scrolling. `check-all.sh` and the scripts above enforce parts of this.
 
@@ -140,11 +140,11 @@ In a sandboxed shell, `check-all.sh` can fail at its first `mktemp` call. The fi
 
 - Revenue grows from ₹1.6 Cr a month today to ₹127.6 Cr in Q16 (Q1 = Oct–Dec 2026).
 - Round 1 is the ₹40 Cr ask in Q1, priced at 16× today's ARR (₹307.2 Cr post-money); the lead investor's cheque inside it is ₹25 Cr (input `valuation.lead`).
-- Round 2 is ₹200 Cr in Q4 (inputs `funding.round2`, `funding.round2Q`; quarters are 0-based, 0 = Q1) and funds organic growth.
-- Round 3 is $50M in Q8 and round 4 is $175M in Q12, for strategic acquisitions (inputs `funding.r3Q`, `r3Usd`, `r4Q`, `r4Usd`; ₹88 per $ in `funding.fx`). The acquisitions themselves are not modelled: their cash stays on the balance sheet and counts at face value in the exit value. Acquired revenue is upside, not in the plan.
-- Rounds 2–4 are priced at 10× ARR of their quarter (`funding.roundMult`). Every round counts in cash and in the returns.
-- Rounds 1–2 (₹240 Cr) cover the ₹219 Cr peak cash required (Q14). The lowest closing cash is ₹11.7 Cr in Q3, before round 2 lands, above the ₹10 Cr floor.
-- The exit is at Q16, valued at 10× ARR or at 100× annual operating profit (`funding.multPat`): ₹25 Cr in round 1 becomes ₹773 Cr (30.9×) or ₹1,194 Cr (47.7×).
+- Round 2 is ₹200 Cr in Q6 (inputs `funding.round2`, `funding.round2Q` = 5; quarters are 0-based, 0 = Q1) and funds organic growth.
+- Rounds 3 and 4 are ₹50 Cr in Q10 and ₹175 Cr in Q14, for organic growth & acquisition (inputs `funding.r3Q`, `funding.r3`, `funding.r4Q`, `funding.r4`; ₹ Cr). The acquisitions themselves are not modelled: their cash stays on the balance sheet and counts at face value in the exit value. Acquired revenue is upside, not in the plan.
+- Every round is priced at `valuation.multiple` (16×) ARR post-money, so valuation rises with ARR. Every round counts in cash and in the returns.
+- Rounds 1–2 (₹240 Cr) cover the ₹219 Cr peak cash required (Q14). Cash goes below zero in Q5 (about −₹12 Cr) before round 2 lands in Q6.
+- The exit is at Q16, valued at the round ARR multiple (16× by default, `valuation.multiple`) or at 100× annual operating profit (`funding.multPat`): ₹25 Cr in round 1 becomes ₹1,819 Cr (72.8×) or ₹1,837 Cr (73.5×).
 - The old unsized "round every 6 months" markers are gone (`funding.cadenceQ` is unused).
 - **Capex:** ₹170 Cr to Q16 is fixed (plants 40 + 30 + 50, centres 10, labs 10, systems 20, misc 10), bought in whole phases a quarter ahead of demand. Phase sizes are placeholders until the founders send real ones.
 - **Working capital** is 60 days of annualised revenue on the revenue added since today. **GST** is ignored by instruction.

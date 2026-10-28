@@ -16,8 +16,8 @@ Object.assign(CAP4C,{capex:PC.capex,pp:PC.labs,wc:PC.wc,interest:PC.int,loss:PC.
 const pcTint=(hex,a)=>{const n=parseInt(hex.slice(1),16),m=k=>Math.round(255-(255-((n>>k)&255))*a).toString(16).padStart(2,'0');return '#'+m(16)+m(8)+m(0);};
 
 /* ---------- six steps: growth spending and funding need are one ---------- */
-CAP_BEATS.splice(0,CAP_BEATS.length,[['rev','4 year revenues scale up']],[['mar','Net margins expansion']],[['spend','Capital Utilisation Plan']],[['raise','Capital Raising roadmap']],[['ret','Investor returns over 4 years']],[['roce','ROCE machinery']]);
-STEPS.finance=['4 year revenues scale up','Net margins expansion','Capital Utilisation Plan','Capital Raising roadmap','Investor returns over 4 years','ROCE machinery'];
+CAP_BEATS.splice(0,CAP_BEATS.length,[['rev','4 year revenues scale up']],[['mar','Net margins expansion']],[['spend','Capital Utilisation Plan']],[['raise','Capital Raising roadmap']],[['ret','Investor return (4Y)']],[['roce','ROCE machinery']]);
+STEPS.finance=['4 year revenues scale up','Net margins expansion','Capital Utilisation Plan','Capital Raising roadmap','Investor return (4Y)','ROCE machinery'];
 CX_KEYS.splice(0,CX_KEYS.length,'rev','mar','spend','raise','ret','roce');
 A.cap.beat=[0,0,0,0,0,0];
 A.cap.exitQ=15;
@@ -138,26 +138,27 @@ cxMoney=function(W,D){
 };
 /* where the lowest closing cash sits: below zero, under the floor, or above it (the floor stays in the model; it is not drawn) */
 const pcCashLevel=R=>R.minCash<-1e-9?'short':R.minCash<R.P.buffer-1e-9?'under':'ok';
-/* a round's size as the founders state it: US$ M for the acquisition rounds, ₹ Cr for the others */
-const pcAmt=r=>r.usd!=null?`$${fd(r.usd,0)}M`:pcR(r.amt);
+/* a round's size, in ₹ Cr */
+const pcAmt=r=>pcR(r.amt);
 /* a step-up or a multiple: whole from 10, else one decimal, never a trailing .0 */
 const pcX=v=>{const r=Math.round(v*10)/10;return (r>=99.95?fd(v,0):Number.isInteger(r)?String(r):fd(r,1))+'×';};   /* one decimal under 100× (30.9×, 1.9×), never a trailing .0 */
 
 /* step 4: the valuation staircase. ARR bars by quarter and the post-money valuation after each round, on a log ₹ axis of their own.
-   The valuation is flat from a round's quarter until the next round, then steps up; rounds 1-2 are organic, rounds 3-4 acquisitions (hatched). */
+   The valuation is flat from a round's quarter until the next round, then steps up; rounds 1-2 are organic, rounds 3-4 organic growth and acquisition (hatched). */
 function cxVal(W,D){
   const R=D.R,pr=D.pr,c=pcFrame(W),id=++cxN,o=pcOcc(),bw=c.bw,arr=D.T.map(v=>12*v),post=pr.map(r=>r.post),Lg=Math.log10,r0=v=>`₹${fd(v,0)} Cr`;
   const GR=[];for(let e=-1;e<=8;e++)[1,3].forEach(m=>GR.push(m*Math.pow(10,e)));
-  const mn=Math.min(...arr,...post),mx=Math.max(...arr,...post),lo=Math.max(...GR.filter(g=>g<=mn*1.0001)),lh=Lg(mx)+.42;
+  const mn=Math.min(...arr,...post),mx=Math.max(...arr,...post),lo=Math.max(...GR.filter(g=>g<=mn*1.0001)),lh=Lg(mx)+.95;   /* headroom: the valuation labels sit above the shaded area and below the band */
   const y=v=>c.top+c.h-(Lg(Math.max(v,lo))-Lg(lo))/(lh-Lg(lo))*c.h,yb=y(lo);
   let ax='';GR.filter(g=>g>=lo&&g<=Math.pow(10,lh)).forEach(g=>{ax+=`<line class="${g===lo?'saxis':'sgrid'}" x1="${c.ml}" x2="${c.ml+c.pw}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}"/>`+T(c.ml-8,y(g)+4,fd(g,0),'smono','end');});
   const defs=`<defs><pattern id="pchat${id}" width="4.5" height="4.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4.5" height="4.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="4.5" stroke="${PC.fund}" stroke-width="2.2"/></pattern></defs>`;
   /* the phases: a band across the top, organic first, then acquisitions */
   const acqQ=R.rounds.filter(r=>r.kind==='acq').map(r=>r.q),xa=acqQ.length?c.x(Math.min(...acqQ))-c.slot/2:c.ml+c.pw,nm=a=>a.length<2?`${a[0]?.n??''}`:`${a[0].n}–${a.at(-1).n}`,orgR=R.rounds.filter(r=>r.kind!=='acq'),acqR=R.rounds.filter(r=>r.kind==='acq'),bandH=21;
+  const aFull=`Organic growth & acquisition · round${acqR.length>1?'s':''} ${nm(acqR)}`,aAv=c.ml+c.pw-xa-16,aFs=pcW(aFull,12,700)<=aAv?12:pcW(aFull,11,700)<=aAv?11:11,aTxt=pcW(aFull,aFs,700)<=aAv?aFull:'Organic growth & acquisition';
   let band=`<rect x="${c.ml}" y="${c.top}" width="${(xa-c.ml).toFixed(1)}" height="${bandH}" fill="${PC.fundBg}"/>`;
   if(orgR.length)band+=T(c.ml+8,c.top+14.5,`Organic growth · round${orgR.length>1?'s':''} ${nm(orgR)}`,'slab-b','start',`font-size:12px;font-weight:700;fill:${PC.fundTxt}`);
   if(acqR.length){band+=`<rect x="${xa.toFixed(1)}" y="${c.top}" width="${(c.ml+c.pw-xa).toFixed(1)}" height="${bandH}" fill="url(#pchat${id})" opacity=".35"/>`+`<line x1="${xa.toFixed(1)}" x2="${xa.toFixed(1)}" y1="${c.top}" y2="${(c.top+c.h).toFixed(1)}" stroke="${PC.fund}" stroke-width="1" stroke-dasharray="3 4" opacity=".6"/>`
-    +T(xa+8,c.top+14.5,`Acquisitions · round${acqR.length>1?'s':''} ${nm(acqR)}`,'slab-b','start',`font-size:12px;font-weight:700;fill:${PC.fundTxt};${halo}`);}
+    +T(xa+8,c.top+14.5,aTxt,'slab-b','start',`font-size:${aFs}px;font-weight:700;fill:${PC.fundTxt};${halo}`);}
   o.add({x:c.ml,y:c.top,w:c.pw,h:bandH});
   /* the valuation staircase: flat to the next round, then up at that round's quarter */
   const pts=[];pr.forEach((r,k)=>{const x=c.x(r.q);if(k)pts.push([x,y(pr[k-1].post)]);pts.push([x,y(r.post)]);});pts.push([c.x(15),y(pr.at(-1).post)]);
@@ -175,11 +176,15 @@ function cxVal(W,D){
     if(k){const mid=(y(pr[k-1].post)+yy)/2,t=pcX(r.stepUp),w=pcW(t,12.5,700);o.add({x:x-8-w,y:mid-11,w,h:15});su+=T(x-8,mid+4,t,'slab-b','end',`font-size:12.5px;font-weight:700;fill:${PC.fundTxt};${halo}`);}
     o.add({x:x-7,y:yy-7,w:14,h:14});
     mk+=`<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="6.5" fill="${acq?`url(#pchat${id})`:PC.fund}" stroke="${acq?PC.fund:'#fff'}" stroke-width="${acq?2:1.6}"><title>Round ${r.n} · ${pcAmt(r)} in ${qLong(r.q)} · ${rc(r.post)} post-money${k?` · ${pcX(r.stepUp)} the last round's post-money`:''}</title></circle>`;});
+  /* the shaded area under the staircase is occupied, so no valuation label can land inside it */
+  pr.forEach((r,k)=>{const xa0=c.x(r.q),xb=k<pr.length-1?c.x(pr[k+1].q):c.x(15),ty=y(r.post);o.add({x:xa0,y:ty,w:xb-xa0,h:yb-ty});});
   let L='';
-  pr.forEach((r,k)=>{L+=pcPlace(o,c,{px:c.x(r.q),py:y(r.post),lines:[`Round ${r.n} · ${pcAmt(r)}`,`${r0(r.post)} post-money`],bold:0,col:PC.fundTxt,c2:PC.fundTxt,w2:600,leader:false,gaps:[9,16,26,40],pref:k?['ul','l','u','ur','r','d','dl']:['ur','u','r','d'],ymin:c.top+bandH+1});});
+  pr.forEach((r,k)=>{L+=pcPlace(o,c,{px:c.x(r.q),py:y(r.post),lines:[`Round ${r.n} · ${pcAmt(r)}`,`${r0(r.post)} post-money`],bold:0,col:PC.fundTxt,c2:PC.fundTxt,w2:600,leader:false,gaps:[9,16,26,40],pref:k?['ul','u','ur','l']:['ur','u'],ymin:c.top+bandH+1});});
+  /* the summary caption: beside the last round if there is clear space above the area, else at the top left (nothing is under it there) */
+  const vL=[`Valuation ${r0(post[0])} → ${r0(post.at(-1))}`,`${fd(post.at(-1)/post[0],0)}× from round 1 to round ${pr.at(-1).n}`];
+  L+=pcPlace(o,c,{px:c.x(15),py:y(post.at(-1)),lines:vL,col:PC.fundTxt,pref:['ul','u'],optional:true,ymin:c.top+bandH+1})||pcPlace(o,c,{px:c.ml+8,py:c.top+bandH+33,fs:11.5,lines:vL,col:PC.fundTxt,pref:['ur'],leader:false,gaps:[0,-6,-12,-18,-24,-30,-36,-42,-48,-56],ymin:c.top+bandH+1,optional:true});
   const a0=pr[0].arr,a15=arr[15];
   L+=pcPlace(o,c,{px:c.x(15),py:y(a15)-18,lines:[`ARR ${r0(a0)} today → ${r0(a15)} by ${qName(15)}`],col:PC.rev,pref:['ul','u','l'],optional:true,ymin:c.top+bandH+1});
-  L+=pcPlace(o,c,{px:c.x(15),py:y(post.at(-1)),lines:[`Valuation ${r0(post[0])} → ${r0(post.at(-1))}`,`${fd(post.at(-1)/post[0],0)}× from round 1 to round ${pr.at(-1).n}`],col:PC.fundTxt,pref:['d','dl','dr'],optional:true,ymin:c.top+bandH+1});
   return `<svg class="s-svg cx-svg" viewBox="0 0 ${c.W} ${c.H}" role="img" aria-label="ARR by quarter and the post-money valuation after each funding round, on a log scale">${defs}${ax}${band}${area}${bars}${line}${pcTitle('₹ Cr, ARR and valuation · log scale',true)}${bl}${su}${mk}${L}${pcAxisX(c)}</svg>`;
 };
 

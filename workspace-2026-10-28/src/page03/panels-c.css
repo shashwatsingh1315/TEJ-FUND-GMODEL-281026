@@ -104,15 +104,16 @@
 .pnc-lh>:first-child,.pnc-lr>:first-child{text-align:left}
 .pnc-lr b{font-weight:600;color:var(--ink)}
 .pnc-lr .pnc-su{color:#B4532F}
-.pnc-lg{display:flex;align-items:flex-end;min-height:19px;padding-top:2px;font-size:13px;font-weight:600;line-height:1.3;color:var(--ink-3);white-space:nowrap}
+.pnc-lg{display:flex;align-items:flex-end;min-height:19px;padding-top:2px;font-size:13px;font-weight:600;line-height:1.3;color:var(--ink-3);white-space:normal}
 
 /* step 3: the three-triggers card. A row is a shape, the trigger, a one-line rule and the amount; under it a thin stacked bar, every bar on one scale. */
 .pnc-tg+.pnc-tg{margin-top:8px}
 .pnc-tg-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;line-height:1.3;color:var(--ink)}
-.pnc-tg-h span{font-weight:600;min-width:0}
-.pnc-tg-h span i{display:inline-block;width:17px;font-style:normal;font-weight:400;color:var(--ink-2)}
+.pnc-tg-h span{font-weight:600;min-width:0;padding-left:17px;text-indent:-17px;text-wrap:balance}
+.pnc-tg-h span i{display:inline-block;width:17px;text-indent:0;font-style:normal;font-weight:400;color:var(--ink-2)}
+.pnc-tg-h+p{margin-top:1px}
 .pnc-tg-h b{flex:none;font-family:var(--fd);font-weight:500;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.pnc-tg p{margin:1px 0 4px 17px;font-size:13.5px;line-height:1.3;color:var(--ink-2);text-wrap:pretty}
-.pnc-tr{margin-left:17px;height:8px;border-radius:3px;background:#F3F1EB;overflow:hidden}
+.pnc-tg p{margin:0 0 0 17px;font-size:13.5px;line-height:1.3;color:var(--ink-2);text-wrap:balance}
+.pnc-tr{margin:4px 0 0 17px;height:8px;border-radius:3px;background:#F3F1EB;overflow:hidden}
 .pnc-tb{display:flex;gap:1px;height:100%;border-radius:3px;overflow:hidden}
 .pnc-tb i{display:block;min-width:2px}

@@ -75,11 +75,10 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 .pc-ctl{margin:8px 0 0}
 .pc-ctl .segmented{flex-wrap:wrap;max-width:100%}
 .pc-ctl .segmented button{padding:3px 7px;font-size:11.5px}
-/* two columns: the chart card and the panel are one fixed height (580, or 640 when the screen is 960 px tall or more); the data card sits under the chart */
+/* two columns: the chart card and the panel are one fixed height (580, or 640 when the screen is 960 px tall or more); the data card sits under the takeaways, outside the grid */
 @media(min-width:1101px){
- .cx-grid{grid-template-columns:minmax(0,3fr) minmax(335px,1fr);grid-template-rows:auto auto;align-items:start}
+ .cx-grid{grid-template-columns:minmax(0,3fr) minmax(335px,1fr);grid-template-rows:auto;align-items:start}
  .cx-chart{grid-column:1;grid-row:1;position:static;display:flex;flex-direction:column;height:580px}
- .cx-dtcard{grid-column:1/-1;grid-row:2}   /* the data table runs the full width, under the chart and the panel */
  .cx-side{grid-column:2;grid-row:1;display:flex;flex-direction:column;height:580px}
  .cx-side>.cx-step:not([hidden]){flex:1;min-height:0;display:flex;flex-direction:column}
  .cx-side-p{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
@@ -92,12 +91,18 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 @media(max-width:1100px){.cx-grid{grid-template-columns:minmax(0,1fr)}.cx-plot{height:464px}}
 @media(min-width:701px) and (max-width:1100px){.cx-side{max-width:560px}}
 
-/* three takeaways per step, above the assumptions */
+/* three takeaways per step, under the chart and above its data table */
 .pc-takes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
 .pc-takes[hidden]{display:none}
-.pc-take{border:1px solid var(--rule);border-top:3px solid var(--c,#E8E6DC);border-radius:6px;background:var(--surface);padding:14px 16px 15px}
+.pc-take{border:1px solid color-mix(in srgb,var(--c,#E8E6DC) 36%,#fff);border-top:4px solid var(--c,#E8E6DC);border-radius:6px;background:color-mix(in srgb,var(--c,#E8E6DC) 13%,#fff);padding:14px 16px 15px}   /* tinted in its own colour so it stands out */
 .pc-take b{display:block;font-family:var(--fd);font-weight:500;font-size:21px;line-height:1.2;color:var(--ct,var(--ink));letter-spacing:-.005em}
 .pc-take p{margin:7px 0 0;font-family:var(--ft);font-feature-settings:normal;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+/* step 2: the founders' three lines, verbatim, are the whole takeaway: the subject bold, the figures in the box's colour */
+.pc-take.pc-say b{font-size:19px;line-height:1.32;color:var(--ink-2);text-wrap:pretty}
+.pc-take.pc-say b strong{font-weight:600;color:var(--ink)}
+.pc-take.pc-say b em{font-style:normal;font-weight:600;color:var(--c)}
+.pc-take.pc-say b .pc-mut{color:var(--ink-3)}
+.cx-host>.cx-dtcard{margin-top:14px}   /* the data table card, under the takeaways */
 @media(max-width:700px){.pc-takes{grid-template-columns:1fr;gap:10px}.pc-take b{font-size:19px}}
 
 /* model assumptions drawer */
@@ -116,7 +121,7 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
  .cx-legs::before{display:block;content:"Swipe the chart sideways to see all 16 quarters";font-size:11px;color:var(--ink-3);margin:0 0 4px}
  .cap-kpi{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
  .cap-kpi>div{padding:8px 14px;border-left:0;border-top:1px solid var(--rule)}
- .cap-kpi>div:first-child{grid-column:1/-1;border-top:0}
+ .cap-kpi>div:nth-child(-n+2){border-top:0}
  .cap-kpi strong{font-size:21px}
  .cap-kpi strong small{display:block;margin:0}
  .step-host[data-steps="finance"] .stepbar li:not(.on){flex:0 0 40px}
@@ -154,7 +159,7 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 .cx-heads .cx-head{display:block;grid-area:1/1;visibility:hidden}
 .cx-chart[data-layer="0"] .cx-head[data-l="0"],.cx-chart[data-layer="1"] .cx-head[data-l="1"],.cx-chart[data-layer="2"] .cx-head[data-l="2"],
 .cx-chart[data-layer="3"] .cx-head[data-l="3"],.cx-chart[data-layer="4"] .cx-head[data-l="4"],.cx-chart[data-layer="5"] .cx-head[data-l="5"]{visibility:visible}
-.cx-head h3{font-size:24px;font-weight:600;line-height:1.2;letter-spacing:-.015em;text-wrap:balance}
+.cx-head h3{font-size:21px;font-weight:600;line-height:1.2;letter-spacing:-.015em;text-wrap:balance}
 .cx-head p{margin-top:6px}
 .cx-legs{flex:none;min-height:46px}
 @media(min-width:1600px){.cx-legs{min-height:28px}}

@@ -1566,13 +1566,11 @@ body[data-page="finance"] .ph-t{font-size:26px}
   "debtCoverage": 50,
   "cadenceQ": 2,
   "round2": 200,
-  "round2Q": 3,
-  "r3Q": 7,
-  "r3Usd": 50,
-  "r4Q": 11,
-  "r4Usd": 175,
-  "fx": 88,
-  "roundMult": 10
+  "round2Q": 5,
+  "r3": 50,
+  "r3Q": 9,
+  "r4": 175,
+  "r4Q": 13
  },
  "operating": {
   "products": {
@@ -2074,7 +2072,7 @@ function stats(V){
    Defaults live in the #inputs-default block. Edits on the Inputs page are kept in this browser,
    and "Download dashboard with these inputs" writes them into a copy of this file. */
 const INPUT_DEFAULT=JSON.parse(document.getElementById('inputs-default').textContent);
-const INPUT_KEY='tejas-dashboard-1041-operating-v2';
+const INPUT_KEY='tejas-dashboard-1041-operating-v3';
 let INP=(()=>{try{const s=JSON.parse(localStorage.getItem(INPUT_KEY)||'null');return s?mergeInputs(INPUT_DEFAULT,s):structuredClone(INPUT_DEFAULT);}catch(e){return structuredClone(INPUT_DEFAULT);}})();
 function mergeInputs(base,over){const out=structuredClone(base);for(const k in over){if(out[k]&&typeof out[k]==='object'&&!Array.isArray(out[k]))out[k]=mergeInputs(out[k],over[k]);else if(k in out)out[k]=over[k];}return out;}
 function saveInputs(){try{localStorage.setItem(INPUT_KEY,JSON.stringify(INP));}catch(e){}}

@@ -13,108 +13,108 @@
     {
       "mode": "none",
       "coverage": 50,
-      "equity": 2220,
+      "equity": 465,
       "debtQ16": 0,
       "interest": 0,
-      "cashQ16": 2042.827241721918,
-      "minCash": 11.677649935378685,
+      "cashQ16": 287.82724172191797,
+      "minCash": -12.019048183725232,
       "rounds": [
         {
           "quarter": 1,
           "amount": 40
         },
         {
-          "quarter": 4,
+          "quarter": 6,
           "amount": 200
         },
         {
-          "quarter": 8,
-          "amount": 440
+          "quarter": 10,
+          "amount": 50
         },
         {
-          "quarter": 12,
-          "amount": 1540
+          "quarter": 14,
+          "amount": 175
         }
       ]
     },
     {
       "mode": "wc",
       "coverage": 50,
-      "equity": 2220,
+      "equity": 465,
       "debtQ16": 124.31342465753418,
       "interest": 15.676126027397256,
-      "cashQ16": 2151.464540352055,
-      "minCash": 12.93410541483074,
+      "cashQ16": 396.4645403520549,
+      "minCash": -6.568685170026605,
       "rounds": [
         {
           "quarter": 1,
           "amount": 40
         },
         {
-          "quarter": 4,
+          "quarter": 6,
           "amount": 200
         },
         {
-          "quarter": 8,
-          "amount": 440
+          "quarter": 10,
+          "amount": 50
         },
         {
-          "quarter": 12,
-          "amount": 1540
+          "quarter": 14,
+          "amount": 175
         }
       ]
     },
     {
       "mode": "plant",
       "coverage": 50,
-      "equity": 2220,
+      "equity": 465,
       "debtQ16": 47.953125,
       "interest": 11.03072265625,
-      "cashQ16": 2079.749644065668,
-      "minCash": 18.443899935378685,
+      "cashQ16": 324.749644065668,
+      "minCash": 1.7590768162747707,
       "rounds": [
         {
           "quarter": 1,
           "amount": 40
         },
         {
-          "quarter": 4,
+          "quarter": 6,
           "amount": 200
         },
         {
-          "quarter": 8,
-          "amount": 440
+          "quarter": 10,
+          "amount": 50
         },
         {
-          "quarter": 12,
-          "amount": 1540
+          "quarter": 14,
+          "amount": 175
         }
       ]
     },
     {
       "mode": "both",
       "coverage": 50,
-      "equity": 2220,
+      "equity": 465,
       "debtQ16": 172.2665496575342,
       "interest": 26.706848683647255,
-      "cashQ16": 2188.386942695805,
-      "minCash": 19.700355414830742,
+      "cashQ16": 433.3869426958049,
+      "minCash": 7.209439829973398,
       "rounds": [
         {
           "quarter": 1,
           "amount": 40
         },
         {
-          "quarter": 4,
+          "quarter": 6,
           "amount": 200
         },
         {
-          "quarter": 8,
-          "amount": 440
+          "quarter": 10,
+          "amount": 50
         },
         {
-          "quarter": 12,
-          "amount": 1540
+          "quarter": 14,
+          "amount": 175
         }
       ]
     }

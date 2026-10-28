@@ -31,22 +31,22 @@ CX.spend=D=>{
   const St=K.steps,item=k=>add(St[k].costs),plants=item('tileP5')+item('wood')+item('upvc');
   const nLab=St.labs.costs.length,nCen=St.centres.costs.length,nSys=St.systems.costs.length,nMis=St.misc.costs.length;
   const perPlant=plants/nLab,perCity=(K.units[L]-4)/nCen,dRev=D.T[L]-K.m0;
-  const ahead=lead>1?`${lead} quarters ahead`:lead===1?'a quarter ahead':'as sales need it';
+  const plantRule=lead>1?`Plants: expand ${lead} quarters before sales need it`:lead===1?'Plants: expand a quarter before sales need it':'Plants: expand when sales need it';
   const before=lead>1?`${lead} quarters before`:lead===1?'a quarter before':'when';
   const seg=(v,col,n)=>({v,c:col,n:`${n} · ${Rs(v)}`});
   const trig=[
-    {sh:'▲',h:'Sales outgrow capacity',rule:`Plant phases bought ${ahead} of sales; a lab per ${Rs(perPlant)} of plant`,
+    {sh:'▲',h:'Plants and labs',rule:[plantRule,`Labs: one per ${Rs(perPlant)} of plant`],
       seg:[seg(plants,PC.capex,'Plants'),seg(item('labs'),PC.labs,'Labs')]},
-    {sh:'●',h:'New cities open',rule:`A centre per ~${fd(perCity,0)} new cities or zones`,
+    {sh:'●',h:'Experience centres',rule:[`One per ~${fd(perCity,0)} new cities or dealer zones`],
       seg:[seg(item('centres'),PC.capex,'Experience centres')]},
-    {sh:'■',h:'Revenue grows',rule:`Working capital at ${fd(days,0)} days; systems and misc in steps`,
+    {sh:'■',h:'Working capital, systems, misc',rule:[`Working capital: ${fd(days,0)} days of revenue`,'Systems, misc: added as revenue grows'],
       seg:[seg(item('misc'),PC.capex,'Misc'),seg(item('systems'),PC.labs,'Systems'),seg(c.wc,PC.wc,'Working capital')]}];
   trig.forEach(t=>t.v=add(t.seg.map(x=>x.v)));
   const tot=add(trig.map(t=>t.v)),tmax=Math.max(...trig.map(t=>t.v),1e-9);
-  const trow=t=>`<div class="pnc-tg"><div class="pnc-tg-h"><span><i>${t.sh}</i>${t.h}</span><b>${Rs(t.v)}</b></div><p>${t.rule}</p>`
+  const trow=t=>`<div class="pnc-tg"><div class="pnc-tg-h"><span><i>${t.sh}</i>${t.h}</span><b>${Rs(t.v)}</b></div>${t.rule.map(r=>`<p>${r}</p>`).join('')}`
     +`<div class="pnc-tr"><div class="pnc-tb" role="img" aria-label="${t.seg.map(x=>x.n).join(', ')}" style="width:${(100*t.v/tmax).toFixed(1)}%">${t.seg.map(x=>`<i style="flex:${x.v} 1 0;background:${x.c}" title="${x.n}"></i>`).join('')}</div></div></div>`;
-  const c2=PK.card({title:`Three triggers pace the ${Rs(tot)}`,body:PK.vis(trig.map(trow).join('')),col:PC.capex});
-  const rule={tileP5:`paid ${before} sales pass built capacity`,wood:`paid ${before} sales pass built capacity`,upvc:`paid ${before} sales pass built capacity`,
+  const c2=PK.card({title:`What triggers the ${Rs(tot)}`,body:PK.vis(trig.map(trow).join('')),col:PC.capex});
+  const rule={tileP5:`bought ${before} sales need it`,wood:`bought ${before} sales need it`,upvc:`bought ${before} sales need it`,
     centres:`one per ~${fd(perCity,0)} new cities or dealer zones`,labs:`one per ${Rs(perPlant)} of plant, same quarter`,
     systems:`one per ~${Rs(dRev/nSys)} of added monthly revenue`,misc:`one per ~${Rs(dRev/nMis)} of added monthly revenue`};
   /* the fold: the per-item rules and phase plan, and what moves the peak */
@@ -61,32 +61,32 @@ CX.spend=D=>{
 };
 
 /* ---------------- step 4: the funding flywheel ---------------- */
-/* a round's size as the founders state it: US$ M for the acquisition rounds, ₹ Cr for the others; a quarter with its months ("Q4, Jul–Sep 2027") */
-const amtS=r=>r.usd!=null?`$${fd(r.usd,0)}M`:Rs(r.amt);
+/* a round's size as the founders state it, in ₹ Cr; a quarter with its months ("Q4, Jul–Sep 2027") */
+const amtS=r=>Rs(r.amt);
 const qWhen=q=>{const d=QD[q];return `${qName(q)}, ${d.ya===d.yz?`${d.a}–${d.z} ${d.ya}`:`${d.a} ${d.ya}–${d.z} ${d.yz}`}`;};
 /* one step of the cycle: a numbered dot, a thin line down to the next dot */
 const fstep=(n,html)=>`<li><i class="pnc-fd">${n}</i><span>${html}</span></li>`;
 CX.raise=D=>{
   const R=D.R,P=R.P,pr=D.pr,S=cxSeries(D),col=PC.fund,r1=pr[0],org=pr.filter(r=>r.kind!=='acq'),acq=pr.filter(r=>r.kind==='acq'),r2=pr.find((r,i)=>i>0&&r.kind!=='acq');
-  const rng=a=>a.length<2?`${a.length?a[0].n:''}`:`${a[0].n}–${a.at(-1).n}`,orgAmt=R.organic.equity,usd=R.acq.usd;
+  const rng=a=>a.length<2?`${a.length?a[0].n:''}`:`${a[0].n}–${a.at(-1).n}`,orgAmt=R.organic.equity,acqAmt=R.acq.amt;
   /* card 1: the first turn of the cycle, all computed: money in, ARR up, valuation up, the next round */
   let c1;
-  if(r2){const up=r2.pre/r1.post,g=r2.arr/r1.arr;
+  if(r2){const up=r2.stepUp,g=r2.arrUp;
     c1=PK.card({title:'Each round buys the next',body:PK.vis(`<ol class="pnc-fl">${fstep(1,`Raise <b>${Rs(r1.amt)}</b> now`)}${fstep(2,`ARR <b>₹${fd(r1.arr,0)} → ₹${fd(r2.arr,0)}${NB}Cr</b> by ${qName(r2.q)} (${pcX(g)})`)}${fstep(3,`Valuation <b>${pcX(up)}</b> the round-1 price`)}${fstep(4,`Raise <b>${Rs(r2.amt)}</b> in round ${r2.n}`)}</ol>`),col});
   }else c1=PK.card({title:'Each round buys the next',note:`Round 1 (${Rs(r1.amt)}) funds the plan; there is no organic round 2.`,col});
   /* card 2: the ladder, grouped organic then acquisitions */
-  const lrow=r=>`<div class="pnc-lr"><span>R${r.n} · ${qName(r.q)}</span><b>${amtS(r)}</b><span>${R0(r.pre)}</span><b class="pnc-su">${r.stepUp?pcX(r.stepUp):'–'}</b></div>`;
+  const lrow=r=>`<div class="pnc-lr"><span>R${r.n} · ${qName(r.q)}</span><b>${amtS(r)}</b><span>${R0(r.post)}</span><b class="pnc-su">${r.stepUp?pcX(r.stepUp):'–'}</b></div>`;
   const lgrp=(name,tot,a)=>a.length?`<div class="pnc-lg">${name} · ${tot}</div>${a.map(lrow).join('')}`:'';
-  const c2=PK.card({title:'Four rounds, rising prices',body:PK.vis(`<div class="pnc-ld"><div class="pnc-lh"><span>Round</span><span>Raise</span><span>Pre-money</span><span>Step-up</span></div>`
-    +lgrp('Organic',Rs(orgAmt),org)+lgrp('Acquisitions',`$${fd(usd,0)}M`,acq)+`</div>`),col});
+  const c2=PK.card({title:'Four rounds, rising prices',body:PK.vis(`<div class="pnc-ld"><div class="pnc-lh"><span>Round</span><span>Raise</span><span>Post-money</span><span>Step-up</span></div>`
+    +lgrp('Organic growth',Rs(orgAmt),org)+lgrp('Organic growth & acquisition',Rs(acqAmt),acq)+`</div>`),col});
   /* card 3: what rounds 3 and 4 are for */
-  const c3=acq.length?PK.card({title:`Rounds ${rng(acq)}: buy and plug in`,hero:[`$${fd(usd,0)}M`,'for acquisitions'],note:'Regional brands and plants.',col}):'';
+  const c3=acq.length?PK.card({title:`Rounds ${rng(acq)}: buy and plug in`,hero:[Rs(acqAmt),'for organic growth & acquisition'],note:'Regional brands and plants.',col}):'';
   /* the fold: how the rounds are priced and the cash they leave */
   const peak=S.peak,low=R.organic.minCash,lowQ=R.organic.minQ,before=r2&&lowQ<r2.q,enough=orgAmt>=peak-1e-9;
   const more=whyD('Pricing and cash',
-    `<p class="cx-note">Round 1 is priced at ${fd(INP.valuation.multiple,0)}× today’s ARR (${R0(r1.post)} post-money). Each later round is priced at ${fd(P.roundMult,0)}× the ARR of its quarter (12 × the quarter’s last month). Dollar rounds convert at ₹${fd(R.fx,0)} per $.${fn(NOTE_PRICE)}</p>`
-    +cxLev(`Rounds ${rng(org)} and the organic plan`,[['Cash required, at its peak',Rs(peak),qName(S.pk)],[`Raised in rounds ${rng(org)}`,Rs(orgAmt),enough?`${Rs(orgAmt-peak)} above`:`${Rs(peak-orgAmt)} short`],['Lowest cash',Rs(low),`${qName(lowQ)}${before?`, before round ${r2.n} lands`:''}`]])
-    +`<p class="cx-note">Lowest cash is ${low>=P.buffer-1e-9?'above':'under'} the ${Rs(P.buffer)} floor.${acq.length?` Rounds ${rng(acq)} (${Rs(R.acq.amt)}) sit in the model as cash and count at face value at the exit; the acquisitions and their revenue are not modelled.`:''} ${R.D.on?`Debt is on: ${rc(R.D.bal[R.N-1])} outstanding at ${qName(R.N-1)}.`:'Debt is off.'}${fn(NOTE_FUND)}</p>`);
+    `<p class="cx-note">Round 1 is priced at ${fd(INP.valuation.multiple,0)}× today’s ARR (${R0(r1.post)} post-money). Every later round is priced at the same ${fd(INP.valuation.multiple,0)}× on the ARR of its quarter (12 × the quarter’s last month), so the valuation rises in step with ARR.${fn(NOTE_PRICE)}</p>`
+    +cxLev(`Rounds ${rng(org)} and the organic plan`,[['Cash required, at its peak',Rs(peak),qName(S.pk)],[`Raised in rounds ${rng(org)}`,Rs(orgAmt),enough?`${Rs(orgAmt-peak)} above`:`${Rs(peak-orgAmt)} short`],['Lowest cash',low<0?`−${Rs(-low)}`:Rs(low),`${qName(lowQ)}${before?`, before round ${r2.n} lands`:''}`]])
+    +`<p class="cx-note">Lowest cash is ${low>=P.buffer-1e-9?'above':'under'} the ${Rs(P.buffer)} floor.${acq.length?` Rounds ${rng(acq)} (${Rs(acqAmt)}) sit in the model as cash and count at face value at the exit; the acquisitions and their revenue are not modelled.`:''} ${R.D.on?`Debt is on: ${rc(R.D.bal[R.N-1])} outstanding at ${qName(R.N-1)}.`:'Debt is off.'}${fn(NOTE_FUND)}</p>`);
   return {lead:'',body:panel([c1,c2,c3].filter(Boolean),more,'pnc-c4')};
 };
 /* ---------------- step 6: return on capital ---------------- */

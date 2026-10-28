@@ -21,7 +21,7 @@ for(const mode of ['none','wc','plant','both'])for(const share of [0,25,50,75,10
   priorPlant=plant;priorWC=wc;
  }
  eq(sum(G.flows.capex),140,'End-state capex paid once');eq(sum(G.flows.pp),30,'Labs/systems paid once');eq(sum(G.flows.wc),G.K.wc[15],'WC cash flows telescope');
- eq(d.ret.eqv,12*baseS[15].net*10+R.cash[15]-D.bal[15],'Exit equity subtracts remaining debt');eq(d.ret.val,d.ret.eqv*d.ret.s,'Investor value accounts for debt and dilution');
+ eq(d.ret.eqv,12*baseS[15].net*d.I.valuation.multiple+R.cash[15]-D.bal[15],'Exit equity subtracts remaining debt');eq(d.ret.val,d.ret.eqv*d.ret.s,'Investor value accounts for debt and dilution');
  assert.equal(d.controls,'','The debt financing bar is hidden on page 03');
  out.push({mode,coverage:share,equity:R.equity,debtQ16:D.bal[15],interest:totalInterest,cashQ16:R.cash[15],minCash:R.minCash,rounds:R.rounds.map(r=>({quarter:r.q+1,amount:r.amt}))});
 }
