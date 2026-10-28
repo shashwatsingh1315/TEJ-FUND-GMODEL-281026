@@ -5,8 +5,19 @@ function disposeGuideMap(){
   if(guideMapFrame){cancelAnimationFrame(guideMapFrame);guideMapFrame=0;}
   guideMapEpoch++;
 }
+function guideMapIcon(kind){
+  const shapes={
+    basis:'<path d="M3 6h4m4 0h10M3 12h10m4 0h4M3 18h4m4 0h10"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="9" cy="18" r="2"/>',
+    revenue:'<path d="M3 3v18h18M6 16l5-5 4 3 6-8m-5 0h5v5"/>',
+    finance:'<path d="M3 8V6a2 2 0 0 1 2-2h13"/><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M21 12h-5a2 2 0 0 0 0 5h5"/><path d="M17 14.5h.01"/>',
+    cities:'<path d="M3 21V8h8v13m0-18h10v18M1 21h22M6 12h2m-2 4h2m7-9h2m-2 4h2m-2 4h2m-1 4v2"/>',
+    products:'<path d="m12 3 9 5v9l-9 5-9-5V8l9-5Zm-9 5 9 5 9-5m-9 5v9M7.5 5.5l9 5"/>',
+    audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h3m3 0h2M8 15h3m3 0h2M8 18h3m3 0h2"/>'
+  };
+  return `<svg class="guide-map-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${shapes[kind]||''}</svg>`;
+}
 function guideOverview(pages){
-  const node=(id,name,route,extra='',label=id)=>`<a class="guide-map-node${extra}" data-node="${Number(id)}" href="#${route}" aria-label="${id} ${name}"><span>${label}</span><b>${name}</b></a>`;
+  const node=(id,name,route,extra='',label=id)=>`<a class="guide-map-node${extra}" data-node="${Number(id)}" href="#${route}" aria-label="${id} ${name}"><span class="guide-map-meta">${guideMapIcon(route)}<span>${label}</span></span><b>${name}</b></a>`;
   return `<div class="guide-layout">
   <section class="s-panel stage3 guide-overview" aria-labelledby="guide-overview-title">
    <header class="guide-card-head"><h2 id="guide-overview-title">What this dashboard is</h2><p>The Tejas plan, from revenue assumptions to funding and investor returns · Oct 2026–Sep 2030.</p></header>
