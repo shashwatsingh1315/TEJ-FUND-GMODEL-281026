@@ -4,6 +4,10 @@ Working material for turning page 03 of the Tejas investor dashboard into a fund
 
 **Status:** built. The current dashboard is `workspace-2026-10-28/outputs/Tejas_Revenue_Dashboard_1041_Updated.html`. Page 03 is now "Funding & returns". `dashboard/` keeps the original dashboard, unmodified, for reference.
 
+## Investor website
+
+The repo is configured for Vercel: import it with the repository root as **Root Directory** and **Other** as the framework. The build uses the current source tree and publishes only `dist/`. Once connected, `main` updates the stable investor URL and branches get review previews. See [hosting setup](docs/hosting.md) for the account connection, checks and publishing workflow. This does not update the separate Claude artifact.
+
 ## Start here
 
 1. Read `workspace-2026-10-28/WORKING-ON-THE-DASHBOARD.md`. It explains where each part comes from, how to rebuild (`python3 src/build.py`) and check (`./check-all.sh`), and the design rules.
