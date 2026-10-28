@@ -35,8 +35,9 @@ a pull-request branch, review and merge that branch before the production import
 
 The website build uses the existing Python generator. It compares the result
 byte-for-byte with the committed current dashboard and fails if they disagree.
-It never chooses the old HTML in `dashboard/`. Only three files are published:
-`index.html`, `version.json` (commit and dashboard checksum), and `robots.txt`.
+It never chooses the old HTML in `dashboard/`. Only five files are published:
+`index.html`, `version.json` (commit and dashboard checksum), `robots.txt`,
+`tejas-preview.png` (shared-link image), and `tejas-icon.png` (home-screen icon).
 Source files, reports, context and archives are outside the published directory.
 
 Search indexing is disabled, but that is not access control. Anyone with an
@@ -59,3 +60,12 @@ Run the same smoke command against the live URL after deploying. `/version.json`
 identifies the deployed commit and exact dashboard bytes. The dashboard currently
 targets laptop screens; the source guide lists the supported sizes. Input changes
 persist in each viewer's browser and are not shared with other investors.
+
+## Tejas branding
+
+The official logo lives in `workspace-2026-10-28/src/brand/tejas-logo.svg`.
+The dashboard builder embeds the logo and browser icon, preserving offline use.
+The public preview title and image are declared in the base HTML. All three
+Vercel aliases use the same preview asset on `tejas-growth-model.vercel.app`.
+To update the checked-in PNGs after changing the brand artwork or preview design,
+run `node tools/render-brand.cjs` with Playwright available, then rebuild and check.

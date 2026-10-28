@@ -54,6 +54,13 @@ def build(root=ROOT):
         shutil.rmtree(dist)
     dist.mkdir()
     (dist / "index.html").write_bytes(html)
+    # Only these reviewed brand assets accompany the self-contained dashboard.
+    import shutil
+    for name in ("tejas-preview.png", "tejas-icon.png"):
+        asset = root / "site-assets" / name
+        if asset.is_symlink() or not asset.is_file():
+            raise RuntimeError(f"Missing or unsafe brand asset: {name}")
+        shutil.copyfile(asset, dist / name)
     (dist / "version.json").write_text(json.dumps(version, indent=2) + "\n", encoding="utf-8")
     (dist / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
     print(json.dumps({"status": "ready", "directory": "dist", **version}))

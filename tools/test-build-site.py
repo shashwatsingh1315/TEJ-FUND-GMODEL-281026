@@ -15,6 +15,7 @@ class SiteBuildTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="tejas-publish-test-") as tmp:
             root = Path(tmp)
             shutil.copytree(SITE.ROOT / SITE.WORKSPACE / "src", root / SITE.WORKSPACE / "src")
+            shutil.copytree(SITE.ROOT / "site-assets", root / "site-assets")
             expected = SITE.ROOT / SITE.DASHBOARD
             target = root / SITE.DASHBOARD
             target.parent.mkdir()
@@ -23,7 +24,7 @@ class SiteBuildTest(unittest.TestCase):
             (root / "dist/private-notes.txt").write_text("must not ship")
             version = SITE.build(root)
             self.assertEqual((root / "dist/index.html").read_bytes(), expected.read_bytes())
-            self.assertEqual(set(p.name for p in (root / "dist").iterdir()), {"index.html", "robots.txt", "version.json"})
+            self.assertEqual(set(p.name for p in (root / "dist").iterdir()), {"index.html", "robots.txt", "version.json", "tejas-preview.png", "tejas-icon.png"})
             self.assertEqual(len(version["dashboardSha256"]), 64)
 
             # A hand edit to generated HTML must block publishing, preserving last output.
