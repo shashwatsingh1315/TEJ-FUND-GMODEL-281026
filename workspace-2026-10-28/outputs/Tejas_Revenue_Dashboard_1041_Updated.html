@@ -1435,6 +1435,33 @@ body[data-page="finance"] .ph-t{font-size:26px}
 }
 @media(max-width:1100px){.cx-grid{grid-template-columns:minmax(0,1fr)}}
 .cx-grid>*,.cx-s{min-width:0}
+
+/* round 2 review: a static logic panel, narrower than before (chart : panel about 2.3 : 1) */
+@media(min-width:1101px){.cx-grid{grid-template-columns:minmax(0,2.3fr) minmax(0,1fr)}}
+.cx-kickrow{flex-wrap:wrap}
+.cx-side-p{padding:14px 16px!important}
+.pc-h{margin:14px 0 5px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.pc-formula{margin:12px 0 0;padding:9px 12px 10px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--accent-fill);border-radius:4px}
+.pc-formula .pc-h{margin:0 0 5px}
+.pc-formula div{font-size:12.5px;line-height:1.5;color:var(--ink);font-variant-numeric:tabular-nums}
+.pc-formula div+div{margin-top:3px}
+.pc-inputs{margin:0;border-top:1px solid var(--rule)}
+.pc-inputs>div{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr);gap:8px;padding:5px 0;border-bottom:1px solid var(--rule);font-size:12.5px;line-height:1.4}
+.pc-inputs dt{color:var(--ink-3)}
+.pc-inputs dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums}
+.pc-rules{margin:0;padding-left:17px;font-size:12.5px;line-height:1.5;color:var(--ink-2);font-family:var(--ft);font-feature-settings:normal}
+.pc-rules li+li{margin-top:5px}
+.pc-rules b,.pc-rules .cap-link{font-family:var(--f)}
+.pc-phases td small{display:block;font-size:11.5px;color:var(--ink-3);font-family:var(--f);margin-top:1px}
+.pc-phases th,.pc-phases td{font-size:12.5px}
+.cx-leg i.dm{display:inline-block;width:8px;height:8px;border:1.4px solid var(--accent);transform:rotate(45deg);background:#fff;margin:0 2px}
+@media(max-width:1100px){.pc-inputs>div{grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr)}}
+.pc-phases{border-top:1px solid var(--rule)}
+.pc-phases>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 10px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:12.5px;line-height:1.4}
+.pc-phases .nm{color:var(--ink);font-weight:500}
+.pc-phases .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.pc-phases b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pc-phases small{grid-column:1/-1;font-size:11.5px;color:var(--ink-3)}
 </style>
 </head><body>
 <a class="skip" href="#main-content">Skip to dashboard</a>
@@ -1534,6 +1561,15 @@ body[data-page="finance"] .ph-t{font-size:26px}
   },
   "centresN": 20,
   "firstPhase": 30,
+  "phases": {
+   "tileP5": 8,
+   "wood": 3,
+   "upvc": 3,
+   "labs": 4,
+   "systems": 4,
+   "misc": 10
+  },
+  "leadQ": 1,
   "wcDays": 60,
   "burn": {
    "mrr": [
@@ -1624,9 +1660,8 @@ body[data-page="finance"] .ph-t{font-size:26px}
   "lifeOther": 5,
   "debtMode": "none",
   "debtCoverage": 50,
-  "cadenceQ": 4,
-  "runwayQ": 6,
-  "annualAfter": 2
+  "cadenceQ": 2,
+  "round2": 200
  },
  "operating": {
   "products": {
@@ -5008,59 +5043,163 @@ NOTES[NOTE_DEBT-1]='Debt scenario: coverage applies to growth in the working-cap
 NOTES[NOTE_PRICE-1]='Illustrative round pricing retained from the supplied dashboard: round 1 uses 16× today’s ARR as post-money; later rounds use the configured ARR-multiple glide, blended with 15× annualised operating profit at the configured margin thresholds. Exit defaults to the user-selected 10× ARR. These are scenario inputs, not verified market valuations or term sheets.';
 NOTES.forEach((s,i)=>{if(s.startsWith('Capital return basis:'))NOTES[i]='Capital return basis: annualised quarter-end monthly operating profit / (cumulative forecast capex + labs/systems + the full working-capital target). Opening working capital is included in this denominator; existing fixed-asset book values are unavailable and excluded. This remains an indicative gross-capital return, not complete company ROCE.';});
 NOTES.push('The former 200% represented 60/30 of monthly revenue, not 200% of annual revenue. The revised 365-day annual-sales rule uses 60/365 = 16.4384% of ARR, equivalent to 1.9726 months of the current sales rate. Changing the percentage base alone does not reduce capital twelvefold.');
+/* >>> step capex layer */
+/* Capex in whole phases, 29 Oct 2026.
+   The spend to Q16 is fixed: plants 40 + 30 + 50, centres 10, labs 10, systems 20, misc 10 (₹170 Cr).
+   What is modelled is when each phase is bought. A phase adds capacity in proportion to its cost,
+   so an item's full budget serves exactly its Q16 demand. A phase is paid leadQ quarters before
+   demand would pass the capacity already built:
+     phases in place (q) = fewest phases whose capacity covers demand(q + leadQ)
+     spend to date (q)   = cost of the phases in place
+   Demand is measured in what each item serves. Labs follow the plant phases in the same quarter.
+   Revenue running late keeps the planned dates. */
+const STEP_ITEMS={
+ tileP5:{driver:'tile adhesive + waterproofing sales above today’s',measure:'tile + waterproofing sales above today',money:1},
+ wood:{driver:'wood adhesive sales',measure:'wood adhesive sales',money:1},
+ upvc:{driver:'uPVC sales',measure:'uPVC sales',money:1},
+ centres:{driver:'cities and dealer zones opened after today’s 4',measure:'units opened',money:0},
+ labs:{driver:'plant phases bought',measure:'plant bought',money:1},
+ systems:{driver:'monthly revenue above today’s',measure:'revenue above today',money:1},
+ misc:{driver:'monthly revenue above today’s',measure:'revenue above today',money:1}};
+function stepCosts(k,C,X){
+ const n=Math.max(1,Math.round(finNum(k==='centres'?C.centresN:(C.phases||{})[k],1,1))),B=X[k],f=finPct(C.firstPhase)/100;
+ if(k==='wood'||k==='upvc'){if(f>=1||n===1)return [B];if(f>0)return [B*f,...Array(n-1).fill(B*(1-f)/(n-1))];}
+ return Array(n).fill(B/n);
+}
+function stepBuild(costs,D,lead){
+ const N=D.length,B=sum(costs),top=D[N-1],cap=[];let c=0;costs.forEach(x=>cap.push((c+=x)/B*top));
+ let j=0,spent=0;const cum=[],buys=[];
+ const buy=(q,need,needQ)=>{buys.push({q,i:j,cost:costs[j],capFrom:j?cap[j-1]:0,cap:cap[j],need,needQ});spent+=costs[j];j++;};
+ for(let q=0;q<N;q++){
+  const needQ=Math.min(N-1,q+lead),need=D[needQ];
+  while(j<costs.length&&need>(j?cap[j-1]:0)+1e-9)buy(q,need,needQ);
+  if(q===N-1)while(j<costs.length)buy(q,need,needQ); /* the Q16 end state is fixed */
+  cum.push(spent);
+ }
+ return {cum,buys,cap,costs};
+}
+const stepPrevCapModel=capModel;
+capModel=function(o={}){
+ const K=stepPrevCapModel(o),C=K.C,X=K.X,M=K.M,T=K.T,lead=Math.max(0,Math.round(finNum(C.leadQ,1)));
+ const D={tileP5:T.map((_,q)=>Math.max(0,M.tile[q]+M.p5[q]-K.tile0)),wood:M.wood.slice(),upvc:M.upvc.slice(),centres:K.units.map(u=>Math.max(0,u-4)),systems:T.map(v=>Math.max(0,v-K.m0))};
+ D.misc=D.systems;
+ const steps={};
+ ['tileP5','wood','upvc','centres','systems','misc'].forEach(k=>steps[k]={...stepBuild(stepCosts(k,C,X),D[k],lead),D:D[k],lead});
+ D.labs=T.map((_,q)=>steps.tileP5.cum[q]+steps.wood.cum[q]+steps.upvc.cum[q]);
+ steps.labs={...stepBuild(stepCosts('labs',C,X),D.labs,0),D:D.labs,lead:0};
+ K.items=Object.fromEntries(CAPEX_ITEMS.map(([k])=>[k,steps[k].cum]));K.steps=steps;K.leadQ=lead;
+ K.cum.forEach((c,q)=>{c.factory=0;c.pp=0;c.misc=0;CAPEX_ITEMS.forEach(([k,,bk])=>c[bk]+=K.items[k][q]);c.capex=c.factory+c.misc;});
+ return K;
+};
+
+/* ---------- how the phases read on page 03 and in Edit inputs ---------- */
+const stepCol=bk=>bk==='pp'?CAP4C.pp:CAP4C.capex;
+function stepCostText(costs){
+ const g=[];costs.forEach(c=>{const l=g.at(-1);if(l&&Math.abs(l[0]-c)<1e-9)l[1]++;else g.push([c,1]);});
+ return g.map(([c,n])=>n>1?`${n} × ${rc(c)}`:rc(c)).join(' + ');
+}
+function stepWhen(buys){
+ const g=[];buys.forEach(b=>{const l=g.at(-1);if(l&&l[0]===b.q)l[1]++;else g.push([b.q,1]);});
+ return g.map(([q,n])=>qName(q)+(n>1?` ×${n}`:'')).join(' · ');
+}
+function stepReason(k,b){
+ const S=STEP_ITEMS[k],v=x=>S.money?rc(x):`${fd(x,x%1?1:0)} units`,L=p=>MODEL.products[p].launch,serve=b.i>1?`${b.i} phases serve`:'1 phase serves';
+ if(k==='labs')return b.i?`plant bought ${rc(b.need)}, past the ${rc(b.capFrom)} that ${b.i>1?`${b.i} labs serve`:'1 lab serves'}`:'with the first plant phase';
+ if(!b.i&&(k==='wood'||k==='upvc'))return `first phase, before the Q${L(k)} launch`;
+ if(!b.i)return `first phase · ${qName(b.needQ)} ${S.measure} ${v(b.need)}`;
+ return `${qName(b.needQ)} ${S.measure} ${v(b.need)}, past the ${v(b.capFrom)} that ${serve}`;
+}
+function stepSections(K,q){
+ const lead=K.leadQ,all=CAPEX_ITEMS.flatMap(([k,l,bk])=>K.steps[k].buys.filter(b=>b.q===q).map(b=>({k,l,bk,b,n:K.steps[k].costs.length})));
+ const now=all.length?`<table class="cx-rules">${all.map(({k,l,bk,b,n})=>`<tr><th>${swc(stepCol(bk))}${l}${n>1?` · ${b.i+1} of ${n}`:''}</th><td>${stepReason(k,b)}</td><td>${rc(b.cost)}</td></tr>`).join('')}</table>`
+  :`<p class="cx-note">No phase is bought in ${qName(q)}. The capacity already built covers ${qName(Math.min(15,q+lead))}.</p>`;
+ const plan=`<table class="cx-rules">${CAPEX_ITEMS.map(([k,l,bk])=>{const s=K.steps[k];return `<tr><th>${swc(stepCol(bk))}${l}</th><td>${stepCostText(s.costs)}<br><small>${stepWhen(s.buys)}</small></td><td>${rc(sum(s.costs))}</td></tr>`;}).join('')}</table>`;
+ const total=sum(CAPEX_ITEMS.map(([k])=>sum(K.steps[k].costs)));
+ return `<section class="review-capital-plan step-capex"><h4>Capex bought in ${qName(q)}</h4><p>Whole phases, each paid ${lead} quarter${lead===1?'':'s'} before demand passes the capacity already built</p>${now}</section>`+
+  `<section class="review-capital-plan step-capex"><h4>Phases to Q16</h4><p>${rc(total)} to Q16 is fixed; phase sizes are assumptions${fn(NOTE_PLANT)}</p>${plan}<div class="review-formula">Capacity per phase = Q16 demand × phase cost ÷ item budget</div></section>`;
+}
+const stepPrevSpend=CX.spend;
+CX.spend=D=>{
+ const r=stepPrevSpend(D),K=D.G.K,q=selQ();
+ r.body=r.body.replace('three plants, experience centres and misc','three plants, experience centres and misc, bought in phases').replace('cumulative investment target','labs with plant phases, systems in phases');
+ const i=r.body.indexOf('</section>',r.body.indexOf('Capital balances at Q16'));
+ r.body=i<0?r.body+stepSections(K,q):r.body.slice(0,i+10)+stepSections(K,q)+r.body.slice(i+10);
+ return r;
+};
+
+const stepPrevCapitalInputs=capitalInputs;
+capitalInputs=function(fld){
+ const html=stepPrevCapitalInputs(fld),C=INP.capital,Df=INPUT_DEFAULT.capital,K=capModel(),mark='<div class="s-panel"><h3>Cost of revenue · capex',at=html.indexOf(mark),next=at<0?-1:html.indexOf('<div class="s-panel">',at+mark.length);
+ const cell=(path,v,d,step='any')=>`<td class="r"><input type="number" step="${step}" min="0" data-input="${path}" value="${v}" class="${v!==d?'changed':''}" title="plan ${d}"></td>`;
+ const bucket=bk=>({factory:'Capex',misc:'Capex',pp:'Intangibles'})[bk];
+ const rows=CAPEX_ITEMS.map(([k,l,bk])=>`<tr><td>${l}</td><td>${bucket(bk)}</td><td>${STEP_ITEMS[k].driver}</td>${k==='centres'?cell('capital.centresN',C.centresN,Df.centresN,1):cell('capital.phases.'+k,C.phases[k],Df.phases[k],1)}<td>${stepCostText(K.steps[k].costs)}</td>${cell('capital.capex.'+k,C.capex[k],Df.capex[k])}</tr>`).join('');
+ const panel=`<div class="s-panel"><h3>Cost of revenue · capex</h3><p class="meta">Spend to Q16, ₹ Cr, is fixed. Each item is bought in whole phases. A phase adds capacity in proportion to its cost and is paid ${K.leadQ} quarter${K.leadQ===1?'':'s'} before demand would pass the capacity already built. Labs follow the plant phases.</p>
+  <div class="s-tw"><table class="s-table s-intable"><thead><tr><th>Item</th><th>Bucket</th><th>Sized on</th><th class="r">Phases</th><th>Phase costs</th><th class="r">₹ Cr to Q16</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="s-ingrid">${fld(['capital.firstPhase','First phase of wood and uPVC','% of the plant, paid before launch'])}${fld(['capital.leadQ','Paid ahead of need','quarters before demand passes capacity'])}${fld(['capital.wcDays','Working-capital days','working capital target = days ÷ 365 × annualised revenue; cash uses changes'])}</div></div>`;
+ return at<0?html+panel:html.slice(0,at)+panel+(next<0?'':html.slice(next));
+};
+const stepPrevOnInput=onInput;
+onInput=function(el){
+ const p=el.dataset.input||'',v=Number(el.value);
+ if(p.startsWith('capital.phases.')||p==='capital.centresN'||p==='capital.leadQ'){
+  const lo=p==='capital.leadQ'?0:1,hi=p==='capital.leadQ'?4:40;
+  if(el.value.trim()===''||!Number.isInteger(v)||v<lo||v>hi){el.setCustomValidity?.(`Enter a whole number from ${lo} to ${hi}.`);return;}
+ }
+ return stepPrevOnInput(el);
+};
+const stepPrevAssumptions=financeAssumptions;
+financeAssumptions=function(){return stepPrevAssumptions().replace(/Capex timing follows product sales[^<]*/,'Capex is bought in whole phases, each paid ahead of the demand it serves. The spend to Q16 is fixed; the number and size of phases are assumptions, not vendor quotes or a tonnage plan.');};
+const stepPrevStress=stressCases;
+stressCases=function(){return stepPrevStress().map(c=>c.k==='pre0'?{...c,label:'Wood and uPVC in equal phases'}:c);};
+NOTES[NOTE_PLANT-1]='Assumption · capex phasing: the spend to Q16 is fixed (₹170 Cr, as the founders set it). Each item is bought in whole phases; a phase adds capacity in proportion to its cost and is paid one quarter before demand would pass the capacity already built. Plan phases: tile adhesive and waterproofing plant 8 × ₹5 Cr (modular dry-mix lines, about ₹1.65 Cr each on the ledger); wood ₹9 Cr before launch then 2 × ₹10.5 Cr; uPVC ₹15 Cr before launch then 2 × ₹17.5 Cr; 20 experience centres at ₹50 L; labs 4 × ₹2.5 Cr, one with each ₹30 Cr of plant; systems 4 × ₹5 Cr and misc 10 × ₹1 Cr on revenue. Phase counts are placeholders until vendor quotes and capacity per phase are in. Dark-store set-up, if any, has to sit inside misc.';
+/* <<< step capex layer */
 window.__dash={...window.__dash,capModel,debtFin,roceFin,financingControls,setFinanceMode};
 
-/* Page 03 review, 28 Oct 2026.
-   Six steps (growth spending and funding need merged), one money chart on a 0-based axis with value labels and callouts,
-   table-style panels, three takeaways per step, and a new raise policy: round 1 = the ask, round 2 = cash trigger,
-   then one round a year (every cadenceQ quarters), each sized for runwayQ quarters of runway. Debt stays off and its bar is hidden. */
+/* Page 03 review, 28 Oct 2026 (rounds 1 and 2).
+   Six steps; one money chart (steps 1-4 on a shared 0-based axis, step 3 on its own axis that runs below zero);
+   a static right-hand panel that explains the logic (formula, inputs, rules, one fold); three takeaways per step.
+   Raise policy: round 1 = the ask in Q1; round 2 = a fixed amount (round2, 200 Cr) in the quarter the cash trigger picks;
+   from round 2 the plan raises every cadenceQ quarters (every 6 months), but those later rounds are NOT sized and sit
+   in no cash line or dilution: the chart marks them on the timeline only. Debt stays off and its bar is hidden. */
 
 /* ---------- raise policy: inputs, engine, note ---------- */
 const pcPolicy=fundPolicy;
 fundPolicy=function(o={}){
-  const P=pcPolicy(o),F=INP.funding,g=(k,d,hi=16)=>{const v=Math.round(+(P[k]??F[k]??d));return Number.isFinite(v)&&v>=1?Math.min(hi,v):d;};
-  return {...P,cadenceQ:g('cadenceQ',4),runwayQ:g('runwayQ',6),annualAfter:g('annualAfter',2,12)};
+  const P=pcPolicy(o),F=INP.funding,c=Math.round(+(P.cadenceQ??F.cadenceQ??2)),r2=+(P.round2??F.round2??200);
+  return {...P,cadenceQ:Number.isFinite(c)&&c>=1?Math.min(16,c):2,round2:Number.isFinite(r2)&&r2>=0?r2:200};
 };
-/* Round 1 = the ask. Round 2 (and any round before annualAfter) is placed by the cash trigger. Later rounds come every cadenceQ
-   quarters, each sized to hold the floor over the next runwayQ quarters (deepest need + floor - equity on hand, rounded up);
-   a year the business already funds itself is skipped. A cash-trigger top-up still closes any quarter left under the floor. */
+/* Round 1 = the ask. Round 2 is placed by the cash trigger (one quarter before cash would fall under the floor) and is a fixed
+   amount (round2; 0 = size it by the cash rule). Nothing else is modelled: R.later lists the quarters of the 6-monthly rounds
+   that follow, for the timeline only. A quarter can end under the floor; nothing tops it up. */
 raisePlan=function(o={}){
   const G=gapFin(o),N=G.N,P=fundPolicy(o),D=debtFin(G,P),base=G.gap.map((g,q)=>-g+D.bal[q]-D.cumInt[q]);
-  const rounds=o.rounds?o.rounds.map(r=>({q:r.q,amt:r.amt})):[{q:0,amt:P.e1,kind:'ask'}],skipped=[];
+  const rounds=o.rounds?o.rounds.map(r=>({q:r.q,amt:r.amt})):[{q:0,amt:P.e1,kind:'ask'}];
   const eq=q=>sum(rounds.filter(r=>r.q<=q).map(r=>r.amt)),up=x=>Math.max(P.roundTo,Math.ceil(x/P.roundTo-1e-9)*P.roundTo);
   const breach=a=>{for(let q=a;q<N;q++)if(eq(q)+base[q]<P.buffer-1e-9)return q;return -1;};
-  /* the lowest projected cash over quarters a..z, before the round being sized: how much more equity holds the floor */
-  const size=(a,z)=>{let m=Infinity,t=a;for(let q=a;q<=Math.min(z,N-1);q++){const c=eq(q)+base[q];if(c<m-1e-12){m=c;t=q;}}return {need:-base[t],needQ:t,raised:eq(t),raw:P.buffer-m,from:a,to:Math.min(z,N-1)};};
-  const place=(close,s,kind,trigger)=>{const amt=up(s.raw),ex=rounds.find(r=>r.q===close);
-    if(ex){ex.amt+=amt;ex.topup=(ex.topup||0)+amt;Object.assign(ex,{need:s.need,needQ:s.needQ,raw:s.raw,raised:s.raised,trigger});}
-    else rounds.push({q:close,amt,...s,kind,trigger});
-    rounds.sort((a,b)=>a.q-b.q);};
   if(!o.rounds){
-    for(let g=0;g<12&&rounds.length<P.annualAfter;g++){            /* cash-trigger rounds, as before */
-      const last=rounds.at(-1).q,b=breach(last);if(b<0)break;
-      const close=Math.max(b-P.lead,last+1);if(close>=N)break;
-      place(close,size(close,close+P.window-1),'trigger',b);
+    const b=breach(0),close=b<0?N:Math.max(b-P.lead,1);
+    if(close<N){
+      let m=Infinity,t=close;for(let q=close;q<=Math.min(close+P.window-1,N-1);q++){const c=eq(q)+base[q];if(c<m-1e-12){m=c;t=q;}}
+      const raw=P.buffer-m;   /* what the cash rule alone would ask for; round 2 is the fixed round2 amount instead */
+      rounds.push({q:close,amt:P.round2>0?P.round2:up(raw),need:-base[t],needQ:t,raised:eq(t),raw,trigger:b,kind:'trigger'});
     }
-    if(rounds.length>=P.annualAfter)for(let q=rounds[P.annualAfter-1].q+P.cadenceQ;q<N;q+=P.cadenceQ){   /* one round a year */
-      const s=size(q,q+P.runwayQ-1);if(s.raw<=1e-9){skipped.push(q);continue;}
-      place(q,s,'annual',-1);
-    }
-    const seen=new Set();
-    for(let g=0;g<12;g++){const b=breach(0);if(b<0||seen.has(b))break;seen.add(b);   /* top-up if an annual round left a quarter under the floor */
-      const close=Math.max(b-P.lead,1);if(close>=N)break;place(close,size(close,Math.max(close+P.window-1,b)),'topup',b);}
   }
   const cash=base.map((v,q)=>eq(q)+v);
   rounds.forEach((r,i)=>{const e=q=>sum(rounds.slice(0,i+1).filter(x=>x.q<=q).map(x=>x.amt));r.breach=-1;for(let q=r.q;q<N;q++)if(e(q)+base[q]<P.buffer-1e-9){r.breach=q;break;}r.next=rounds[i+1]?rounds[i+1].q:null;});
-  const minCash=Math.min(...cash),minQ=cash.indexOf(minCash);
-  return {G,D,P,N,rounds,base,cash,eq,equity:sum(rounds.map(r=>r.amt)),minCash,minQ,short:cash.map((c,q)=>c<0?q:-1).filter(q=>q>=0),skipped};
+  const minCash=Math.min(...cash),minQ=cash.indexOf(minCash),later=[];
+  if(!o.rounds&&rounds[1])for(let q=rounds[1].q+P.cadenceQ;q<N;q+=P.cadenceQ)later.push(q);
+  return {G,D,P,N,rounds,base,cash,eq,equity:sum(rounds.map(r=>r.amt)),minCash,minQ,short:cash.map((c,q)=>c<0?q:-1).filter(q=>q>=0),later};
 };
-NOTES[NOTE_FUND-1]='Assumption · raise policy: keep at least the minimum cash (₹10 Cr in the plan) at every quarter end. Round 1 is the ask, closed in Q1. Round 2 is set by cash: it closes a quarter before cash would fall under the minimum and covers the next eight quarters. From round 3 the company raises once a year, every four quarters after round 2, whatever cash is on hand. Each annual round buys 18 months (six quarters) of runway: the deepest cash need over those quarters plus the minimum, less the cash already projected, rounded up to ₹5 Cr. If the business already funds itself, that year’s round is skipped; if an annual round still leaves a later quarter under the minimum, a top-up round is added. All are placeholders for the founders to set.';
+NOTES[NOTE_FUND-1]='Assumption · raise policy: round 1 is the ask, closed in Q1. Round 2 is a fixed amount (₹200 Cr in the plan), closed in the quarter before cash would fall under the minimum cash (₹10 Cr). From round 2 the plan raises every six months, but those later rounds are not sized: they are shown on the timeline only and sit in no cash line, equity total or dilution. With a smaller round 2, cash can end a quarter under the minimum or below zero until they are sized; with the plan’s round 2 the later rounds are extra cushion. Placeholders for the founders to set.';
 {const g=INPUT_SCHEMA.find(x=>x.title==='Funding plan');
  if(g){const at=g.fields.findIndex(f=>f[0]==='funding.window')+1;
-  g.fields.splice(at,0,['funding.annualAfter','Annual rounds start after round','rounds set by cash first · later rounds are yearly'],['funding.cadenceQ','Annual round every','quarters'],['funding.runwayQ','Runway each annual round buys','quarters of cash need']);
-  g.intro='Equity policy and illustrative loan terms. Round 1 is the ask in Valuation; round 2 is set by cash; later rounds come once a year and are sized for the runway below. Debt is off in this plan. Working capital uses days / 365 of annualised revenue.';}}
+  g.fields.splice(at,0,['funding.round2','Round 2 amount','₹ Cr · 0 = size it by the cash rule'],['funding.cadenceQ','Later rounds every','quarters · timeline markers only, not sized']);
+  g.intro='Equity policy and illustrative loan terms. Round 1 is the ask in Valuation; round 2 is a fixed amount placed by the cash trigger; later six-monthly rounds are not sized or included in cash. Debt is off in this plan. Working capital uses days / 365 of annualised revenue.';}}
 const pcInput=onInput;
-onInput=function(el){const p=el.dataset.input;if(['funding.cadenceQ','funding.runwayQ','funding.annualAfter'].includes(p)){const v=Number(el.value);if(el.value.trim()===''||!Number.isInteger(v)||v<1||v>16){el.setCustomValidity?.('Enter a whole number from 1 to 16.');return;}}pcInput(el);};
+onInput=function(el){const p=el.dataset.input,v=Number(el.value);
+  if(p==='funding.cadenceQ'&&(el.value.trim()===''||!Number.isInteger(v)||v<1||v>16)){el.setCustomValidity?.('Enter a whole number from 1 to 16.');return;}
+  if(p==='funding.round2'&&(el.value.trim()===''||!Number.isFinite(v)||v<0)){el.setCustomValidity?.('Enter an amount of 0 or more.');return;}
+  pcInput(el);};
 
 
 /* ---------- six steps: growth spending and funding need are one ---------- */
@@ -5068,39 +5207,40 @@ CAP_BEATS.splice(0,CAP_BEATS.length,[['rev','Revenue']],[['mar','Margins']],[['s
 STEPS.finance=['Revenue','Margins','Growth spending &amp; funding need','Raises and cash','Investor return','Return on capital'];
 CX_KEYS.splice(0,CX_KEYS.length,'rev','mar','spend','raise','ret','roce');
 A.cap.beat=[0,0,0,0,0,0];
+A.cap.exitQ=15;
 if(A.steps.finance>5)A.steps.finance=5;
 
-/* ---------- chart toolkit: 0-based axes, value labels, callouts that dodge each other ---------- */
+/* ---------- chart toolkit: value labels on the bars, callouts that dodge each other ---------- */
 const pcKey=[0,3,7,11,15],pcMuted='#5F5E58';
 let pcCv=null,pcFam='';
 function pcW(s,fs=11,wt=500){const t=String(s).replace(/<[^>]*>/g,'').replace(/&amp;/g,'&');try{pcCv=pcCv||document.createElement('canvas').getContext('2d');pcFam=pcFam||getComputedStyle(document.body).fontFamily;pcCv.font=`${wt} ${fs}px ${pcFam}`;return pcCv.measureText(t).width*1.05+1;}catch(e){return t.length*fs*.6;}}
-function pcOcc(){const R=[];return {R,add:r=>(R.push(r),r),n:(r,p=4)=>R.filter(b=>r.x<b.x+b.w+p&&r.x+r.w+p>b.x&&r.y<b.y+b.h+p&&r.y+r.h+p>b.y).length};}
+function pcOcc(){const R=[];return {R,add:r=>(R.push(r),r),n:(r,p=6)=>R.filter(b=>r.x<b.x+b.w+p&&r.x+r.w+p>b.x&&r.y<b.y+b.h+p&&r.y+r.h+p>b.y).length};}
 function pcTrace(o,pts,t=3){for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i],n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)/5));for(let k=0;k<=n;k++)o.add({x:x0+(x1-x0)*k/n-t,y:y0+(y1-y0)*k/n-t,w:2*t,h:2*t});}}
 const pcH=()=>Math.max(250,Math.min(420,(window.innerHeight||864)-500));
-function pcFrame(W,o={}){const ml=50,mr=o.mr??70,top=34,h=o.h||pcH(),pw=W-ml-mr,slot=pw/16;return {ml,mr,pw,slot,top,h,W,x:q=>ml+(q+.5)*slot,axT:top+h+18,H:top+h+18+40,bw:Math.min(36,slot*.62)};}
+function pcFrame(W,o={}){const ml=50,mr=o.mr??70,top=34,h=o.h||pcH(),pw=W-ml-mr,slot=pw/16;return {ml,mr,pw,slot,top,h,W,x:q=>ml+(q+.5)*slot,axT:top+h+18,H:top+h+18+40+(o.extra||0),bw:Math.min(36,slot*.62)};}
 function pcScale(lo,hi,n=7){const ST=[1,2,2.5,5,10,20,25,50,100,200,250,500,1000,2000,2500,5000,10000,20000],st=ST.find(s=>Math.ceil(hi/s-1e-9)-Math.floor(lo/s+1e-9)<=n)||ST.at(-1);return {st,a:Math.floor(lo/st+1e-9)*st,b:Math.ceil(hi/st-1e-9)*st};}
 function pcAxis(c,lo,hi,o={}){
-  const {st,a,b}=pcScale(lo,hi,o.n||7),y=v=>c.top+c.h-(v-a)/(b-a||1)*c.h,fmt=o.fmt||(v=>(v<0?'−':'')+fd(Math.abs(v),0));let s='';
-  for(let v=a;v<=b+1e-9;v+=st)s+=`<line class="${Math.abs(v)<1e-9?'saxis':'sgrid'}" x1="${c.ml}" x2="${c.ml+c.pw}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`+T(c.ml-8,y(v)+4,fmt(v),'smono','end');
+  const sc=pcScale(lo,hi,o.n||7),{st,b}=sc,a=o.half?Math.max(sc.a,Math.floor(lo/(st/2)+1e-9)*(st/2)):sc.a,y=v=>c.top+c.h-(v-a)/(b-a||1)*c.h,fmt=o.fmt||(v=>(v<0?'−':'')+fd(Math.abs(v),0));let s='';
+  for(let v=Math.ceil(a/st-1e-9)*st;v<=b+1e-9;v+=st)s+=`<line class="${Math.abs(v)<1e-9?'saxis':'sgrid'}" x1="${c.ml}" x2="${c.ml+c.pw}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`+T(c.ml-8,y(v)+4,fmt(v),'smono','end');
   return {y,svg:s,lo:a,hi:b,st};
 }
-const pcBand=(c,q)=>q==null?'':`<rect x="${(c.x(q)-c.slot/2).toFixed(1)}" y="${c.top-6}" width="${c.slot.toFixed(1)}" height="${(c.axT+34-c.top+6).toFixed(1)}" fill="#F3F1EB" rx="3"/>`;
-const pcHits=(c,key)=>{let s='';for(let q=0;q<16;q++)s+=`<rect class="qhit" data-cap="${key}:${q}" x="${(c.x(q)-c.slot/2).toFixed(1)}" y="${c.top-6}" width="${c.slot.toFixed(1)}" height="${(c.axT+34-c.top+6).toFixed(1)}"><title>${qLong(q)}</title></rect>`;return s;};
 /* quarter labels under the plot; the month under each is dropped when the slots are too narrow for it */
-const pcAxisX=(c,sel)=>{let s='';for(let q=0;q<16;q++)s+=T(c.x(q),c.axT+13,qName(q),'slab-b','middle',`font-size:12px;${q===sel?`fill:${ACCENT_TXT}`:''}`)+(c.slot>=34?T(c.x(q),c.axT+27,EXIT[q],'smut','middle','font-size:11px'):'');return s;};
+const pcAxisX=c=>{let s='';for(let q=0;q<16;q++)s+=T(c.x(q),c.axT+13,qName(q),'slab-b','middle','font-size:12px')+(c.slot>=34?T(c.x(q),c.axT+27,EXIT[q],'smut','middle','font-size:11px'):'');return s;};
 const pcTitle=t=>T(4,18,t,'smut','start','font-size:11.5px');
 const pcRect=(o,x,y,w,h,fill,title,extra='')=>{if(o&&h>0)o.add({x,y,w,h});return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(h,.5).toFixed(1)}" fill="${fill}"${extra}>${title?`<title>${title}</title>`:''}</rect>`;};
 /* a value printed on a bar or point; registered so callouts keep clear of it */
 function pcVal(o,x,y,s,on,col,fs){fs=fs||(on?12:11);const w=pcW(s,fs,600);o.add({x:x-w/2,y:y-fs,w,h:fs+2});return T(x,y,s,'smono','middle',`font-size:${fs}px;font-weight:${on?700:600};fill:${col||(on?ACCENT_TXT:'#3D3C38')};${halo}`);}
-const pcAllFit=(c,labs,fs=11)=>c.slot>=Math.max(...labs.map(l=>pcW(l,fs,600)))+6;
+const pcAllFit=(c,labs,fs=11)=>c.slot>=Math.max(...labs.map(l=>pcW(l,fs,600)))+5;
 /* a callout: first line bold, an optional second line; tries positions near the point until one is clear (text and stem) */
+/* where the lowest closing cash sits: below zero, under the floor, or above it */
+const pcCashLevel=R=>R.minCash<-1e-9?'short':R.minCash<R.P.buffer-1e-9?'under':'ok';
 function pcPlace(o,c,p){
   const fs=p.fs||12,lh=fs+2,L=p.lines,w=Math.max(...L.map((s,i)=>pcW(s,i?fs-.5:fs,i?500:700))),h=L.length*lh,px=p.px,py=p.py,col=p.col||'#3D3C38';
   const G={u:g=>[-w/2,-(h+g)],ur:g=>[-3,-(h+g)],ul:g=>[-w+3,-(h+g)],d:g=>[-w/2,g],dr:g=>[-3,g],dl:g=>[-w+3,g],r:g=>[g+3,-h/2],l:g=>[-w-g-3,-h/2]},AN={u:'middle',d:'middle',ur:'start',dr:'start',r:'start',ul:'end',dl:'end',l:'end'};
   const x0=p.xmin??c.ml+2,x1=p.xmax??c.ml+c.pw-1,y0=p.ymin??c.top-10,y1=p.ymax??c.top+c.h-1;
   const stem=r=>{const qx=Math.max(r.x,Math.min(px,r.x+r.w)),qy=Math.max(r.y,Math.min(py,r.y+r.h)),d=Math.hypot(qx-px,qy-py);return {qx,qy,d,box:d>10&&p.leader!==false?{x:Math.min(qx,px+(qx-px)*6/d)-1,y:Math.min(qy,py+(qy-py)*6/d)-1,w:Math.abs(qx-px-(qx-px)*6/d)+2,h:Math.abs(qy-py-(qy-py)*6/d)+2}:null};};
   let best=null;
-  for(const g of p.gaps||[5,14,26,40,56,74,94])for(const k of p.pref||['u','ur','ul','r','l','d','dr','dl']){const [dx,dy]=G[k](g),r={x:px+dx,y:py+dy,w,h};
+  for(const g of p.gaps||[5,14,26,40,56,74,94,120,150])for(const k of p.pref||['u','ur','ul','r','l','d','dr','dl']){const [dx,dy]=G[k](g),r={x:px+dx,y:py+dy,w,h};
     if(r.x<x0||r.x+r.w>x1||r.y<y0||r.y+r.h>y1)continue;const st=stem(r),n=o.n(r)+(st.box?o.n(st.box,0):0);if(!best||n<best.n)best={r,n,k};if(n===0)break;}
   if(best&&best.n>0&&p.optional)return '';
   if(!best){if(p.optional)return '';const k=(p.pref||['u'])[0],[dx,dy]=G[k](8),r={x:Math.max(x0,Math.min(x1-w,px+dx)),y:Math.max(y0,Math.min(y1-h,py+dy)),w,h};best={r,n:9,k};}
@@ -5111,256 +5251,270 @@ function pcPlace(o,c,p){
   return s;
 }
 
-/* ---------- steps 1-4 share one chart and one axis; each step shows its own layer ---------- */
+/* ---------- steps 1-4 share one chart; steps 1, 2 and 4 share a 0-based axis, step 3 has its own that runs below zero ---------- */
 cxMoney=function(W,D){
-  const S=cxSeries(D),R=D.R,c=pcFrame(W),sel=selQ(),id=++cxN,Q=operatingModel().S;
-  const hi=Math.max(...S.net,...S.cash,...S.pat,...S.sp)*1.1,ax=pcAxis(c,0,hi,{n:8}),k={c,ax,y:ax.y,y0:ax.y(0),S,R,D,sel,Q,id};
+  const S=cxSeries(D),R=D.R,c=pcFrame(W,{extra:30}),id=++cxN,Q=operatingModel().S;
+  /* one axis for steps 1-4: the top covers revenue, cash and the peak cash required; the bottom covers the largest quarterly growth-spending bar */
+  const down=S.pat.map((e,q)=>Math.max(0,-e)+S.sp[q]),ax=pcAxis(c,-Math.max(...down,-Math.min(...S.cash)),Math.max(...S.net,...S.cash,S.peak)*1.05,{n:8,half:1}),k={c,ax,y:ax.y,y0:ax.y(0),S,R,D,Q,id};
   const defs=`<defs><marker id="pcarr${id}" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${ACCENT}"/></marker></defs>`;
-  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Revenue, margins, growth spending with the funding need, and cash with the funding rounds, by quarter">${defs}${pcBand(c,sel)}${ax.svg}${ly('0','',pcRev(k))}${ly('1','',pcMar(k))}${ly('2','',pcSpend(k))}${ly('3','',pcCash(k))}${pcAxisX(c,sel)}${pcHits(c,'selq')}</svg>`;
+  return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Revenue by product line, margins, growth spending with the cash required, and cash with the funding rounds, by quarter">${defs}${ax.svg}${ly('0','',pcRev(k))}${ly('1','',pcMar(k))}${ly('2','',pcSpend(k))}${ly('3','',pcCash(k))}${pcAxisX(c)}</svg>`;
 };
 
-/* step 1: monthly revenue */
+/* step 1: monthly revenue, stacked by product line, a total on every bar */
 function pcRev(k){
-  const {c,y,y0,S,sel}=k,o=pcOcc(),bw=c.bw,lab=S.net.map(v=>fd(v,1)),all=pcAllFit(c,lab),m0=INP.valuation.todayMRR;let s=pcTitle('₹ Cr a month');
-  S.net.forEach((v,q)=>{s+=pcRect(o,c.x(q)-bw/2,y(v),bw,y0-y(v),CX_REV,`${qLong(q)} · revenue ${rc(v)} a month`);});
-  S.net.forEach((v,q)=>{if(all||pcKey.includes(q)||q===sel)s+=pcVal(o,c.x(q),y(v)-5,lab[q],q===sel);});
+  const {c,y,y0,S,Q}=k,o=pcOcc(),bw=c.bw,lab=S.net.map(v=>fd(v,1)),all=pcAllFit(c,lab),m0=INP.valuation.todayMRR,light=['niche','wood'];let s=pcTitle('₹ Cr a month, by product line'),ins='';
+  Q.forEach((w,q)=>{const x=c.x(q);let a=0;P.forEach(p=>{const v=sum(w.rows.filter(r=>r.p===p).map(r=>r.rev));if(v<=0.0005)return;const t=y(a+v),h=y(a)-t;
+    s+=pcRect(o,x-bw/2,t,bw,h,COLORS[p],`${qLong(q)} · ${SH[p]} ${rc(v)} a month`);
+    if(pcKey.includes(q)&&h>=13)ins+=T(x,t+h/2+3.5,fd(v,v<10?1:0),'smono','middle',`font-size:10px;font-weight:600;fill:${light.includes(p)?'#17202a':'#fff'}`);a+=v;});});
+  s+=ins;
+  S.net.forEach((v,q)=>{if(all||pcKey.includes(q))s+=pcVal(o,c.x(q),y(v)-5,lab[q]);});
   s+=pcPlace(o,c,{px:c.x(15),py:y(S.net[15])-19,lines:[`${rc(S.net[15])} a month by Q16`,`${fd(S.net[15]/m0,0)}× today’s ${rc(m0)}`],col:CX_REV,pref:['ul','u','l'],ymin:c.top-22});
   [['p5','Waterproofing'],['upvc','uPVC'],['wood','Wood adhesive']].forEach(([p,n])=>{const q=MODEL.products[p].launch-1;if(q>=0&&q<16)s+=pcPlace(o,c,{px:c.x(q),py:y(S.net[q])-19,lines:[`${n} launches · Q${q+1}`],col:'#3D3C38',pref:['ur','u']});});
   return s;
 }
 
-/* step 2: three segments, direct costs, common overhead and operating profit */
+/* step 2: three segments, direct costs, common overhead and operating profit; operating margin on every bar */
 function pcMar(k){
-  const {c,y,y0,Q,sel}=k,o=pcOcc(),bw=c.bw;let s=pcTitle('₹ Cr a month'),ins='',lbl='';const tops=[];
+  const {c,y,y0,Q}=k,o=pcOcc(),bw=c.bw,lm=Q.map(w=>pctR(w.patP)),all=pcAllFit(c,lm);let s=pcTitle('₹ Cr a month'),ins='',lbl='';const tops=[];
   Q.forEach((w,q)=>{const x=c.x(q),dir=w.cogs+w.variable,seg=[[0,dir,CX_COGS,'Direct costs (cost of goods + selling costs)',dir,'#2E3A48'],[dir,dir+w.fixed,CX_FIX,'Common overhead',w.fixed,'#fff']];
     if(w.pat>0)seg.push([dir+w.fixed,dir+w.fixed+w.pat,CX_PAT,'Operating profit',w.pat,'#fff']);
     seg.forEach(([a,b,col,l,v,tc])=>{const t=y(b),h=y(a)-t;s+=pcRect(o,x-bw/2,t,bw,h,col,`${qLong(q)} · ${l}: ${rc(v)}`);
-      if((pcKey.includes(q)||q===sel)&&h>=17)ins+=T(x,t+h/2+3.5,fd(v,v<10?1:0),'smono','middle',`font-size:10.5px;font-weight:600;fill:${tc}`);});
+      if(h>=16&&pcW(fd(v,v<10?1:0),10,600)<bw-3)ins+=T(x,t+h/2+3.5,fd(v,v<10?1:0),'smono','middle',`font-size:10px;font-weight:600;fill:${tc}`);});
     if(w.pat<0){const h=Math.max(3,Math.min(12,-w.pat/(k.ax.hi-k.ax.lo)*c.h));s+=pcRect(o,x-bw/2,y0,bw,h,CX_NEG,`${qLong(q)} · operating loss ${sr(w.pat)} a month`);}
     tops[q]=y(dir+w.fixed+Math.max(w.pat,0));});
   s+=ins;
-  Q.forEach((w,q)=>{if(pcKey.includes(q)||q===sel)lbl+=pcVal(o,c.x(q),tops[q]-5,pctR(w.patP),q===sel,w.pat<0?CX_NEG:CX_PAT);});
+  Q.forEach((w,q)=>{if(all||pcKey.includes(q))lbl+=pcVal(o,c.x(q),tops[q]-5,lm[q],false,w.pat<0?CX_NEG:CX_PAT);});
   s+=lbl;
   const pos=Q.findIndex(r=>r.pat>=0.005),worst=-Math.min(0,...Q.map(r=>r.pat)),f=Q[0],l=Q[15];
   s+=pcPlace(o,c,{px:c.x(15),py:tops[15]-20,lines:[`Q16: ${pctR(l.patP)} operating margin`,`${rc(l.pat)} profit on ${rc(l.net)} a month`],col:CX_PAT,pref:['ul','u','l'],ymin:c.top-22});
   if(pos>=0)s+=pcPlace(o,c,{px:c.x(pos),py:tops[pos]-20,lines:[pos?`Operating profit turns positive in Q${pos+1}`:'Operating profit positive from Q1',worst>0.005?`after a worst month of −${rc(worst)}`:'every month'],col:CX_PAT,pref:['ul','u','ur','l']});
   else s+=pcPlace(o,c,{px:c.x(15),py:tops[15]-60,lines:['Operating loss through Q16'],col:CX_NEG});
   const q2=9,mid=y(Q[q2].cogs+Q[q2].variable+Q[q2].fixed/2);
-  s+=pcPlace(o,c,{px:c.x(q2),py:mid,lines:[`Common overhead: ${pctR(f.fixP)} → ${pctR(l.fixP)} of revenue`],col:CX_FIX,dot:true,pref:['ul','u','l','dl']});
+  s+=pcPlace(o,c,{px:c.x(q2)-bw/2-3,py:mid,lines:[`Common overhead: ${pctR(f.fixP)} → ${pctR(l.fixP)} of revenue`],col:CX_FIX,dot:true,pref:['ul','u','l','dl']});
   return s;
 }
 
-/* step 3: earnings beside growth spending, and the running total on a right-hand axis */
+/* step 3: earnings go up, growth spending stacks down, and the cash required (minus the running total) is shaded behind them, all on the shared axis */
 function pcSpend(k){
-  const {c,y,y0,S,R,sel}=k,o=pcOcc(),bw2=Math.min(19,c.slot*.36),gp=1.5,cum=S.cum,sc=pcScale(Math.min(0,...cum),Math.max(0,...cum),4),ys=v=>c.top+(sc.b-v)/(sc.b-sc.a)*c.h;
-  const sp=[['capex','Capex'],['pp','Labs / systems'],['wc','Increase in working capital'],...(R.D.on?[['interest','Loan interest']]:[])];
-  let s=pcTitle('₹ Cr in the quarter (left axis)'),lab='';
-  S.pat.forEach((e,q)=>{const x=c.x(q),bx=x-gp/2-bw2,sx=x+gp/2;
-    if(e>=0.005)s+=pcRect(o,bx,y(e),bw2,y0-y(e),CX_PAT,`${qLong(q)} · operating earnings ${sr(e)}`);
-    else s+=pcRect(o,bx,y0,bw2,Math.max(3,Math.min(12,-e/(k.ax.hi-k.ax.lo)*c.h)),CX_NEG,`${qLong(q)} · operating loss ${sr(e)}`);
-    let d=0;sp.forEach(([key,l])=>{const v=Math.max(0,S.fl[key][q]);if(v>0)s+=pcRect(o,sx,y(d+v),bw2,y(d)-y(d+v),CAP4C[key],`${qLong(q)} · ${l}: ${rc(v)}`);d+=v;});});
-  S.pat.forEach((e,q)=>{if(!(pcKey.includes(q)||q===sel))return;const x=c.x(q),on=q===sel;
-    lab+=e>=0.005?pcVal(o,x-gp/2-bw2/2,y(e)-5,nlab(e),on,CX_PAT,on?11.5:10.5):pcVal(o,x-gp/2-bw2/2,y0+15,nlab(e),on,CX_NEG,10.5);
-    lab+=pcVal(o,x+gp/2+bw2/2,y(S.sp[q])-5,nlab(S.sp[q]),on,'#3D3C38',on?11.5:10.5);});
-  s+=lab;
-  /* the running total hangs from zero at the top of the plot: right-hand axis */
-  const pts=[[c.x(0)-c.slot/2,ys(0)],...cum.map((v,q)=>[c.x(q),ys(v)])],pth=capPath(pts);
-  let ax2=T(c.W-4,18,'Running total, ₹ Cr (right axis)','slab-b','end',`font-size:11.5px;fill:${CX_NEG}`)+`<line x1="${c.ml+c.pw}" x2="${c.ml+c.pw}" y1="${c.top}" y2="${c.top+c.h}" stroke="${CX_NEG}" stroke-opacity=".5"/>`;
-  for(let v=sc.a;v<=sc.b+1e-9;v+=sc.st)ax2+=`<line x1="${c.ml+c.pw}" x2="${c.ml+c.pw+4}" y1="${ys(v).toFixed(1)}" y2="${ys(v).toFixed(1)}" stroke="${CX_NEG}"/>`+T(c.ml+c.pw+8,ys(v)+4,(v<0?'−':'')+fd(Math.abs(v),0),'smono','start',`fill:${CX_NEG};font-size:11px`);
-  s+=ax2+`<path d="${pth}" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="round" opacity=".9"/><path d="${pth}" fill="none" stroke="${CX_NEG}" stroke-width="2.4" stroke-linejoin="round"/>`;
-  cum.forEach((v,q)=>{s+=`<circle cx="${c.x(q).toFixed(1)}" cy="${ys(v).toFixed(1)}" r="${q===sel?4.6:3.2}" fill="${CX_NEG}" stroke="#fff" stroke-width="1.2"><title>${qLong(q)} · running total ${sr(v)}</title></circle>`;});
+  const {c,ax,y,y0,S,R}=k,o=pcOcc(),bw=c.bw,sp=[['capex','Capex'],['pp','Labs / systems'],['wc','Increase in working capital'],...(R.D.on?[['interest','Loan interest']]:[])];
+  const req=S.cum.map(v=>Math.max(0,-v)),pts=[[c.x(0)-c.slot/2,y0],...req.map((v,q)=>[c.x(q),y(v)])];let s=pcTitle('₹ Cr in the quarter · cash required, shaded'),lab='';const bot=[];
+  s+=`<path d="${capPath(pts)}L${c.x(15).toFixed(1)} ${y0.toFixed(1)}Z" fill="#F6DAD5" opacity=".9"/><path d="${capPath(pts)}" fill="none" stroke="${CX_NEG}" stroke-width="1.5" stroke-linejoin="round"/>`;
+  req.forEach((v,q)=>{s+=`<circle cx="${c.x(q).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.8" fill="${CX_NEG}" stroke="#fff" stroke-width="1"><title>${qLong(q)} · cash required ${rc(v)}</title></circle>`;});
   pcTrace(o,pts,3);
+  S.pat.forEach((e,q)=>{const x=c.x(q);let d=0;
+    if(e>=0.005)s+=pcRect(o,x-bw/2,y(e),bw,y0-y(e),CX_PAT,`${qLong(q)} · operating earnings ${sr(e)}`);
+    else if(e<=-0.005){s+=pcRect(o,x-bw/2,y0,bw,y(e)-y0,CX_NEG,`${qLong(q)} · operating loss ${sr(e)}`);d+=-e;}
+    sp.forEach(([key,l])=>{const v=Math.max(0,S.fl[key][q]);if(v>0.0005){s+=pcRect(o,x-bw/2,y(-d),bw,y(-d-v)-y(-d),CAP4C[key],`${qLong(q)} · ${l}: ${rc(v)}`);d+=v;}});bot[q]=y(-d);});
+  const le=S.pat.map(e=>nlab(e)),ls=S.sp.map(v=>nlab(-v)),all=pcAllFit(c,[...le,...ls],10.5);
+  S.pat.forEach((e,q)=>{if(!(all||pcKey.includes(q)))return;
+    if(e>=0.005)lab+=pcVal(o,c.x(q),y(e)-4,le[q],false,CX_PAT,10.5);
+    lab+=pcVal(o,c.x(q),bot[q]+12,ls[q],false,'#3D3C38',10.5);});
+  s+=lab;
   const pk=S.pk;
-  s+=pcPlace(o,c,{px:c.x(pk),py:ys(cum[pk]),lines:[`Deepest gap ${sr(-S.peak)} in ${qName(pk)}`,pk<15?`${qName(15)} closes at ${sr(cum[15])}`:'before any equity or debt'],col:CX_NEG,dot:true,pref:['ul','u','l','dl']});
-  if(S.cross>=0){const q=S.cross;s+=pcPlace(o,c,{px:c.x(q)-gp/2-bw2/2,py:y(S.pat[q])-17,lines:[`Earnings pass spending in ${qName(q)}`,`${rc(S.pat[q])} against ${rc(S.sp[q])}`],col:CX_PAT,pref:['ul','u','l']});}
-  if(S.back>=0)s+=pcPlace(o,c,{px:c.x(S.back),py:ys(cum[S.back]),lines:[`Back above zero in ${qName(S.back)}`],col:CX_NEG,dot:true,pref:['ur','u','r']});
-  [3,7,11,sel].filter((q,i,a)=>a.indexOf(q)===i&&q!==pk&&q!==15).forEach(q=>{s+=pcPlace(o,c,{px:c.x(q),py:ys(cum[q]),lines:[(cum[q]<0?'−':'')+fd(Math.abs(cum[q]),0)],fs:11,col:CX_NEG,leader:false,gaps:[7,12,18],pref:['ur','u','r','ul'],optional:true});});
+  s+=pcPlace(o,c,{px:c.x(pk),py:y(req[pk]),lines:[`Cash required peaks at ₹${f0(S.peak)} Cr in ${qName(pk)}`],col:CX_NEG,dot:true,pref:['ul','u','l','dl'],ymin:c.top-24});
+  if(S.cross>=0){const q=S.cross;s+=pcPlace(o,c,{px:c.x(q),py:y(S.pat[q])-16,lines:[`Earnings pass spending in ${qName(q)}`,`${rc(S.pat[q])} against ${rc(S.sp[q])}`],col:CX_PAT,pref:['ul','u','l']});}
+  if(S.back>=0)s+=pcPlace(o,c,{px:c.x(S.back),py:y(0),lines:[`Cash required back to zero in ${qName(S.back)}`],col:CX_NEG,dot:true,pref:['ur','u','r']});
+  [3,7,11,15].filter(q=>q!==pk).forEach(q=>{s+=pcPlace(o,c,{px:c.x(q),py:y(req[q]),lines:[fd(req[q],0)],fs:11,col:CX_NEG,leader:false,gaps:[7,12,18],pref:['u','ul','ur','l'],optional:true});});
+  /* net cash flow, one number a quarter, under the quarter labels */
+  const ln=S.ncf.map(v=>pcN(v)),allN=pcAllFit(c,ln,11),ry=c.axT+52;
+  s+=T(c.ml-8,ry-9,'Net cash','smut','end','font-size:10.5px')+T(c.ml-8,ry+2,'flow','smut','end','font-size:10.5px')+`<line x1="${c.ml}" x2="${c.ml+c.pw}" y1="${c.axT+36}" y2="${c.axT+36}" stroke="#E6E3DA"/>`;
+  S.ncf.forEach((v,q)=>{if(allN||pcKey.includes(q))s+=T(c.x(q),ry,ln[q],'smono','middle',`font-size:11px;font-weight:600;fill:${v<0?CX_NEG:CX_PAT}`);});
   return s;
 }
 
-/* step 4: monthly revenue behind the cash line, with the funding rounds */
+/* step 4: monthly revenue behind the cash line, with round 1, round 2 and the 6-monthly timeline */
 function pcCash(k){
-  const {c,y,y0,S,R,sel,id}=k,P=R.P,o=pcOcc(),bw=c.bw,labN=S.cash.map(nlab),all=pcAllFit(c,labN,11);let s=pcTitle('₹ Cr (cash at quarter end · revenue a month)');
+  const {c,y,y0,S,R,id}=k,PL=R.P,o=pcOcc(),bw=c.bw,labN=S.cash.map(nlab),all=pcAllFit(c,labN,11);let s=pcTitle('₹ Cr (cash at quarter end · revenue a month)');
   S.net.forEach((v,q)=>{s+=pcRect(null,c.x(q)-bw/2,y(v),bw,y0-y(v),'#DCE7F3',`${qLong(q)} · revenue ${rc(v)} a month`);});
-  const yb=y(P.buffer),raised=q=>sum(R.rounds.filter(r=>r.q===q).map(r=>r.amt));
-  s+=`<line x1="${c.ml}" x2="${c.ml+c.pw+4}" y1="${yb.toFixed(1)}" y2="${yb.toFixed(1)}" stroke="${ACCENT}" stroke-width="1.4" stroke-dasharray="6 4"/>`+T(c.ml+c.pw+8,yb-2,`₹${f0(P.buffer)} Cr`,'slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`)+T(c.ml+c.pw+8,yb+11,'minimum','slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`);
+  const yb=y(PL.buffer),raised=q=>sum(R.rounds.filter(r=>r.q===q).map(r=>r.amt));
+  s+=`<line x1="${c.ml}" x2="${c.ml+c.pw+4}" y1="${yb.toFixed(1)}" y2="${yb.toFixed(1)}" stroke="${ACCENT}" stroke-width="1.4" stroke-dasharray="6 4"/>`+T(c.ml+c.pw+8,yb-2,`₹${f0(PL.buffer)} Cr`,'slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`)+T(c.ml+c.pw+8,yb+11,'floor','slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`);
   const pts=[[c.x(0)-c.slot/2,y0]],arrows=[];pcTrace(o,[[c.ml,yb],[c.ml+c.pw,yb]],2);
-  for(let q=0;q<16;q++){const x=c.x(q),a=raised(q),v=S.cash[q];if(a>0){const b4=Math.max(0,v-a);pts.push([x,y(b4)],[x,y(v)]);arrows.push([q,b4,v,a]);}else pts.push([x,y(v)]);}
+  for(let q=0;q<16;q++){const x=c.x(q),a=raised(q),v=S.cash[q];if(a>0){const b4=Math.max(k.ax.lo,v-a);pts.push([x,y(b4)],[x,y(v)]);arrows.push([q,b4,v,a]);}else pts.push([x,y(v)]);}
   const pth=capPath(pts);
   s+=`<path d="${pth}" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="round" opacity=".9"/><path d="${pth}" fill="none" stroke="${CX_CASH}" stroke-width="2.6" stroke-linejoin="round"/>`;
-  S.cash.forEach((v,q)=>{s+=`<circle cx="${c.x(q).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${q===sel?4.6:3.3}" fill="${CX_CASH}" stroke="#fff" stroke-width="1.2"><title>${qLong(q)} · cash at the end ${sr(v)}</title></circle>`;});
+  S.cash.forEach((v,q)=>{s+=`<circle cx="${c.x(q).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.3" fill="${v<PL.buffer-1e-9?ACCENT:CX_CASH}" stroke="#fff" stroke-width="1.2"><title>${qLong(q)} · cash at the end ${sr(v)}</title></circle>`;});
   pcTrace(o,pts,3);
-  const KIND={ask:'the ask',trigger:'set by cash',annual:'yearly round',topup:'top-up'};
-  const done=new Set();
+  const KIND={ask:'the ask',trigger:'placed by cash'},done=new Set();
   arrows.forEach(([q,b4,v,a])=>{const i=R.rounds.findIndex(r=>r.q===q),r=R.rounds[i],x=c.x(q);done.add(q);
-    s+=pcPlace(o,c,{px:x,py:y(v),lines:[labN[q]],fs:q===sel?12:11,col:q===sel?ACCENT_TXT:CX_CASH,leader:false,gaps:[7],pref:['u']});
+    s+=pcPlace(o,c,{px:x,py:y(v),lines:[labN[q]],fs:11,col:CX_CASH,leader:false,gaps:[7,13],pref:['l','u','ul']});
     s+=`<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y(b4).toFixed(1)}" y2="${(y(v)+4).toFixed(1)}" stroke="${ACCENT}" stroke-width="3.6" marker-end="url(#pcarr${id})"/>`;
-    s+=pcPlace(o,c,{px:x,py:y(v)-4,lines:[`Round ${i+1} · ${pcR(a)}`,r&&(!i||R.rounds[i-1].kind!==r.kind)&&KIND[r.kind]||''].filter(Boolean),col:ACCENT_TXT,leader:false,gaps:[3,10,20,32],pref:['u','ur','ul','r','l']});});
-  /* revenue labels at key quarters, then cash labels */
+    s+=pcPlace(o,c,{px:x,py:y(v)-4,lines:[`Round ${i+1} · ${pcR(a)}`,r&&KIND[r.kind]||''].filter(Boolean),col:ACCENT_TXT,leader:false,gaps:[3,10,20,32],pref:['ur','u','ul','r','l']});});
   const mrr=S.net.map(v=>fd(v,1));
-  [...new Set([...pcKey,sel])].forEach(q=>{s+=pcPlace(o,c,{px:c.x(q),py:y(S.net[q]),lines:[mrr[q]],fs:11,col:'#4F6F97',leader:false,gaps:[3,10,18],pref:['u','d'],optional:true});});
-  S.cash.forEach((v,q)=>{if(done.has(q)||!(all||pcKey.includes(q)||q===sel))return;s+=pcPlace(o,c,{px:c.x(q),py:y(v),lines:[labN[q]],fs:q===sel?12:11,col:q===sel?ACCENT_TXT:CX_CASH,leader:false,gaps:[7,13,20],pref:['u','d','ur','dr','r'],optional:true});});
-  s+=pcPlace(o,c,{px:c.x(R.minQ),py:y(R.minCash),lines:[`Lowest cash ${rc(R.minCash)} in ${qName(R.minQ)}`,...(R.minCash<P.buffer-1e-9?[`below the ${pcR(P.buffer)} minimum`]:[])],col:CX_CASH,dot:true,pref:['ul','u','l','dl','d']});
-  s+=pcPlace(o,c,{px:c.x(15),py:y(S.net[15])-17,lines:[`Revenue ${rc(S.net[15])} a month by Q16`],col:'#4F6F97',pref:['ul','u','l']});
+  pcKey.forEach(q=>{s+=pcPlace(o,c,{px:c.x(q),py:y(S.net[q]),lines:[mrr[q]],fs:11,col:'#4F6F97',leader:false,gaps:[3,10,18],pref:['u','d'],optional:true});});
+  S.cash.forEach((v,q)=>{if(done.has(q)||!(all||pcKey.includes(q)))return;s+=pcPlace(o,c,{px:c.x(q),py:y(v),lines:[labN[q]],fs:11,col:v<PL.buffer-1e-9?ACCENT_TXT:CX_CASH,leader:false,gaps:[7,13,20],pref:['u','d','ur','dr','r'],optional:true});});
+  const lv=pcCashLevel(R),lowL={short:[`Cash short by ${rc(-R.minCash)} in ${qName(R.minQ)}`,'the 6-monthly rounds (not sized here) must cover it'],under:[`Cash dips to ${rc(R.minCash)} in ${qName(R.minQ)}, under the ${pcR(PL.buffer)} floor`,'the 6-monthly rounds (not sized here) keep it above'],ok:[`Lowest cash ${rc(R.minCash)} in ${qName(R.minQ)}`,`above the ${pcR(PL.buffer)} floor; 6-monthly rounds are extra cushion`]}[lv];
+  s+=pcPlace(o,c,{px:c.x(R.minQ),py:y(R.minCash),lines:lowL,col:lv==='ok'?CX_CASH:ACCENT_TXT,dot:true,pref:['ul','u','l','dl','d']});
+  s+=pcPlace(o,c,{px:c.x(15),py:y(S.net[15])-17,lines:[`Revenue ${rc(S.net[15])} a month by Q16`],col:'#4F6F97',pref:['ul','u','l'],ymin:c.top-22});
+  /* the timeline: rounds 1 and 2 as filled diamonds; a round every cadenceQ quarters after round 2 as small open ticks, no amounts */
+  const ry=c.axT+58,dm=(x,r,f)=>`<path d="M${x.toFixed(1)} ${(ry-r).toFixed(1)}L${(x+r).toFixed(1)} ${ry.toFixed(1)}L${x.toFixed(1)} ${(ry+r).toFixed(1)}L${(x-r).toFixed(1)} ${ry.toFixed(1)}Z" fill="${f}" stroke="${ACCENT_TXT}" stroke-width="1.4"/>`;
+  s+=T(c.ml-8,ry+4,'Rounds','smut','end','font-size:10.5px')+`<line x1="${c.ml}" x2="${c.ml+c.pw}" y1="${c.axT+36}" y2="${c.axT+36}" stroke="#E6E3DA"/>`;
+  if(R.rounds[1]){const x2=c.x(R.rounds[1].q);
+    s+=`<line x1="${x2.toFixed(1)}" x2="${(c.x(15)+c.slot/2-3).toFixed(1)}" y1="${ry}" y2="${ry}" stroke="${ACCENT}" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+    R.later.forEach(q=>{s+=dm(c.x(q),4,'#fff');});
+    s+=T(x2+10,ry-11,`From round 2, raising every ${PL.cadenceQ*3} months · later rounds are not sized here`,'slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`);}
+  R.rounds.forEach(r=>{s+=dm(c.x(r.q),5.5,ACCENT);});
   return s;
 }
 
-/* step 5: what the first investor's stake is worth at an exit in each quarter */
+/* step 5: what the first investor's stake is worth at an exit in each quarter (dilution from rounds 1-2 only) */
 cxRet=function(W,D){
-  const c=pcFrame(W),ret=D.ret,path=ret.path,q0=D.X.q,e=D.pr[0],ask=e.amt,o=pcOcc(),bw=c.bw,ax=pcAxis(c,0,Math.max(...path,ask)*1.12,{n:6}),y=ax.y,y0=y(0),labs=path.map(v=>fd(v,v<10?1:0)),all=pcAllFit(c,labs);
-  let s=pcBand(c,q0)+ax.svg+pcTitle('₹ Cr, value of the first investor’s stake');
+  const c=pcFrame(W),ret=D.ret,path=ret.path,q0=D.X.q,e=D.pr[0],ask=e.amt,o=pcOcc(),bw=c.bw,ax=pcAxis(c,0,Math.max(...path,ask)*1.12,{n:6}),y=ax.y,y0=y(0),labs=path.map(v=>fd(v,v<10?1:0)),all=pcAllFit(c,labs,10.5);
+  let s=ax.svg+pcTitle('₹ Cr, value of the first investor’s stake');
   path.forEach((v,q)=>{s+=pcRect(o,c.x(q)-bw/2,y(v),bw,y0-y(v),CX_VALUE,`${qLong(q)} · stake worth ${rc(v)} (${xS(v/ask)})`,q===q0?` stroke="${ACCENT}" stroke-width="2.2"`:'');});
   const yl=y(ask);s+=`<line x1="${c.ml}" x2="${c.ml+c.pw+4}" y1="${yl.toFixed(1)}" y2="${yl.toFixed(1)}" stroke="${ACCENT}" stroke-width="1.4" stroke-dasharray="6 4"/>`+T(c.ml+c.pw+8,yl-2,`₹${f0(ask)} Cr`,'slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`)+T(c.ml+c.pw+8,yl+11,'put in','slab-b','start',`font-size:11.5px;fill:${ACCENT_TXT}`);
   pcTrace(o,[[c.ml,yl],[c.ml+c.pw,yl]],2);
   path.forEach((v,q)=>{const key=pcKey.includes(q)||q===q0,on=q===q0;if(!(all||key))return;
-    if(key){s+=pcVal(o,c.x(q),y(v)-5,xS(v/ask),on,on?ACCENT_TXT:CX_VALUE,on?12:11);s+=pcVal(o,c.x(q),y(v)-18,labs[q],on,on?ACCENT_TXT:'#3D3C38',on?12:11);}
-    else s+=pcVal(o,c.x(q),y(v)-5,labs[q],false);});
-  const back=path.findIndex(v=>v>=ask),later=D.pr.filter((r,i)=>i>0&&r.q<=q0).length;
-  s+=pcPlace(o,c,{px:c.x(q0),py:y(path[q0])-32,lines:[`Exit in ${qName(q0)}: ${rc(ret.val)}`,`${xS(ret.mult)} the money · ${pct1(ret.irr*100)} a year`],col:ACCENT_TXT,pref:['ul','u','l'],ymin:c.top-22});
-  if(back>=0&&back!==q0)s+=pcPlace(o,c,{px:c.x(back),py:y(path[back])-(pcKey.includes(back)?32:19),lines:[`Stake worth more than the ${pcR(ask)} put in from ${qName(back)}`],col:CX_VALUE,pref:['ul','u','ur','l']});
-  s+=pcPlace(o,c,{px:c.ml+6,py:c.top+4,lines:[`Stake ${pct2(e.stake)} at round 1 → ${pct2(ret.s)} at exit`,`after ${later} later round${later===1?'':'s'}`],col:'#3D3C38',leader:false,pref:['dr'],gaps:[2,14,28]});
-  s+=pcAxisX(c,q0)+pcHits(c,'exitq');
+    if(key){s+=pcVal(o,c.x(q),y(v)-5,xS(v/ask),on,on?ACCENT_TXT:CX_VALUE,on?12:10.5);s+=pcVal(o,c.x(q),y(v)-17,labs[q],on,on?ACCENT_TXT:'#3D3C38',on?12:10.5);}
+    else s+=pcVal(o,c.x(q),y(v)-5,labs[q],false,null,10.5);});
+  const back=path.findIndex(v=>v>=ask),mod=D.pr.filter(r=>r.q<=q0).length;
+  s+=pcPlace(o,c,{px:c.x(q0),py:y(path[q0])-30,lines:[`Exit in ${qName(q0)}: ${rc(ret.val)}`,`${xS(ret.mult)} the money · ${pct1(ret.irr*100)} a year`],col:ACCENT_TXT,pref:['ul','u','l'],ymin:c.top-22});
+  if(back>=0&&back!==q0)s+=pcPlace(o,c,{px:c.x(back),py:y(path[back])-(pcKey.includes(back)?30:19),lines:[`Stake worth more than the ${pcR(ask)} put in from ${qName(back)}`],col:CX_VALUE,pref:['ul','u','ur','l']});
+  s+=pcPlace(o,c,{px:c.ml+6,py:c.top+4,lines:[`Stake ${pct2(e.stake)} at round 1 → ${pct2(ret.s)} at exit`,`dilution covers rounds 1–${mod} only; later 6-monthly rounds not included`],col:'#3D3C38',leader:false,pref:['dr'],gaps:[2,14,28]});
+  s+=pcAxisX(c);
   return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Value of the first investor's stake by exit quarter">${s}</svg>`;
 };
 
 /* step 6: return on capital employed; the axis stops at -20% and bars below it are marked */
 cxRoce=function(W,D){
-  const c=pcFrame(W),ro=roceFin(D.G),sel=selQ(),o=pcOcc(),bw=c.bw,pre=ro.map(r=>r.pre*100),post=ro.map(r=>r.post*100),FL=-20;
+  const c=pcFrame(W),ro=roceFin(D.G),o=pcOcc(),bw=c.bw,pre=ro.map(r=>r.pre*100),post=ro.map(r=>r.post*100),FL=-20;
   const ax=pcAxis(c,Math.max(FL,Math.min(0,...pre)),Math.max(...pre,5)*1.12,{n:9,fmt:v=>(v<0?'−':'')+fd(Math.abs(v),0)+'%'}),y=ax.y,y0=y(0),yf=y(ax.lo),labs=pre.map(pctR),off=pre.map(v=>v<ax.lo-1e-9);
-  let s=pcBand(c,sel)+ax.svg+pcTitle('Annualised operating profit ÷ capital employed');
+  let s=ax.svg+pcTitle('Annualised operating profit ÷ capital employed');
   pre.forEach((v,q)=>{const x=c.x(q),vv=Math.max(v,ax.lo),neg=v<0;
-    s+=pcRect(o,x-bw/2,neg?y0:y(vv),bw,Math.abs(y(vv)-y0),neg?CX_NEG:CX_PAT,`${qLong(q)} · ${pct1(v)} before depreciation, ${pct1(post[q])} after${off[q]?' (below the scale shown)':''}`,q===sel?` stroke="${ACCENT}" stroke-width="2"`:'');
+    s+=pcRect(o,x-bw/2,neg?y0:y(vv),bw,Math.abs(y(vv)-y0),neg?CX_NEG:CX_PAT,`${qLong(q)} · ${pct1(v)} before depreciation, ${pct1(post[q])} after${off[q]?' (below the scale shown)':''}`);
     if(off[q])s+=`<path d="M${(x-bw/2-1).toFixed(1)} ${(yf-9).toFixed(1)}l${(bw/2+1).toFixed(1)} -4l${(bw/2+1).toFixed(1)} 4v4l-${(bw/2+1).toFixed(1)} -4l-${(bw/2+1).toFixed(1)} 4z" fill="#fff"/>`;
     if(post[q]>=ax.lo)s+=`<circle cx="${x.toFixed(1)}" cy="${y(post[q]).toFixed(1)}" r="3.6" fill="#fff" stroke="${CX_PAT}" stroke-width="1.6"><title>${qLong(q)} · ${pct1(post[q])} after depreciation</title></circle>`;});
-  const all=pcAllFit(c,labs);
-  pre.forEach((v,q)=>{if(!(all||pcKey.includes(q)||q===sel))return;s+=pcVal(o,c.x(q),(v<0?y0:y(v))-5,labs[q],q===sel,v<0?CX_NEG:CX_PAT);});
+  const all=pcAllFit(c,labs,10.5);
+  pre.forEach((v,q)=>{if(!(all||pcKey.includes(q)))return;s+=pcVal(o,c.x(q),(v<0?y0:y(v))-5,labs[q],false,v<0?CX_NEG:CX_PAT,10.5);});
   const l=pre[15],first=pre.findIndex(v=>v>0),ofs=pre.map((v,q)=>off[q]?q:-1).filter(q=>q>=0);
   s+=pcPlace(o,c,{px:c.x(15),py:y(l)-19,lines:[`Q16: ${pctR(l)} before depreciation`,`${pctR(post[15])} after depreciation`],col:CX_PAT,pref:['ul','u','l'],ymin:c.top-22});
   if(first>0)s+=pcPlace(o,c,{px:c.x(first),py:y(pre[first])-19,lines:[`Return turns positive in ${qName(first)}`],col:CX_PAT,pref:['ur','u','ul']});
   if(ofs.length)s+=pcPlace(o,c,{px:c.x(ofs.at(-1))+bw/2,py:yf-6,lines:[`Off scale: ${ofs.map(q=>`${qName(q)} ${pctR(pre[q])}`).join(', ')}`,'capital is built ahead of sales'],col:CX_NEG,pref:['r','dr','ur'],ymax:c.top+c.h+2});
-  s+=pcAxisX(c,sel)+pcHits(c,'selq');
+  s+=pcAxisX(c);
   return `<svg class="s-svg cx-svg" viewBox="0 0 ${W} ${c.H}" role="img" aria-label="Annualised operating return on gross modelled capital by quarter">${s}</svg>`;
 };
 
 
 /* ---------- headings, keys, takeaways ---------- */
 const pcS=v=>`<span class="nw">${sr(v)}</span>`,pcR=v=>`₹${fd(v,Math.abs(v%1)>1e-9?1:0)} Cr`,pcN=(v,d=1)=>Math.abs(v)<Math.pow(10,-d)/2?'–':(v<0?'−':'')+fd(Math.abs(v),d);
+const pcRound=(r,P)=>Math.max(P.roundTo,Math.ceil(r.raw/P.roundTo-1e-9)*P.roundTo);   /* what the cash rule alone would size round 2 at */
 cxHeads=function(D){
-  const S=cxSeries(D),O=operatingModel().S,R=D.R,P=R.P,T=D.T,m0=INP.valuation.todayMRR,X=D.X,ret=D.ret,e=D.pr[0],ro=roceFin(D.G),pos=O.findIndex(r=>r.pat>=0.005),f=O[0],l=O[15],dir=r=>r.cogsP+r.varP,n=R.rounds.length;
+  const S=cxSeries(D),O=operatingModel().S,R=D.R,P2=R.P,T=D.T,m0=INP.valuation.todayMRR,X=D.X,ret=D.ret,e=D.pr[0],ro=roceFin(D.G),pos=O.findIndex(r=>r.pat>=0.005),f=O[0],l=O[15],dir=r=>r.cogsP+r.varP,r1=R.rounds[0],r2=R.rounds[1],mod=D.pr.filter(r=>r.q<=X.q).length;
   return [
-   ['Monthly revenue by quarter',`Revenue grows from ${rc(m0)} a month today to ${rc(T[15])} by Q16, the base every later step builds on; next, how much of it is left after costs.`],
+   ['Monthly revenue by quarter, by product line',`Revenue grows from ${rc(m0)} a month today to ${rc(T[15])} by Q16, the base every later step builds on; next, how much of it is left after costs.`],
    ['Monthly revenue split into costs and operating profit',`Direct costs fall from ${pctR(dir(f))} to ${pctR(dir(l))} of revenue and overhead from ${pctR(f.fixP)} to ${pctR(l.fixP)}, so ${pos>0?`operating profit turns positive in Q${pos+1} and `:''}reaches ${rc(l.pat)} a month by Q16: the cash to set against growth spending.`],
-   ['Growth spending against operating earnings, and the funding need it creates',`Earnings stay below growth spending${S.cross>=0?` until ${qName(S.cross)}`:' through Q16'}, so the running total sinks to ${pcS(-S.peak)} in ${qName(S.pk)}: the gap the raises in the next step have to cover.`],
-   ['Cash in the bank against monthly revenue, with the funding rounds',`${n} round${n>1?'s':''} worth ${pcR(R.equity)} hold cash at or above ${pcR(P.buffer)} (lowest ${rc(R.minCash)} in ${qName(R.minQ)}), the funding behind the first investor’s return in the next step.`],
-   [`Value of the first ${pcR(e.amt)} by exit quarter`,`An exit in ${qName(X.q)} turns ${pcR(e.amt)} into ${rc(ret.val)} (${xS(ret.mult)}) after dilution from later rounds; the last step asks whether the capital behind it earns enough.`],
+   ['Growth spending against operating earnings, and the cash it requires',`Earnings stay below growth spending${S.cross>=0?` until ${qName(S.cross)}`:' through Q16'}, so the cash required builds to ${rc(S.peak)} in ${qName(S.pk)}: the gap the raises in the next step have to cover.`],
+   ['Cash in the bank against monthly revenue, with the funding rounds',`${r2?`Rounds of ${pcR(r1.amt)} and ${pcR(r2.amt)}`:`The ${pcR(r1.amt)} round`} ${{ok:`keep cash at or above ${pcR(P2.buffer)} (lowest ${rc(R.minCash)} in ${qName(R.minQ)}), with the 6-monthly rounds that follow (not sized here) as extra cushion`,under:`leave cash dipping to ${rc(R.minCash)} in ${qName(R.minQ)}, under the ${pcR(P2.buffer)} floor, until the 6-monthly rounds (not sized here)`,short:`leave cash short by ${rc(-R.minCash)} in ${qName(R.minQ)} until the 6-monthly rounds (not sized here) cover it`}[pcCashLevel(R)]}; the next step values what the first ${pcR(e.amt)} becomes.`],
+   [`Value of the first ${pcR(e.amt)} by exit quarter`,`An exit in ${qName(X.q)} turns ${pcR(e.amt)} into ${rc(ret.val)} (${xS(ret.mult)}) after dilution from round${mod>1?`s 1–${mod}`:' 1'} only, before any later 6-monthly round; the last step asks whether the capital behind it earns enough.`],
    ['Return on capital employed by quarter',`Annualised operating profit on the capital tied up reaches ${pctR(ro[15].pre*100)} by Q16 (${pctR(ro[15].post*100)} after depreciation), the test of whether the money raised earns its keep.`]];
 };
 cxLegends=function(D){
   const i=(c,l,x='')=>`<span>${swc(c,x)}${l}</span>`,ln=(st,l)=>`<span><i class="ln" style="${st}"></i>${l}</span>`,R=D.R;
   return [
-   i(CX_REV,'Revenue a month, at each quarter end'),
+   P.map(p=>i(COLORS[p],SH[p])).join('')+'<span class="lg-n">total on every bar</span>',
    i(CX_COGS,'Direct costs (cost of goods + selling)')+i(CX_FIX,'Common overhead')+i(CX_PAT,'Operating profit')+i(CX_NEG,'Operating loss')+'<span class="lg-n">% above a bar: operating margin</span>',
-   i(CX_PAT,'Operating earnings')+i(CAP4C.capex,'Capex')+i(CAP4C.pp,'Labs / systems')+i(CAP4C.wc,'Increase in working capital')+(R.D.on?i(CAP4C.interest,'Loan interest'):'')+ln(`border-top:2.5px solid ${CX_NEG}`,'Running total (right axis)'),
-   i('#DCE7F3','Revenue a month')+ln(`border-top:2.5px solid ${CX_CASH}`,'Closing cash')+i(ACCENT,'Equity round')+ln(`border-top:1.5px dashed ${ACCENT}`,`${pcR(R.P.buffer)} minimum`),
-   i(CX_VALUE,'Stake value at that exit')+i('#fff','Exit picked',`outline:2px solid ${ACCENT};outline-offset:-2px`)+ln(`border-top:1.5px dashed ${ACCENT}`,`${pcR(D.pr[0].amt)} put in`),
+   i(CX_PAT,'Operating earnings (up)')+i(CAP4C.capex,'Capex (down)')+i(CAP4C.pp,'Labs / systems')+i(CAP4C.wc,'Increase in working capital')+(R.D.on?i(CAP4C.interest,'Loan interest'):'')+i('#F6DAD5','Cash required (running total, shaded)',`outline:1px solid ${CX_NEG}`),
+   i('#DCE7F3','Revenue a month')+ln(`border-top:2.5px solid ${CX_CASH}`,'Closing cash')+i(ACCENT,'Equity round')+ln(`border-top:1.5px dashed ${ACCENT}`,`${pcR(R.P.buffer)} floor`)+`<span><i class="dm"></i>Round every ${R.P.cadenceQ*3} months (not sized)</span>`,
+   i(CX_VALUE,'Stake value at that exit')+i('#fff','Exit used',`outline:2px solid ${ACCENT};outline-offset:-2px`)+ln(`border-top:1.5px dashed ${ACCENT}`,`${pcR(D.pr[0].amt)} put in`),
    i(CX_PAT,'Before depreciation')+'<span><i class="dot o"></i>After depreciation</span>'+i(CX_NEG,'Below zero')+'<span class="lg-n">axis stops at −20%</span>'];
 };
 /* three takeaways per step, every figure computed from the model */
 function pcTakes(D){
-  const S=cxSeries(D),O=operatingModel().S,R=D.R,P=R.P,G=D.G,K=G.K,T=D.T,m0=INP.valuation.todayMRR,X=D.X,ret=D.ret,e=D.pr[0],ro=roceFin(G),f=O[0],l=O[15],c15=K.cum[15],M=D.B.V.M,t15=T[15];
+  const S=cxSeries(D),O=operatingModel().S,R=D.R,P2=R.P,G=D.G,K=G.K,T=D.T,m0=INP.valuation.todayMRR,X=D.X,ret=D.ret,e=D.pr[0],ro=roceFin(G),f=O[0],l=O[15],c15=K.cum[15],M=D.B.V.M,t15=T[15];
   const newLines=['wood','upvc','p5'].filter(p=>MODEL.products[p].launch>1),newShare=sum(newLines.map(p=>M[p][15]))/t15,dz=view(SCOPE.core,'dist').T[15]/t15,uc=unitsBy('city',15),ud=unitsBy('dist',15);
   const pos=O.findIndex(r=>r.pat>=0.005),burn=sum(operatingModel().months.map(r=>Math.max(0,-r.pat))),tot=c15.capex+c15.pp+c15.wc;
-  const rs=R.rounds,back=ret.path.findIndex(v=>v>=e.amt),later=D.pr.filter((r,i)=>i>0&&r.q<=X.q).length,rp=ro.findIndex(r=>r.pre>0);
+  const rs=R.rounds,r2=rs[1],back=ret.path.findIndex(v=>v>=e.amt),mod=D.pr.filter(r=>r.q<=X.q),rp=ro.findIndex(r=>r.pre>0),lv=pcCashLevel(R);
   return [
    [[`${rc(t15)} a month by Q16`,`${fd(t15/m0,0)}× today’s ${rc(m0)}`],[`${fd(newShare*100,0)}% from new lines`,`of Q16 revenue comes from lines launched after today: ${newLines.map(p=>SH[p].toLowerCase()).join(', ').replace('upvc','uPVC')}`],[`${fd(dz*100,0)}% through dealer zones`,`of Q16 revenue; cities bring the other ${fd((1-dz)*100,0)}% (${uc} cities and ${ud} dealer zones open)`]],
    [[`${pctR(f.patP)} → ${pctR(l.patP)} margin`,`operating profit goes from ${pcS(f.pat)} to ${rc(l.pat)} a month`],[pos>=0?`Profit turns positive in Q${pos+1}`:'Operating loss through Q16',`monthly operating losses before then add up to ${rc(burn)} across the intervening months`],[`Overhead ${pctR(f.fixP)} → ${pctR(l.fixP)}`,`common overhead grows ${fd(l.fixed/f.fixed,1)}× while revenue grows ${fd(l.net/f.net,0)}×`]],
-   [[`${pcS(-S.peak)} deepest gap in ${qName(S.pk)}`,'accumulated earnings less growth spending, before any equity'],[`${rc(tot)} growth spending to Q16`,`capex ${fd(c15.capex/tot*100,0)}%, labs and systems ${fd(c15.pp/tot*100,0)}%, working capital ${fd(c15.wc/tot*100,0)}%`],[S.cross>=0?`Earnings pass spending in ${qName(S.cross)}`:'Spending leads through Q16',S.cross>=0?`${rc(S.pat[S.cross])} of earnings against ${rc(S.sp[S.cross])} of spending that quarter`:`Q16 earnings ${rc(S.pat[15])} against ${rc(S.sp[15])} of spending`]],
-   [[`${pcR(R.equity)} in ${rs.length} round${rs.length>1?'s':''}`,rs.map(r=>`${qName(r.q)} ${pcR(r.amt)}`).join(' · ')],[`Lowest cash ${rc(R.minCash)}`,`in ${qName(R.minQ)}, ${R.minCash>=P.buffer-1e-9?'above':'below'} the ${pcR(P.buffer)} minimum; ${rc(R.cash[15])} at Q16`],[`One round a year from round ${P.annualAfter+1}`,`every ${P.cadenceQ} quarters, sized for ${P.runwayQ} quarters of runway${R.skipped.length?`; ${R.skipped.map(qName).join(', ')} skipped as the business funds itself`:''}`]],
-   [[`${xS(ret.mult)} at a ${qName(X.q)} exit`,`${pcR(e.amt)} becomes ${rc(ret.val)}, ${pct1(ret.irr*100)} a year`],[`Stake ${pct2(e.stake)} → ${pct2(ret.s)}`,`after ${later} later round${later===1?'':'s'} dilute the first investor`],[back>=0?`Above cost from ${qName(back)}`:'Below cost through Q16',`the exit value of the stake ${back>=0?'passes':'stays under'} the ${pcR(e.amt)} put in`]],
+   [[`Cash required peaks at ${rc(S.peak)}`,`in ${qName(S.pk)}: accumulated earnings less growth spending, before any equity`],[`${rc(tot)} growth spending to Q16`,`capex ${fd(c15.capex/tot*100,0)}%, labs and systems ${fd(c15.pp/tot*100,0)}%, working capital ${fd(c15.wc/tot*100,0)}%`],[S.cross>=0?`Earnings pass spending in ${qName(S.cross)}`:'Spending leads through Q16',S.cross>=0?`${rc(S.pat[S.cross])} of earnings against ${rc(S.sp[S.cross])} of spending that quarter`:`Q16 earnings ${rc(S.pat[15])} against ${rc(S.sp[15])} of spending`]],
+   [[`${pcR(R.equity)} in ${rs.length} round${rs.length>1?'s':''}`,rs.map((r,i)=>`round ${i+1} ${pcR(r.amt)} in ${qName(r.q)}`).join(', ')+'; then a round every '+P2.cadenceQ*3+' months, not sized'],[{short:`Cash short by ${rc(-R.minCash)}`,under:`Cash dips to ${rc(R.minCash)}`,ok:`Lowest cash ${rc(R.minCash)}`}[lv],{short:`in ${qName(R.minQ)}: the 6-monthly rounds (not sized here) must cover it`,under:`in ${qName(R.minQ)}, under the ${pcR(P2.buffer)} floor: the 6-monthly rounds (not sized here) would keep it above`,ok:`in ${qName(R.minQ)}, above the ${pcR(P2.buffer)} floor; the 6-monthly rounds (not sized here) are extra cushion`}[lv]],[r2?`Round 2 is ${pcR(r2.amt)} in ${qName(r2.q)}`:'No round 2 needed',r2?`placed a quarter before cash would fall under ${pcR(P2.buffer)}; the cash rule alone would size it at ${pcR(pcRound(r2,P2))}`:`round 1 keeps cash above ${pcR(P2.buffer)} to Q16`]],
+   [[`${xS(ret.mult)} at a ${qName(X.q)} exit`,`${pcR(e.amt)} becomes ${rc(ret.val)}, ${pct1(ret.irr*100)} a year, before later rounds`],[`Stake ${pct2(e.stake)} → ${pct2(ret.s)}`,`after rounds 1–${mod.length} only; the later 6-monthly rounds are not sized, so not in the dilution`],[back>=0?`Above cost from ${qName(back)}`:'Below cost through Q16',`the exit value of the stake ${back>=0?'passes':'stays under'} the ${pcR(e.amt)} put in`]],
    [[`${pctR(ro[15].pre*100)} at Q16`,`annualised operating profit of ${rc(12*l.pat)} on ${rc(ro[15].ce)} of capital employed`],[rp>=0?`Positive from ${qName(rp)}`:'Negative through Q16',`early quarters carry plants and working capital built ahead of sales`],[`${pctR(ro[15].post*100)} after depreciation`,`capex ${rc(c15.capex)}, labs and systems ${rc(c15.pp)}, working-capital target ${rc(K.wcTotal[15])}`]]];
 }
 
-/* ---------- panels: the quarter picker, one table, at most one fold ---------- */
-function pcTab(head,rows,o={}){
-  const on=new Set([].concat(o.on??[])),n=head.length,cell=(v,i,r,tag)=>`<${tag}${(r.on||(i&&on.has(i)))?' class="on"':''}>${v}</${tag}>`;
-  const tr=r=>r.sub!=null?`<tr class="pc-sub"><td colspan="${n}">${r.sub}</td></tr>`:r.kv?`<tr class="${r.cls||''}"><th colspan="${n-1}"${r.on?' class="on"':''}>${r.kv[0]}</th><td${r.on?' class="on"':''}>${r.kv[1]}</td></tr>`:`<tr class="${r.cls||''}">${r.c.map((v,i)=>cell(v,i,r,i?'td':'th')).join('')}</tr>`;
-  return `<table class="cx-cols pc-tab${o.cls?' '+o.cls:''}"><thead><tr>${head.map((h,i)=>`<th${i&&on.has(i)?' class="on"':''}>${h}</th>`).join('')}</tr></thead><tbody>${rows.filter(r=>!r.foot).map(tr).join('')}</tbody>${rows.some(r=>r.foot)?`<tfoot>${rows.filter(r=>r.foot).map(tr).join('')}</tfoot>`:''}</table>`;
-}
-const pcQs=q=>[...new Set([...pcKey,q])].sort((a,b)=>a-b);
+/* ---------- the right-hand panel: the logic behind the chart; it does not change with a quarter ---------- */
+const pcFormula=lines=>`<div class="pc-formula"><p class="pc-h">The formula</p>${lines.map(l=>`<div>${l}</div>`).join('')}</div>`;
+const pcInputs=rows=>`<p class="pc-h">Inputs used</p><dl class="pc-inputs">${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+const pcRules=items=>`<p class="pc-h">How it works</p><ul class="pc-rules">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
 const pcFold=(label,html)=>whyD(label,html);
+const pcLaunch=p=>`Q${MODEL.products[p].launch}`;
 
 CX.rev=D=>{
-  const q=selQ(),rt=view(SCOPE.core,'city'),dd=view(SCOPE.core,'dist'),Q=operatingModel().S,tot=rt.T[q]+dd.T[q],z=v=>v<0.005?'–':fd(v,2),w=Q[q],late=q>=2?Q[q-2].net:null,uc=unitsBy('city',q),ud=unitsBy('dist',q);
-  const rows=P.map(p=>{const a=rt.M[p][q],b=dd.M[p][q];return {c:[`${swc(COLORS[p])} ${SH[p]}`,z(a),z(b),z(a+b),a+b<0.005?'–':fd((a+b)/tot*100,0)+'%']};});
-  rows.push({foot:1,cls:'tot',c:['Revenue a month',fd(rt.T[q],2),fd(dd.T[q],2),fd(tot,2),'100%']},{foot:1,c:['Share of the total',fd(rt.T[q]/tot*100,0)+'%',fd(dd.T[q]/tot*100,0)+'%','100%','']},{foot:1,c:['Units open',...[uc,ud,uc+ud].map(v=>fd(v,Math.abs(uc%1)+Math.abs(ud%1)>1e-6?1:0)),'']});
-  return {lead:'',body:cxQ(q)+pcTab(['₹ Cr a month at '+qName(q)+' end','Cities (RT)','Dealer zones (DD)','Total','Share'],rows,{})
-   +pcFold('If revenue slips, and where it comes from',cxLev(`${qName(q)} revenue a month if…`,[['Revenue runs two quarters late',late!=null?rc(late):'–',late!=null?dlt(late,w.net):''],['70% of the plan is achieved',rc(w.net*.7),dlt(w.net*.7,w.net)]],`${capLink('basis','Model basis · 01')}${capLink('cities','Cities and DD zones · 04')}${capLink('products','Products · 05')}`))};
+  const rt=view(SCOPE.core,'city'),dd=view(SCOPE.core,'dist'),Q=operatingModel().S,m0=INP.valuation.todayMRR,t=rt.T[15]+dd.T[15],late=Q[13].net,w=Q[15];
+  return {lead:'',body:pcFormula(['Revenue a month = Σ product lines','each line = cities (RT) + dealer zones (DD)','each stream = units open × market × product size × share for the line’s age'])
+   +pcInputs([['Revenue today',`${rc(m0)} a month`],['Revenue at Q16',`${rc(Q[15].net)} a month`],['Units open at Q16',`${fd(unitsBy('city',15),unitsBy('city',15)%1?1:0)} cities · ${fd(unitsBy('dist',15),unitsBy('dist',15)%1?1:0)} dealer zones`],['Q16 split',`cities ${fd(rt.T[15]/t*100,0)}% · dealer zones ${fd(dd.T[15]/t*100,0)}%`],['Wood adhesive launches',pcLaunch('wood')],['uPVC launches',pcLaunch('upvc')],['Waterproofing launches',pcLaunch('p5')]])
+   +pcRules(['Each bar is the revenue of the quarter’s last month, not a quarter total. GST is ignored.','A new line starts at its launch quarter and ramps up with its age in each city and dealer zone.','Cities and dealer zones are summed; the segments are the five product lines in the key.','These are page 02’s figures, built from the units on page 04 and the lines on page 05.'])
+   +pcFold('If revenue slips',cxLev('Q16 revenue a month if…',[['Revenue runs two quarters late',rc(late),dlt(late,w.net)],['70% of the plan is achieved',rc(w.net*.7),dlt(w.net*.7,w.net)]],`${capLink('basis','Model basis · 01')}${capLink('cities','Cities and DD zones · 04')}${capLink('products','Products · 05')}`))};
 };
 CX.mar=D=>{
-  const Q=operatingModel().S,q=selQ(),w=Q[q],qs=pcQs(q),at=qs.indexOf(q)+1,row=(l,f,cls)=>({c:[l,...qs.map(f)],cls});
-  const rows=[row('Revenue / month ₹ Cr',t=>fd(Q[t].net,1)),row('Cost of goods %',t=>pctR(Q[t].cogsP)),row('Selling costs %',t=>pctR(Q[t].varP)),row('CM2 %',t=>pctR(Q[t].cm2P),'b'),row('Common overhead %',t=>pctR(Q[t].fixP)),row('Operating profit ₹ Cr',t=>pcN(Q[t].pat),'b'),{foot:1,cls:'tot',c:['Operating margin %',...qs.map(t=>pctR(Q[t].patP))]}];
-  const overheads=OP_COSTS.map(([k,l])=>[l,rc(w.overhead.by[k]),'a month']);
-  return {lead:'',body:cxQ(q)+pcTab(['Monthly, quarter end',...qs.map(qName)],rows,{on:[at]})
-   +pcFold('Method and sensitivities',cxLev(`${qName(q)} operating profit a month if…`,[['Cost of goods is 1 point higher',sr(w.pat-w.net*.01),dlt(w.pat-w.net*.01,w.pat)],['Common overhead is 20% higher',sr(w.pat-w.fixed*.2),dlt(w.pat-w.fixed*.2,w.pat)]])+cxLev(`${qName(q)} common overhead`,overheads)+`<p class="cx-note">Direct costs are cost of goods plus selling costs. Product and RT/DD margins are weighted by revenue, interpolated from Q1 to Q16. Operating profit is before tax, interest and depreciation. GST is ignored.</p>${capLink('audit','All 16 monthly snapshots · 06')}`)};
+  const Q=operatingModel().S,f=Q[0],l=Q[15],a=(g,d=0)=>`${pctR(g(f))} → ${pctR(g(l))}`,overheads=OP_COSTS.map(([k,lb])=>[lb,rc(l.overhead.by[k]),'a month']);
+  return {lead:'',body:pcFormula(['Operating profit = revenue − cost of goods − selling costs − common overhead','Operating margin = operating profit ÷ revenue'])
+   +pcInputs([['Cost of goods',`${a(r=>r.cogsP)} of revenue`],['Selling costs',`${a(r=>r.varP)}`],['CM2, after both',`${a(r=>r.cm2P)}`],['Common overhead',`${rc(f.fixed)} → ${rc(l.fixed)} a month`],['Overhead share',`${a(r=>r.fixP)}`],['Operating margin',`${a(r=>r.patP)}`],['Basis','Q1 → Q16, monthly']])
+   +pcRules(['Direct costs = cost of goods plus selling costs: RM salaries, schemes, brand payouts, last-mile, discounts and NPAs.','Product and city/dealer-zone cost rates move in a straight line from Q1 to Q16 and are weighted by each stream’s revenue.','Common overhead follows the supplied budget by revenue level, extended above ₹20 Cr a month.','Operating profit is before tax, interest and depreciation.'])
+   +pcFold('Sensitivities and the overhead budget',cxLev('Q16 operating profit a month if…',[['Cost of goods is 1 point higher',sr(l.pat-l.net*.01),dlt(l.pat-l.net*.01,l.pat)],['Common overhead is 20% higher',sr(l.pat-l.fixed*.2),dlt(l.pat-l.fixed*.2,l.pat)]])+cxLev('Q16 common overhead',overheads)+capLink('audit','All 16 monthly snapshots · 06'))};
 };
 CX.spend=D=>{
-  const q=selQ(),G=D.G,K=G.K,S=cxSeries(D),R=D.R,cum=(t,k)=>K.cum[t][k],d=R.D.on;
-  const row=(l,col,a,b,c)=>({c:[`${swc(col)} ${l}`,pcN(a),pcN(b),pcN(c)]});
-  const rows=[row('Operating earnings',CX_PAT,S.pat[q],G.cumPat[q],G.cumPat[15]),row('Capex',CAP4C.capex,-S.fl.capex[q],-cum(q,'capex'),-cum(15,'capex')),row('Labs / systems',CAP4C.pp,-S.fl.pp[q],-cum(q,'pp'),-cum(15,'pp')),row('Increase in working capital',CAP4C.wc,-S.fl.wc[q],-cum(q,'wc'),-cum(15,'wc'))];
-  if(d)rows.push(row('Loan interest',CAP4C.interest,-S.fl.interest[q],-R.D.cumInt[q],-R.D.cumInt[15]));
-  rows.push({foot:1,cls:'tot',c:['Net cash flow',pcN(S.ncf[q]),pcN(S.cum[q]),pcN(S.cum[15])]},{foot:1,sub:`Before equity${d?' and net loan proceeds':''}. The running total is the funding shortfall: ${pcS(S.cum[q])} at ${qName(q)}, deepest ${pcS(-S.peak)} in ${qName(S.pk)}.`});
+  const G=D.G,K=G.K,S=cxSeries(D),X=K.X,C=INP.capital,days=K.days(),R=D.R,lead=K.leadQ,total=sum(CAPEX_ITEMS.map(([k])=>sum(K.steps[k].costs)));
   const pk=o=>{const r=raisePlan(o);return Math.max(...r.G.gap.map((v,i)=>v+r.D.cumInt[i]));},a=pk({capital:{wcDays:45}}),b=pk({capital:{wcDays:90}}),p=pk({plantMult:1.2}),l=pk({lateQ:2});
-  return {lead:'',body:cxQ(q)+pcTab(['₹ Cr',`In ${qName(q)}`,`To ${qName(q)}`,'To Q16'],rows,{on:[1,2]})
-   +pcFold('Peak shortfall if…',cxLev('Deepest running total if…',[['Working-capital target is 45 days',rc(a),dlt(a,S.peak)],['Working-capital target is 90 days',rc(b),dlt(b,S.peak)],['Plants cost 20% more',rc(p),dlt(p,S.peak)],['Revenue is two quarters late',rc(l),dlt(l,S.peak)]])+`<p class="cx-note">Quarter cash used = closing capital balance − opening balance. Operating earnings already include operating losses, so they are not charged twice. Working capital is the ${fd(INP.capital.wcDays,0)}-day target above the opening balance.${fn(NOTE_WC)}</p>`)};
+  const plan=`<p class="pc-h">Phase plan to Q16</p><div class="pc-phases">${CAPEX_ITEMS.map(([k,lb,bk])=>{const s=K.steps[k];return `<div><span class="nm">${swc(stepCol(bk))}${lb}</span><b>${rc(sum(s.costs))}</b><small>${stepCostText(s.costs)} · bought in ${stepWhen(s.buys)}</small></div>`;}).join('')}</div>`;
+  return {lead:'',body:pcFormula(['Net cash flow = operating earnings − capex − labs / systems − increase in working capital','Cash required = minus the running total of net cash flow since Q1',`its peak (${rc(S.peak)}) is the funding need`])
+   +pcInputs([['Capex, labs and systems to Q16',`${rc(total)}, fixed`],['Plants',`${pcR(X.tileP5+X.wood+X.upvc)}: tile adhesive and waterproofing ${pcR(X.tileP5)}, wood ${pcR(X.wood)}, uPVC ${pcR(X.upvc)}`],['Centres, misc, labs, systems',`${pcR(X.centres)}, ${pcR(X.misc)}, ${pcR(X.labs)}, ${pcR(X.systems)}`],['Paid ahead of need',`${lead} quarter${lead===1?'':'s'} before demand passes capacity`],['Working-capital target',`${fd(days,0)} days of annualised revenue (${fd(days/365*100,1)}% of ARR)`],['Opening target',`${rc(K.openingWC)}, assumed funded`]])
+   +pcRules([`The spend to Q16 is fixed at ${rc(total)}; what is modelled is when each phase is bought, so capex is lumpy by quarter.`,'Each item is bought in whole phases. A phase adds capacity in proportion to its cost: capacity per phase = Q16 demand × phase cost ÷ item budget.',`A phase is paid ${lead} quarter${lead===1?'':'s'} before demand would pass the capacity already built. Labs follow the plant phases in the same quarter; systems and misc follow monthly revenue above today’s; centres follow the units opened.${fn(NOTE_PLANT)}`,`Working capital = ${fd(days,0)} / 365 × annualised revenue, less the opening target; a quarter’s cash is the increase in that target. Operating losses sit inside earnings and are not charged twice.`])
+   +plan
+   +pcFold('Peak cash required if…',cxLev('Peak cash required if…',[['Working-capital target is 45 days',rc(a),dlt(a,S.peak)],['Working-capital target is 90 days',rc(b),dlt(b,S.peak)],['Plants cost 20% more',rc(p),dlt(p,S.peak)],['Revenue is two quarters late',rc(l),dlt(l,S.peak)]])+`<p class="cx-note">Quarter capex = the phases bought that quarter; the plan’s phase sizes and counts are assumptions, not vendor quotes.${fn(NOTE_WC)}</p>`)};
 };
 CX.raise=D=>{
-  const R=D.R,P=R.P,q=selQ(),rs=R.rounds,N=R.N,S=cxSeries(D);
-  const why=(r,i,end)=>{const base=`Covers ${qName(r.q)}–${qName(end)}. `;
-    if(!i)return base+'The opening ask.';
-    const sz=`Deepest need ${rc(r.need)} (${qName(r.needQ)}) + ${pcR(P.buffer)} minimum − ${rc(r.raised)} on hand = ${rc(r.raw)}, rounded up to ${pcR(r.amt-(r.topup||0))}${r.topup?`, plus a ${pcR(r.topup)} top-up`:''}.`;
-    return base+(r.kind==='annual'?`Yearly round, not set by cash. ${sz}`:r.kind==='topup'?`Top-up: cash would fall under ${pcR(P.buffer)} in ${qName(r.trigger)}. ${sz}`:`Set by cash: it would fall under ${pcR(P.buffer)} in ${qName(r.trigger)}. ${sz}`);};
-  const rows=[];
-  rs.forEach((r,i)=>{const end=r.next!=null?r.next-1:N-1;rows.push({c:[`Round ${i+1}`,qName(r.q),pcN(r.amt,r.amt%1?1:0),pcN(R.cash[end])],on:q>=r.q&&q<=end},{sub:why(r,i,end)});});
-  if(R.skipped.length)rows.push({sub:`No round in ${R.skipped.map(qName).join(', ')}: cash already covers the next ${P.runwayQ} quarters.`});
-  rows.push({foot:1,cls:'tot',c:['Total equity',`${rs.length} round${rs.length>1?'s':''}`,pcN(R.equity,R.equity%1?1:0),`low ${pcN(R.minCash)} · ${qName(R.minQ)}`]},{foot:1,on:1,kv:[`Closing cash at ${qName(q)}`,pcN(R.cash[q])]});
+  const R=D.R,P2=R.P,rs=R.rounds,r1=rs[0],r2=rs[1],S=cxSeries(D),lv=pcCashLevel(R),m=P2.cadenceQ*3;
   const SL={d90:'Working-capital target 90 days',pl20:'Plants cost 20% more',pre100:'Plants fully built before launch',late2:'Revenue two quarters late'};
-  const cases=stressCases().filter(c=>c.toggle).map(c=>{const x=stressRun(c,R),out=x.fixed.cash.findIndex(v=>v<-1e-9);return [SL[c.k]||c.label,rc(x.equity),out>=0?`out of cash in ${qName(out)} on ${rs.length} rounds`:'covered'];});
-  let debt='';if(R.D.on){const p=q?R.D.bal[q-1]:0,dp=R.D.draw[q]-R.D.repay[q]+R.D.wcBal[q]-(q?R.D.wcBal[q-1]:0),it=R.D.intC[q]+R.D.intW[q];debt=`<p class="cx-sub">Debt in ${qName(q)}</p><table class="cx-cols"><tbody><tr><th>Debt entering the quarter</th><td>${rc(p)}</td></tr><tr><th>Net new borrowing</th><td>${sr(dp)}</td></tr><tr><th>Interest paid</th><td>${rc(it)}</td></tr><tr><th>Debt at ${qName(q)} end</th><td>${rc(R.D.bal[q])}</td></tr></tbody></table>`;}
-  const rule=`<p class="cx-note"><b>The rule:</b> round 1 is the ${pcR(rs[0].amt)} ask. Round 2 closes ${P.lead} quarter${P.lead>1?'s':''} before cash would fall under ${pcR(P.buffer)} and covers the next ${P.window} quarters. From round ${P.annualAfter+1}, one round every ${P.cadenceQ} quarters whatever cash is on hand, each buying ${P.runwayQ} quarters of runway: deepest cash need in that time + ${pcR(P.buffer)} minimum − cash already projected, rounded up to ${pcR(P.roundTo)}. A year the business funds itself is skipped.${fn(NOTE_FUND)}</p>`;
-  return {lead:'',body:cxQ(q)+pcTab(['Round','Quarter','Raised ₹ Cr','Cash at period end'],rows,{cls:'pc-rounds'})+pcFold('How rounds are timed and sized',rule+cxLev('Equity needed if…',cases)+debt)};
+  const cases=stressCases().filter(c=>c.toggle).map(c=>{const x=stressRun(c,R).fixed;return [SL[c.k]||c.label,sr(x.minCash),`in ${qName(x.minQ)}`];});
+  let debt='';if(R.D.on)debt=`<p class="cx-note">Debt is on: ${rc(R.D.bal[15])} outstanding at Q16, ${rc(R.D.cumInt[15])} of interest over the plan, both inside closing cash.</p>`;
+  return {lead:'',body:pcFormula(['Closing cash = equity raised to date − cash required to date',`The floor: closing cash ≥ ${pcR(P2.buffer)} at every quarter end`])
+   +pcInputs([['Round 1',`${pcR(r1.amt)} in ${qName(r1.q)}, the ask`],...(r2?[['Round 2',`${pcR(r2.amt)} in ${qName(r2.q)}, placed by the cash rule`]]:[]),['Equity in the plan',`${pcR(R.equity)} in ${rs.length} round${rs.length>1?'s':''}`],['Later rounds',`every ${m} months from round 2, not sized`],['Minimum closing cash',pcR(P2.buffer)],['Equity lead time',`${P2.lead} quarter${P2.lead>1?'s':''}`],['Lowest closing cash',`${pcS(R.minCash)} in ${qName(R.minQ)}`]])
+   +pcRules([`Round 1 is the ask, closed in ${qName(r1.q)}.`,r2?`Round 2 is a fixed ${pcR(r2.amt)}, closed in the quarter before cash would fall under ${pcR(P2.buffer)} (${qName(r2.q)} here).`:'No second round is needed: round 1 keeps cash above the floor.',`From round 2 the plan raises every ${m} months. Those rounds are timeline markers only: not sized, and in no cash line, equity total or dilution.${fn(NOTE_FUND)}`,{short:`So cash is short by ${rc(-R.minCash)} in ${qName(R.minQ)}; the ${m}-monthly rounds, once sized, must cover it.`,under:`So cash dips to ${rc(R.minCash)} in ${qName(R.minQ)}, under the ${pcR(P2.buffer)} floor; sizing the ${m}-monthly rounds closes that gap.`,ok:`Cash stays at or above the ${pcR(P2.buffer)} floor in every quarter (lowest ${rc(R.minCash)} in ${qName(R.minQ)}); the ${m}-monthly rounds, once sized, are extra cushion.`}[lv]])
+   +pcFold('Caveats and what-ifs',(r2?`<p class="cx-note">The cash rule alone would size round 2 at ${pcR(pcRound(r2,P2))}; the plan fixes it at ${pcR(r2.amt)}.</p>`:'')+cxLev('Lowest closing cash with these rounds if…',[['The plan as modelled',sr(R.minCash),`in ${qName(R.minQ)}`],...cases],'A negative figure means the rounds as set run out of cash that quarter.')+debt)};
 };
 CX.ret=D=>{
-  const R=D.R,X=D.X,ret=D.ret,pr=ret.pr,q=X.q,e=pr[0],Fd=INP.funding,cur=X.m==='arr'?`arr-${X.mult}`:X.m,lbl=k=>k==='pat'?`${f0(Fd.multPat)}× Operating profit`:(RET_M.find(x=>x[0]===k)||[0,`${X.mult}× ARR`])[1];
+  const R=D.R,X=D.X,ret=D.ret,pr=ret.pr,q=X.q,e=pr[0],Fd=INP.funding,cur=X.m==='arr'?`arr-${X.mult}`:X.m,lbl=k=>k==='pat'?`${f0(Fd.multPat)}× operating profit`:(RET_M.find(x=>x[0]===k)||[0,`${X.mult}× ARR`])[1];
   const ctl=`<div class="cx-ctl"><span>Exit valued at</span>${seg(RET_M.map(([k])=>[k,lbl(k)]),cur,'exitm','Exit valued at')}<span>Plan achieved</span>${seg([[1,'100%'],[0.7,'70%'],[0.5,'50%']],X.ach,'ach','Share of the revenue plan achieved')}</div>`;
-  const arr=12*D.T[q]*X.ach,pat4=12*R.G.patMonthly[q]*X.ach,worth=X.m==='pat'?`annualised operating profit ${rc(pat4)} × ${f0(Fd.multPat)}`:X.m==='model'?`ARR ${rc(arr)} at the round method’s ${xS(multArrAt(q))}${blendW(q,R)>0.001?`, part on ${f0(Fd.multPat)}× operating profit`:''}`:`ARR ${rc(arr)} × ${X.mult}`;
-  const held=pr.filter(r=>r.q<=q),rows=held.map((r,i)=>({c:[`Round ${i+1}`,qName(r.q),pcN(r.amt,r.amt%1?1:0),fd(r.post,0),pct2(r.stake)]}));
-  rows.push({foot:1,cls:'tot',c:[`At ${qName(q)} exit`,'',pcN(sum(held.map(r=>r.amt)),0),'',pct2(ret.s)]},{foot:1,kv:['Tejas at exit: valuation + cash − debt',rc(ret.eqv)]},{foot:1,sub:`${worth} + cash ${rc(ret.cash)}${ret.debt>0.005?` − debt ${rc(ret.debt)}`:''}`},{foot:1,cls:'tot',kv:[`First ${pcR(e.amt)} becomes`,rc(ret.val)]},{foot:1,kv:['Multiple · IRR over '+fd(ret.yrs,ret.yrs%1?2:0)+' years',`${xS(ret.mult)} · ${pct1(ret.irr*100)}`]});
+  const arr=12*D.T[q]*X.ach,pat4=12*R.G.patMonthly[q]*X.ach,held=pr.filter(r=>r.q<=q),n=held.length;
+  const worth=X.m==='pat'?`operating profit ${rc(pat4)} a year × ${f0(Fd.multPat)}`:X.m==='model'?`ARR ${rc(arr)} at the round method’s ${xS(multArrAt(q))}`:`ARR ${rc(arr)} × ${X.mult}`;
   const others=RET_M.filter(([k])=>k!==cur).map(([k])=>{const [m,x]=k.split('-'),r=investorReturn(R,{q,m,mult:x?+x:undefined,ach:X.ach});return [k==='model'?'On the round method':`At ${lbl(k)}`,rc(r.val),`${xS(r.mult)} · IRR ${pct1(r.irr*100)}`];});
-  return {lead:'',pre:ctl,body:cxQ(q,'exitq','Exit in')+pcTab(['Round','Quarter','Raised ₹ Cr','Post-money ₹ Cr','First investor’s stake'],rows,{on:[4]})
-   +pcFold('Other ways to value this exit',cxLev(`The same ${qName(q)} exit, valued other ways`,others)+`<p class="cx-note">Round 1 buys ${pcR(e.amt)} at ${rc(e.post)} post-money, ${xS(e.mArr)} today’s ARR of ${rc(e.arr)}.${fn(NOTE_PRICE)} Each later round dilutes the first investor by pre-money ÷ post-money; profit valuation annualises the quarter-end monthly operating profit ×12.${fn(NOTE_RET)}</p>`)};
+  return {lead:'',pre:ctl,body:pcFormula([`Value of the first ${pcR(e.amt)} = stake at exit × (exit valuation + cash − debt)`,'Stake = ask ÷ post-money, × (pre-money ÷ post-money) for each later round'])
+   +pcInputs([['Exit',`${qName(q)} · ${EXIT[q]} (the last quarter)`],['Valued at',`${lbl(cur)}${X.ach<1?`, ${fd(X.ach*100,0)}% of plan`:''}`],['Tejas at exit',`${rc(ret.eqv)} (${worth} + cash ${rc(ret.cash)}${ret.debt>0.005?` − debt ${rc(ret.debt)}`:''})`],...held.map((r,i)=>[`Round ${i+1} · ${qName(r.q)}`,`${pcR(r.amt)} at ${rc(r.post)} post-money, ${xS(r.mArr)} ARR${r.w>0.001?` blended ${Math.round(r.w*100)}% on profit`:''}; stake ${pct2(r.stake)}`]),['Result',`${rc(ret.val)} · ${xS(ret.mult)} · IRR ${pct1(ret.irr*100)}`]])
+   +pcRules([`Round 1 is priced at ${xS(INP.valuation.multiple)} today’s ARR; later rounds at the ARR multiple for their quarter (${xS(Fd.multQ4)} at Q4, ${xS(Fd.multQ8)} at Q8, ${xS(Fd.multQ16)} at Q16), blended into ${f0(Fd.multPat)}× annualised operating profit as the margin rises from ${f0(Fd.blendLo)}% to ${f0(Fd.blendHi)}%.${fn(NOTE_PRICE)}`,`Each bar values the stake as if Tejas exited in that quarter, with the stake held after the rounds closed by then.`,`Dilution covers round${n>1?`s 1–${n}`:' 1'} only. The later 6-monthly rounds are not sized, so the multiple is before them.`,'Exit equity value adds cash and subtracts debt.'])
+   +pcFold('Other ways to value this exit',cxLev(`The same ${qName(q)} exit, valued other ways`,others)+`<p class="cx-note">Profit valuation annualises the quarter-end monthly operating profit × 12.${fn(NOTE_RET)}</p>`)};
 };
 CX.roce=D=>{
-  const G=D.G,K=G.K,ro=roceFin(G),q=selQ(),qs=pcQs(q),at=qs.indexOf(q)+1,l=ro[15],F=INP.funding,row=(lb,f,cls)=>({c:[lb,...qs.map(f)],cls});
-  const rows=[row('Operating profit a year',t=>pcN(12*G.patMonthly[t])),row('Capex',t=>pcN(K.cum[t].capex)),row('Labs / systems',t=>pcN(K.cum[t].pp)),row('Working-capital target',t=>pcN(K.wcTotal[t])),row('Capital employed',t=>pcN(ro[t].ce),'b'),row('Depreciation a year',t=>pcN(4*ro[t].dep)),row('Return after depreciation',t=>pctR(ro[t].post*100)),{foot:1,cls:'tot',c:['Return before depreciation',...qs.map(t=>pctR(ro[t].pre*100))]}];
+  const G=D.G,K=G.K,ro=roceFin(G),l=ro[15],F=INP.funding,m=G.patMonthly[15],c=K.cum[15];
   const rq=o=>roceFin(gapFin(o))[15].pre*100,v45=rq({capital:{wcDays:45}}),v90=rq({capital:{wcDays:90}}),vp=rq({plantMult:1.2}),pts=x=>fd(x,1)+' pts';
-  return {lead:'',body:cxQ(q)+pcTab(['₹ Cr, quarter end',...qs.map(qName)],rows,{on:[at]})
-   +pcFold('Method and sensitivities',`<div class="review-formula">Return before depreciation = monthly operating profit × 12 ÷ capital employed</div><div class="review-formula">Capital employed = cumulative capex + labs/systems + the full working-capital target</div><p class="cx-note">Depreciation is straight-line: plants and centres over ${f0(F.lifePlant)} years, labs, systems and misc over ${f0(F.lifeOther)}.${fn(NOTE_RET)} This is a gross-capital proxy, not a complete company ROCE; existing fixed-asset book values are excluded, and small early balances give large negative percentages.</p>`+cxLev('Q16 return before depreciation if…',[['Working-capital target is 45 days',pct1(v45),dlt(v45,l.pre*100,pts)],['Working-capital target is 90 days',pct1(v90),dlt(v90,l.pre*100,pts)],['Plants cost 20% more',pct1(vp),dlt(vp,l.pre*100,pts)]]))};
+  return {lead:'',body:pcFormula(['Return before depreciation = operating profit a year ÷ capital employed','Operating profit a year = 12 × the quarter’s monthly operating profit','Capital employed = cumulative capex + labs / systems + working-capital target'])
+   +pcInputs([['Plants and centres life',`${f0(F.lifePlant)} years, straight line`],['Labs, systems, misc life',`${f0(F.lifeOther)} years, straight line`],['Working-capital target',`${fd(K.days(),0)} days of annualised revenue`],['At Q16: operating profit',`${rc(12*m)} a year`],['At Q16: capital employed',`${rc(l.ce)} (capex ${rc(c.capex)}, labs/systems ${rc(c.pp)}, WC ${rc(K.wcTotal[15])})`],['At Q16: depreciation',`${rc(4*l.dep)} a year`],['At Q16: return',`${pctR(l.pre*100)} before, ${pctR(l.post*100)} after`]])
+   +pcRules(['Capital goes in ahead of the sales it serves, so the return starts low and climbs as revenue fills the plants.','After depreciation = (operating profit a year − annual depreciation) ÷ capital employed.','Bars below −20% are drawn to the axis floor and marked; their values are in the callout.','It is a pre-tax gross-capital proxy, not a complete company ROCE: existing fixed assets are excluded.'])
+   +pcFold('Sensitivities and caveats',cxLev('Q16 return before depreciation if…',[['Working-capital target is 45 days',pct1(v45),dlt(v45,l.pre*100,pts)],['Working-capital target is 90 days',pct1(v90),dlt(v90,l.pre*100,pts)],['Plants cost 20% more',pct1(vp),dlt(vp,l.pre*100,pts)]])+`<p class="cx-note">Small early capital balances give large negative percentages.${fn(NOTE_RET)}</p>`)};
 };
 
-/* ---------- the page: no debt bar, six panels, the takeaways above the assumptions ---------- */
+/* ---------- the page: no debt bar, six static panels, the takeaways above the assumptions ---------- */
 financingControls=function(){return '';};
+capKPI=function(D){
+  const T=D.T,ret=D.ret,R=D.R,G=D.G,ro=roceFin(G)[G.N-1],n=R.rounds.length;
+  return `<div class="b-metrics cap-kpi"><div class="ans-k"><span>Revenue a month, today → Q16</span><strong>₹${fd(INP.valuation.todayMRR,1)} → ₹${fd(T[15],1)}<small>Cr</small></strong></div>
+   <div><span>Q16 capital + early losses</span><strong>₹${f0(G.cumTot[G.N-1])}<small>Cr</small></strong></div>
+   <div><span>Equity raised · ${n} round${n>1?'s':''}</span><strong>₹${f0(R.equity)}<small>Cr${pcCashLevel(R)==='short'?`, cash short in ${qName(R.minQ)}`:pcCashLevel(R)==='under'?`, cash under floor in ${qName(R.minQ)}`:R.later.length?`, then every ${R.P.cadenceQ*3} months`:''}</small></strong></div>
+   <div><span>First ₹${f0(INP.valuation.ask)} Cr at a ${qName(D.X.q)} exit</span><strong>${xS(ret.mult)}<small>₹${f0(ret.val)} Cr</small></strong></div>
+   <div><span>Q16 operating return</span><strong>${fd(ro.pre*100,0)}%<small>gross capital proxy</small></strong></div></div>`;
+};
 fundDrawer=function(){
   const field=(p,l,u,min=0,step='any')=>`<label class="s-in"><span class="l">${l}<small>${u}</small></span><input type="number" min="${min}" step="${step}" data-input="${p}" value="${getPath(INP,p)}"><span class="d">plan ${getPath(INPUT_DEFAULT,p)}</span></label>`;
   const grid=a=>`<div class="s-ingrid cap-ingrid">${a.map(x=>field(...x)).join('')}</div>`;
-  return `<details class="cap-drawer"${A.cap.drawer?' open':''}><summary>Model assumptions</summary><div class="cap-drawer-b"><p class="note">Round 1 is the ask. Round 2 is set by cash; from round ${INP.funding.annualAfter+1} the company raises once a year, each round sized for the runway below. Every change re-runs the model and redraws the chart, the panels and the key figures.${fn(NOTE_FUND)}</p>
-  <p class="pc-grp">Funding rounds</p>${grid([['funding.buffer','Minimum closing cash','₹ Cr · quarter-end target'],['funding.lead','Equity lead time','quarters before cash threshold',0,1],['funding.window','Round 2 sizing window','quarters',1,1],['funding.annualAfter','Annual rounds start after round','rounds set by cash first',1,1],['funding.cadenceQ','Annual round every','quarters',1,1],['funding.runwayQ','Runway each annual round buys','quarters of cash need',1,1],['capital.wcDays','Working-capital target','days of annualised revenue'],['capital.firstPhase','Pre-launch plant build','% of wood and uPVC budgets']])}
+  return `<details class="cap-drawer"${A.cap.drawer?' open':''}><summary>Model assumptions</summary><div class="cap-drawer-b"><p class="note">Round 1 is the ask. Round 2 is a fixed amount placed by the cash trigger. From round 2 the plan raises every ${INP.funding.cadenceQ*3} months, but those later rounds are not sized: they are timeline markers only and sit in no cash line or dilution. Every change re-runs the model and redraws the chart, the panel and the key figures.${fn(NOTE_FUND)}</p>
+  <p class="pc-grp">Funding rounds</p>${grid([['funding.buffer','Minimum closing cash','₹ Cr · quarter-end floor'],['funding.lead','Equity lead time','quarters before cash threshold',0,1],['funding.round2','Round 2 amount','₹ Cr · 0 = size it by the cash rule'],['funding.cadenceQ','Later rounds every','quarters · timeline markers only',1,1],['capital.wcDays','Working-capital target','days of annualised revenue'],['capital.firstPhase','Pre-launch plant build','% of wood and uPVC budgets']])}
   <p class="pc-grp">Loan terms <span>(debt is off in this plan; these apply only if it is switched on)</span></p>${grid([['funding.rateCapex','Plant loan rate','% per year · assumption'],['funding.rateWC','Working-capital rate','% per year · assumption'],['funding.moratorium','Plant principal grace','full quarters after draw',0,1],['funding.tenor','Plant amortisation','quarterly instalments after grace',1,1]])}
   ${whyD('Assumptions requiring business validation',financeAssumptions())}</div></details>`;
 };
 renderFinance=function(){
   const D=capData(),cur=A.steps.finance,heads=cxHeads(D),legs=cxLegends(D),tk=pcTakes(D),st=STEPS.finance,nx=PAGE_ORDER[PAGE_ORDER.indexOf('finance')+1];
   const nav=i=>`<span class="cx-nav">${i>0?`<button type="button" class="cx-pv" data-step="${i-1}" aria-label="Back to ${st[i-1]}">←</button>`:''}${i<st.length-1?`<button type="button" class="cx-nx" data-step="${i+1}">Next: ${st[i+1]} →</button>`:`<button type="button" class="cx-nx" data-goto="${nx}">Next page: ${PAGE_NAME[nx]} →</button>`}</span>`;
-  const side=CX_KEYS.map((k,i)=>{const p=CX[k](D);return `<section class="step cx-step${i===cur?' on':''}" data-step-panel="${i}"${i===cur?'':' hidden'}><div class="s-panel cx-side-p"><div class="cx-kickrow"><p class="cx-kick">${i+1} · ${st[i]}</p>${nav(i)}</div>${p.pre||''}${p.lead?`<p class="cx-lead">${p.lead}</p>`:''}${p.body}</div></section>`;}).join('');
+  const side=CX_KEYS.map((k,i)=>{const p=CX[k](D);return `<section class="step cx-step${i===cur?' on':''}" data-step-panel="${i}"${i===cur?'':' hidden'}><div class="s-panel cx-side-p"><div class="cx-kickrow"><p class="cx-kick">${i+1} · ${st[i]}</p>${nav(i)}</div>${p.pre||''}${p.body}</div></section>`;}).join('');
   const chart=`<div class="s-panel cx-chart" data-layer="${cur}"><div class="cx-heads">${heads.map(([t,s],i)=>`<div class="cx-head" data-l="${i}"><h3>${t}</h3>${s?`<p>${s}</p>`:''}</div>`).join('')}</div>
    <div class="cx-s cx-s-m">${cbox('cx-money',W=>cxMoney(W,D),560)}</div><div class="cx-s cx-s-r">${cbox('cx-ret',W=>cxRet(W,D),560)}</div><div class="cx-s cx-s-o">${cbox('cx-roce',W=>cxRoce(W,D),560)}</div>
    <div class="cx-legs">${legs.map((h,i)=>`<div class="cap-legend static cx-leg" data-l="${i}">${h}</div>`).join('')}</div></div>`;
