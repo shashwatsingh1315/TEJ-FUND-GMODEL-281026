@@ -3920,9 +3920,9 @@ function renderGuide(){
   $('main-content').innerHTML=pageHead('00 · How to read','Dashboard guide')+
   guideOverview(pages)+
   secHead('Chart guide')+
-  `<div class="b-grid"><div class="s-panel c7 lay-compact">
-   <div class="lay lay-band lay-sw">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
-   <div class="s-panel c5"><h3>Meaning of colours and icons</h3><div class="keys keys-2">
+  `<div class="b-grid chart-guide-grid"><div class="s-panel c7 lay-compact">
+   <h3 class="chart-guide-title">How to read a chart</h3><div class="lay lay-band lay-sw chart-guide-body">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
+   <div class="s-panel c5"><h3 class="chart-guide-title">Meaning of colours and icons</h3><div class="keys keys-2 chart-guide-body">
    <div class="key"><h4>Product lines</h4><p class="rule-l">Hue for the family, shade for the line.</p><div class="chips">${['tile','wood','niche','upvc','p5'].map(p=>chip(pIcon(p,16),SH[p]==='Niche'?'Niche · Bondure':SH[p])).join('')}</div></div>
    <div class="key"><h4>Markets</h4><p class="rule-l">Sand = cities, sage = dealer zones; dark = large.</p><div class="chips">${chip(iconHTML('city',MKT_SHADE.city.med,16),'Medium city')}${chip(iconHTML('city',MKT_SHADE.city.lg,16),'Large city')}${chip(iconHTML('dealer',MKT_SHADE.dealer.med,16),'Medium zone')}${chip(iconHTML('dealer',MKT_SHADE.dealer.lg,16),'Large zone')}${chip(sq('#fff','outline:2px solid #141413;outline-offset:-2px'),'Outlined = live')}</div></div>
    <div class="key"><h4>Depth and amount</h4><p class="rule-l">Darker grey = deeper in the P&amp;L, or more.</p><div class="chips">${chip(sq(LAYER.cm1),'CM1')}${chip(sq(LAYER.cm2),'CM2')}${chip(sq(LAYER.pat),'Operating profit')}${chip(`<i class="ramp-sw"></i>`,'More units → darker')}</div></div>

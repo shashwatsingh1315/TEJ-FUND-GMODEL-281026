@@ -43,3 +43,14 @@
 @media print{.guide-layout{break-inside:avoid}.guide-map-node{color:var(--ink);text-decoration:none}}
 
 @media(max-width:560px){.guide-map-canvas{flex-basis:470px;min-height:470px}.guide-map-node[data-node="3"]{height:70px}}
+
+/* Chart guide: matching headings and content boundaries in both columns. */
+.chart-guide-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:stretch}
+#main-content .chart-guide-grid>.s-panel{grid-column:auto;margin:0;padding:18px;display:flex;flex-direction:column;min-width:0}
+#main-content .chart-guide-grid .chart-guide-title{margin:0 0 12px;font-family:var(--fd);font-size:16px;font-weight:500;line-height:1.4}
+#main-content .chart-guide-grid .chart-guide-body{margin:0;flex:1}
+.chart-guide-grid .lay-band{gap:8px}
+.chart-guide-grid .lay-r{flex:1;align-content:center}
+.chart-guide-grid .keys-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1050px){.chart-guide-grid{grid-template-columns:minmax(0,1fr)}.chart-guide-grid .lay-r{flex:none}}
+@media(max-width:560px){#main-content .chart-guide-grid>.s-panel{padding:17px}.chart-guide-grid .keys-2{grid-template-columns:minmax(0,1fr)}}

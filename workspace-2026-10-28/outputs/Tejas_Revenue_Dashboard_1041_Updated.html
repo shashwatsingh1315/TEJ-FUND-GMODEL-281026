@@ -1862,6 +1862,17 @@ table.pc-dt{width:100%;min-width:820px;table-layout:fixed;border-collapse:collap
 
 @media(max-width:560px){.guide-map-canvas{flex-basis:470px;min-height:470px}.guide-map-node[data-node="3"]{height:70px}}
 
+/* Chart guide: matching headings and content boundaries in both columns. */
+.chart-guide-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:stretch}
+#main-content .chart-guide-grid>.s-panel{grid-column:auto;margin:0;padding:18px;display:flex;flex-direction:column;min-width:0}
+#main-content .chart-guide-grid .chart-guide-title{margin:0 0 12px;font-family:var(--fd);font-size:16px;font-weight:500;line-height:1.4}
+#main-content .chart-guide-grid .chart-guide-body{margin:0;flex:1}
+.chart-guide-grid .lay-band{gap:8px}
+.chart-guide-grid .lay-r{flex:1;align-content:center}
+.chart-guide-grid .keys-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1050px){.chart-guide-grid{grid-template-columns:minmax(0,1fr)}.chart-guide-grid .lay-r{flex:none}}
+@media(max-width:560px){#main-content .chart-guide-grid>.s-panel{padding:17px}.chart-guide-grid .keys-2{grid-template-columns:minmax(0,1fr)}}
+
 </style>
 </head><body>
 <a class="skip" href="#main-content">Skip to dashboard</a>
@@ -4394,9 +4405,9 @@ function renderGuide(){
   $('main-content').innerHTML=pageHead('00 · How to read','Dashboard guide')+
   guideOverview(pages)+
   secHead('Chart guide')+
-  `<div class="b-grid"><div class="s-panel c7 lay-compact">
-   <div class="lay lay-band lay-sw">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
-   <div class="s-panel c5"><h3>Meaning of colours and icons</h3><div class="keys keys-2">
+  `<div class="b-grid chart-guide-grid"><div class="s-panel c7 lay-compact">
+   <h3 class="chart-guide-title">How to read a chart</h3><div class="lay lay-band lay-sw chart-guide-body">${rows.map((r,i)=>`<div class="lay-r"><span class="lay-n">${i+1}</span><div class="lay-t"><b>${r[0]}</b><span>${r[1]}</span></div><div class="lay-s">${r[2]}</div></div>`).join('')}</div></div>
+   <div class="s-panel c5"><h3 class="chart-guide-title">Meaning of colours and icons</h3><div class="keys keys-2 chart-guide-body">
    <div class="key"><h4>Product lines</h4><p class="rule-l">Hue for the family, shade for the line.</p><div class="chips">${['tile','wood','niche','upvc','p5'].map(p=>chip(pIcon(p,16),SH[p]==='Niche'?'Niche · Bondure':SH[p])).join('')}</div></div>
    <div class="key"><h4>Markets</h4><p class="rule-l">Sand = cities, sage = dealer zones; dark = large.</p><div class="chips">${chip(iconHTML('city',MKT_SHADE.city.med,16),'Medium city')}${chip(iconHTML('city',MKT_SHADE.city.lg,16),'Large city')}${chip(iconHTML('dealer',MKT_SHADE.dealer.med,16),'Medium zone')}${chip(iconHTML('dealer',MKT_SHADE.dealer.lg,16),'Large zone')}${chip(sq('#fff','outline:2px solid #141413;outline-offset:-2px'),'Outlined = live')}</div></div>
    <div class="key"><h4>Depth and amount</h4><p class="rule-l">Darker grey = deeper in the P&amp;L, or more.</p><div class="chips">${chip(sq(LAYER.cm1),'CM1')}${chip(sq(LAYER.cm2),'CM2')}${chip(sq(LAYER.pat),'Operating profit')}${chip(`<i class="ramp-sw"></i>`,'More units → darker')}</div></div>
