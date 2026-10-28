@@ -150,7 +150,9 @@ function cxVal(W,D){
   const GR=[];for(let e=-1;e<=8;e++)[1,3].forEach(m=>GR.push(m*Math.pow(10,e)));
   const mn=Math.min(...arr,...post),mx=Math.max(...arr,...post),lo=Math.max(...GR.filter(g=>g<=mn*1.0001)),lh=Lg(mx)+.95;   /* headroom: the valuation labels sit above the shaded area and below the band */
   const y=v=>c.top+c.h-(Lg(Math.max(v,lo))-Lg(lo))/(lh-Lg(lo))*c.h,yb=y(lo);
-  let ax='';GR.filter(g=>g>=lo&&g<=Math.pow(10,lh)).forEach(g=>{ax+=`<line class="${g===lo?'saxis':'sgrid'}" x1="${c.ml}" x2="${c.ml+c.pw}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}"/>`+T(c.ml-8,y(g)+4,fd(g,0),'smono','end');});
+  /* gridlines stop at the first one above the data; the headroom above it holds labels, not scale */
+  const gTop=Math.min(...GR.filter(g=>g>=mx));
+  let ax='';GR.filter(g=>g>=lo&&g<=Math.min(gTop,Math.pow(10,lh))).forEach(g=>{ax+=`<line class="${g===lo?'saxis':'sgrid'}" x1="${c.ml}" x2="${c.ml+c.pw}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}"/>`+T(c.ml-8,y(g)+4,fd(g,0),'smono','end');});
   const defs=`<defs><pattern id="pchat${id}" width="4.5" height="4.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4.5" height="4.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="4.5" stroke="${PC.fund}" stroke-width="2.2"/></pattern></defs>`;
   /* the phases: a band across the top, organic first, then acquisitions */
   const acqQ=R.rounds.filter(r=>r.kind==='acq').map(r=>r.q),xa=acqQ.length?c.x(Math.min(...acqQ))-c.slot/2:c.ml+c.pw,nm=a=>a.length<2?`${a[0]?.n??''}`:`${a[0].n}–${a.at(-1).n}`,orgR=R.rounds.filter(r=>r.kind!=='acq'),acqR=R.rounds.filter(r=>r.kind==='acq'),bandH=21;

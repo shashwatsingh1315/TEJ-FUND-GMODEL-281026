@@ -13,10 +13,10 @@
     {
       "mode": "none",
       "coverage": 50,
-      "equity": 465,
+      "equity": 2490,
       "debtQ16": 0,
       "interest": 0,
-      "cashQ16": 287.82724172191797,
+      "cashQ16": 2312.8272417219177,
       "minCash": -12.019048183725232,
       "rounds": [
         {
@@ -29,21 +29,21 @@
         },
         {
           "quarter": 10,
-          "amount": 50
+          "amount": 500
         },
         {
-          "quarter": 14,
-          "amount": 175
+          "quarter": 15,
+          "amount": 1750
         }
       ]
     },
     {
       "mode": "wc",
       "coverage": 50,
-      "equity": 465,
+      "equity": 2490,
       "debtQ16": 124.31342465753418,
       "interest": 15.676126027397256,
-      "cashQ16": 396.4645403520549,
+      "cashQ16": 2421.464540352055,
       "minCash": -6.568685170026605,
       "rounds": [
         {
@@ -56,21 +56,21 @@
         },
         {
           "quarter": 10,
-          "amount": 50
+          "amount": 500
         },
         {
-          "quarter": 14,
-          "amount": 175
+          "quarter": 15,
+          "amount": 1750
         }
       ]
     },
     {
       "mode": "plant",
       "coverage": 50,
-      "equity": 465,
+      "equity": 2490,
       "debtQ16": 47.953125,
       "interest": 11.03072265625,
-      "cashQ16": 324.749644065668,
+      "cashQ16": 2349.749644065668,
       "minCash": 1.7590768162747707,
       "rounds": [
         {
@@ -83,21 +83,21 @@
         },
         {
           "quarter": 10,
-          "amount": 50
+          "amount": 500
         },
         {
-          "quarter": 14,
-          "amount": 175
+          "quarter": 15,
+          "amount": 1750
         }
       ]
     },
     {
       "mode": "both",
       "coverage": 50,
-      "equity": 465,
+      "equity": 2490,
       "debtQ16": 172.2665496575342,
       "interest": 26.706848683647255,
-      "cashQ16": 433.3869426958049,
+      "cashQ16": 2458.386942695805,
       "minCash": 7.209439829973398,
       "rounds": [
         {
@@ -110,11 +110,11 @@
         },
         {
           "quarter": 10,
-          "amount": 50
+          "amount": 500
         },
         {
-          "quarter": 14,
-          "amount": 175
+          "quarter": 15,
+          "amount": 1750
         }
       ]
     }

@@ -2,9 +2,9 @@
    Six steps; one money chart (steps 1-4 on a shared 0-based axis, step 3 on its own axis that runs below zero);
    a static right-hand panel that explains the logic (formula, inputs, rules, one fold); three takeaways per step.
    Round 1 = the ask in Q1. Round 2 = fixed amount (round2) at a fixed quarter (round2Q, default Q6).
-   Rounds 3 and 4 = Rs Cr amounts (r3, r4) at fixed quarters (r3Q Q10, r4Q Q14), organic growth & acquisition.
+   Rounds 3 and 4 = Rs Cr amounts (r3, r4) at fixed quarters (r3Q Q10, r4Q Q15), organic growth & acquisition.
    Every round is priced at valuation.multiple x ARR, post-money (round 1 on 12 x todayMRR; rounds 2-4 on 12 x quarter-end monthly revenue). All four rounds count in cash and dilution.
-   Exit is Q16 at the round ARR multiple (16x by default) or 100x annual operating profit. The lead investor's cheque (valuation.lead) sits inside round 1.
+   Exit is Q16 at the round ARR multiple (12x by default) or 100x annual operating profit. The lead investor's cheque (valuation.lead) sits inside round 1.
    Debt stays off and its bar is hidden. */
 
 /* ---------- raise policy: inputs, engine, pricing, exit, notes ---------- */
@@ -12,7 +12,7 @@ const pcPolicy=fundPolicy;
 fundPolicy=function(o={}){
   const P=pcPolicy(o),F=INP.funding,num=(v,d,lo=0)=>Number.isFinite(+v)&&v!==null&&v!==''&&+v>=lo?+v:d,qi=(v,d)=>{const n=Math.round(+v);return Number.isFinite(n)&&v!==null&&v!==''&&n>=0?Math.min(15,n):d;};
   return {...P,cadenceQ:Math.max(1,Math.min(16,Math.round(num(P.cadenceQ??F.cadenceQ,2,1)))),round2:num(P.round2??F.round2,200),round2Q:qi(P.round2Q??F.round2Q,5),
-    r3Q:qi(P.r3Q??F.r3Q,9),r3:num(P.r3??F.r3,50),r4Q:qi(P.r4Q??F.r4Q,13),r4:num(P.r4??F.r4,175)};
+    r3Q:qi(P.r3Q??F.r3Q,9),r3:num(P.r3??F.r3,500),r4Q:qi(P.r4Q??F.r4Q,14),r4:num(P.r4??F.r4,1750)};
 };
 /* Four rounds. Round 1 = the ask (Q1). Round 2 = fixed amount at a fixed quarter (round2 = 0 sizes it by the cash rule instead).
    Rounds 3-4 = organic growth & acquisition rounds in Rs Cr. o.rounds (stress runs) overrides the list; the cash rule never moves a round. */
@@ -51,7 +51,7 @@ priceRounds=function(R,over){
       e={...r,k,n,kind,name:'E'+(k+1),arr,mArr:mult,w:0,marg:R.G.patMonthly[q]/T[q]*100,arrVal:post,patVal:0,pre,post,sold:dil,dil,stake,stepUp:post/prev.post,arrUp:arr/prev.arr,method:fd(mult,0)+'× ARR'};}
     prev=e;return e;});
 };
-/* Exit value: the round ARR multiple (INP.valuation.multiple, 16x by default; X.mult, 'arr') or the profit multiple x annual operating profit (12 x monthly operating profit, 'pat'). No revenue-vs-plan factor. */
+/* Exit value: the round ARR multiple (INP.valuation.multiple, 12x by default; X.mult, 'arr') or the profit multiple x annual operating profit (12 x monthly operating profit, 'pat'). No revenue-vs-plan factor. */
 exitEV=function(q,X,R){const F=INP.funding;return Math.max(0,X.m==='pat'?12*R.G.patMonthly[q]*F.multPat:(X.mult??+INP.valuation.multiple)*12*baseData().V.T[q]);};
 /* capX is a const in the base, so capData is redefined: only the two methods are reachable and the achievement factor is always 1 */
 capData=function(){const R=raisePlan(),X={q:A.cap.exitQ,m:A.cap.exitM==='pat'?'pat':'arr',mult:+INP.valuation.multiple,ach:1},ret=investorReturn(R,X),B=baseData();return {R,G:R.G,X,ret,pr:ret.pr,B,I:B.I,T:B.V.T,F:B.F};};
@@ -67,14 +67,14 @@ investorReturn=function(R,X,over){
   return {pr,s,ev,cash,debt,eqv,val,mult,irr,yrs,growth,mchg,kept,netc,path,lead};
 };
 RET_M.splice(0,RET_M.length,['arr',null],['pat',null]);
-NOTES[NOTE_FUND-1]='Assumption · funding rounds: round 1 is the ₹40 Cr ask, closed in Q1. Round 2 (₹200 Cr) closes in Q6 and funds organic growth. Round 3 (₹50 Cr, Q10) and round 4 (₹175 Cr, Q14) are for organic growth & acquisition; the acquisitions themselves are not modelled, so their cash sits on the balance sheet. All four rounds are counted in cash and in every return shown. Round dates and sizes are placeholders for the founders to set.';
-NOTES[NOTE_PRICE-1]='Illustrative round pricing: every round is priced at 16× ARR post-money, so the valuation rises in step with ARR. Round 1 uses today’s ARR; later rounds use ARR as 12 × the quarter-end monthly revenue. Returns count each later round at its own price (pre-money ÷ post-money). Scenario inputs, not verified market valuations or term sheets.';
-NOTES[NOTE_RET-1]='Exit is at the end of Q16, valued at 16× ARR (the same multiple as the funding rounds) or at 100× annual operating profit (12 × the quarter-end monthly operating profit, before tax, interest and depreciation). Exit equity value adds closing cash, including unspent round 3 and 4 money at face value, and subtracts modelled debt. The lead investor’s cheque is part of round 1 and is valued on the same basis.';
+NOTES[NOTE_FUND-1]='Assumption · funding rounds: round 1 is the ₹40 Cr ask, closed in Q1. Round 2 (₹200 Cr) closes in Q6 and funds organic growth. Round 3 (₹500 Cr, Q10) and round 4 (₹1,750 Cr, Q15) are for organic growth & acquisition; the acquisitions themselves are not modelled, so their cash sits on the balance sheet. All four rounds are counted in cash and in every return shown. Round dates and sizes are placeholders for the founders to set.';
+NOTES[NOTE_PRICE-1]='Illustrative round pricing: every round is priced at 12× ARR post-money, so the valuation rises in step with ARR. Round 1 uses today’s ARR; later rounds use ARR as 12 × the quarter-end monthly revenue. Returns count each later round at its own price (pre-money ÷ post-money). Scenario inputs, not verified market valuations or term sheets.';
+NOTES[NOTE_RET-1]='Exit is at the end of Q16, valued at 12× ARR (the same multiple as the funding rounds) or at 100× annual operating profit (12 × the quarter-end monthly operating profit, before tax, interest and depreciation). Exit equity value adds closing cash, including unspent round 3 and 4 money at face value, and subtracts modelled debt. The lead investor’s cheque is part of round 1 and is valued on the same basis.';
 {const g=INPUT_SCHEMA.find(x=>x.title==='Funding plan');
  if(g){const at=g.fields.findIndex(f=>f[0]==='funding.window')+1;
   g.fields=g.fields.filter(f=>f[0]!=='funding.cadenceQ');
   g.fields.splice(at,0,['funding.round2','Round 2 amount','₹ Cr · organic growth · 0 = size it by the cash rule'],['funding.round2Q','Round 2 quarter','quarter index, 0-based · 0 = Q1, 5 = Q6'],
-   ['funding.r3Q','Round 3 quarter','quarter index, 0-based · 9 = Q10'],['funding.r3','Round 3 amount','₹ Cr · organic growth & acquisition'],['funding.r4Q','Round 4 quarter','quarter index, 0-based · 13 = Q14'],['funding.r4','Round 4 amount','₹ Cr · organic growth & acquisition']);
+   ['funding.r3Q','Round 3 quarter','quarter index, 0-based · 9 = Q10'],['funding.r3','Round 3 amount','₹ Cr · organic growth & acquisition'],['funding.r4Q','Round 4 quarter','quarter index, 0-based · 14 = Q15'],['funding.r4','Round 4 amount','₹ Cr · organic growth & acquisition']);
   g.intro='Equity policy and illustrative loan terms. Round 1 is the ask in Valuation; rounds 2 to 4 are fixed amounts at fixed quarters. Every round is priced at the round-1 ARR multiple, post-money. All four rounds count in cash and in the valuation. Debt is off in this plan. Working capital uses days / 365 of annualised revenue.';}
  /* the exit group: the ARR multiple per quarter and the profit blend are gone (every round is priced at valuation.multiple x ARR, the exit is valuation.multiple x ARR or multPat x profit) */
  const h=INPUT_SCHEMA.find(x=>x.title==='Later-round valuation');
