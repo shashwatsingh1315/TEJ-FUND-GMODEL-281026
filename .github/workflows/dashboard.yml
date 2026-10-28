@@ -1,0 +1,41 @@
+name: Dashboard checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build the publish directory and check source agreement
+        run: |
+          python3 tools/test-build-site.py
+          python3 tools/build-site.py
+      - name: Check capex and financing independently
+        working-directory: workspace-2026-10-28
+        run: |
+          node work/verify-step-capex.cjs
+          node work/verify-financing.cjs
+          node work/audit-review.cjs
+      - name: Install browser for published-site checks
+        run: |
+          npm install --no-save --package-lock=false playwright@1.62.1
+          npx playwright install --with-deps chromium
+      - name: Check the investor website
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory dist >/tmp/tejas-site.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/version.json >/dev/null; then break; fi
+            sleep 1
+          done
+          node tools/smoke-site.cjs http://127.0.0.1:8000/
