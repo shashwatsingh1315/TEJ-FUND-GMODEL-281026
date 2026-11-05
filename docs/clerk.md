@@ -44,6 +44,10 @@ Use a Clerk application owned by your account; no framework migration is needed.
    Alternatively, add your email to `DASHBOARD_ALLOWED_EMAILS` and create/sign in
    to the Clerk account using that address. Clerk must verify it as the account's
    primary email before the model is served. This does not send an invitation.
+   The allowlist does not bypass Clerk's sign-up restrictions: in Invite-only
+   mode, an administrator must still create or invite the account first. During
+   a development preview, open Clerk sign-up can be used to create the owner's
+   account while the server email allowlist continues to deny other viewers.
 6. Deploy a preview and verify the complete signed-out → sign-in → dashboard
    flow with real Clerk credentials before promoting production. Confirm an
    ordinary signed-in account without a grant receives HTTP 403.
