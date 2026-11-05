@@ -10,10 +10,13 @@ is a separately published copy and is not updated by this deployment.
    repository if it does not appear. The repository can stay private.
 3. Keep **Root Directory** at the repository root and **Framework Preset** at
    **Other**. `vercel.json` supplies the build command and output directory:
-   `python3 tools/build-site.py`, `dist`. No environment variables are needed.
+   `python3 tools/build-site.py`, `dist`. Node 24+ installs the Clerk backend SDK.
+   Configure the required variables and invitation access in [Clerk setup](clerk.md)
+   before deploying; missing configuration denies access.
 4. Use `main` as the **Production Branch**. Deploy, then share the project's
-   production URL with investors. Check Deployment Protection allows your intended
-   investors to open production; test the URL in a signed-out browser.
+   production URL with invited investors. Check Deployment Protection allows your
+   intended investors to reach Clerk's sign-in flow, then test both signed-out and
+   authorized access. An account without a dashboard grant must receive HTTP 403.
 
 This requires the hosting configuration commit to be on `main` first. If it is on
 a pull-request branch, review and merge that branch before the production import.
@@ -35,29 +38,34 @@ a pull-request branch, review and merge that branch before the production import
 
 The website build uses the existing Python generator. It compares the result
 byte-for-byte with the committed current dashboard and fails if they disagree.
-It never chooses the old HTML in `dashboard/`. Only five files are published:
-`index.html`, `version.json` (commit and dashboard checksum), `robots.txt`,
+It never chooses the old HTML in `dashboard/`. Only four static files are public:
+`version.json` (commit and dashboard checksum), `robots.txt`,
 `tejas-preview.png` (shared-link image), and `tejas-icon.png` (home-screen icon).
-Source files, reports, context and archives are outside the published directory.
+The dashboard HTML is generated into `.private/dashboard.html` and included only
+in the authenticated Node function bundle. Source files, reports, context and
+archives are outside the published directory.
 
-Search indexing is disabled, but that is not access control. Anyone with an
-unprotected investor URL can open the dashboard and its embedded model data.
+Search indexing is disabled. Clerk session verification and a server-managed
+dashboard grant provide access control; see [Clerk setup](clerk.md). Previous
+static deployments remain public until retired or protected separately.
 
 ## Local deployment check
 
-Requires Python 3. Financial checks need Node 18+; browser checks need Playwright
-and Chromium. No dependencies are needed for the Vercel build itself.
+Requires Python 3 and Node 24+. Browser checks need Playwright and Chromium.
 
 ```sh
+npm ci --ignore-scripts
+npm run test:auth
 python3 tools/test-build-site.py
 python3 tools/build-site.py
-python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
-# In another terminal:
-node tools/smoke-site.cjs http://127.0.0.1:8000/
 ```
 
-Run the same smoke command against the live URL after deploying. `/version.json`
-identifies the deployed commit and exact dashboard bytes. The dashboard currently
+CI also runs the model browser check using a temporary copy served only on
+loopback; it does not publish the private HTML in `dist/`. For a deployed preview,
+verify real Clerk sign-in and invitation access as described in [Clerk setup](clerk.md).
+The existing unauthenticated smoke script is a model-rendering check and cannot
+test a protected live deployment without an authenticated browser session.
+`/version.json` identifies the deployed commit and exact dashboard bytes. The dashboard currently
 targets laptop screens; the source guide lists the supported sizes. Input changes
 persist in each viewer's browser and are not shared with other investors.
 

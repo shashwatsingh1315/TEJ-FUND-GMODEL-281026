@@ -1,0 +1,11 @@
+{
+  "name": "tejas-funding-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "engines": { "node": "24.x" },
+  "scripts": {
+    "build": "python3 tools/build-site.py",
+    "test:auth": "node tools/test-dashboard-auth.mjs"
+  },
+  "dependencies": { "@clerk/backend": "3.26.6" }
+}

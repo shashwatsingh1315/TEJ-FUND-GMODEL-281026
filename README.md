@@ -6,7 +6,7 @@ Working material for turning page 03 of the Tejas investor dashboard into a fund
 
 ## Investor website
 
-The repo is configured for Vercel: import it with the repository root as **Root Directory** and **Other** as the framework. The build uses the current source tree and publishes only `dist/`. Once connected, `main` updates the stable investor URL and branches get review previews. See [hosting setup](docs/hosting.md) for the account connection, checks and publishing workflow. This does not update the separate Claude artifact.
+The repo is configured for Vercel: import it with the repository root as **Root Directory** and **Other** as the framework. The build publishes reviewed assets in `dist/` and bundles the dashboard privately in a Clerk-protected function. Viewers need an invited account with a dashboard access grant. Configure Clerk before deploying this change; missing configuration denies access. Once connected, `main` updates the stable investor URL and branches get review previews. See [hosting setup](docs/hosting.md) and [Clerk setup](docs/clerk.md) for configuration and checks. This does not update the separate Claude artifact.
 
 ## Start here
 

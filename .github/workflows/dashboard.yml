@@ -17,6 +17,8 @@ jobs:
           node-version: '24'
       - name: Build the publish directory and check source agreement
         run: |
+          npm ci --ignore-scripts
+          npm run test:auth
           python3 tools/test-build-site.py
           python3 tools/build-site.py
       - name: Check capex and financing independently
@@ -31,9 +33,14 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Check the investor website
         run: |
-          python3 -m http.server 8000 --bind 127.0.0.1 --directory dist >/tmp/tejas-site.log 2>&1 &
+          # Model rendering check on loopback only. Production serves the same
+          # bytes through Clerk; the private HTML never enters public dist/.
+          preview_dir=$(mktemp -d)
+          cp dist/* "$preview_dir/"
+          cp .private/dashboard.html "$preview_dir/index.html"
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$preview_dir" >/tmp/tejas-site.log 2>&1 &
           server_pid=$!
-          trap 'kill "$server_pid"' EXIT
+          trap 'kill "$server_pid"; rm -rf "$preview_dir"' EXIT
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8000/version.json >/dev/null; then break; fi
             sleep 1

@@ -1,7 +1,8 @@
 """Build the investor website using the current dashboard source tree.
 
-Only dist/ is published. Refuse to publish when the checked-in dashboard and
-its sources disagree: neither a stale output nor an unrecorded HTML edit wins.
+Only reviewed public assets go to dist/. The generated dashboard is staged in
+.private/ for inclusion only in the authenticated Vercel function bundle.
+Refuse to build when the checked-in dashboard and its sources disagree.
 """
 import hashlib
 import json
@@ -44,8 +45,17 @@ def build(root=ROOT):
         "dashboardSha256": hashlib.sha256(html).hexdigest(),
     }
 
-    # Replace the entire static output so an old extra file cannot be published.
-    # Refuse symlinks, including links to private source directories.
+    # Recreate private function payload separately from public static output.
+    private = root / ".private"
+    if private.is_symlink():
+        raise RuntimeError(".private must be a real directory, not a symlink.")
+    if private.exists():
+        import shutil
+        shutil.rmtree(private)
+    private.mkdir()
+    (private / "dashboard.html").write_bytes(html)
+
+    # Replace the entire public output so no dashboard copy or stale file ships.
     dist = root / "dist"
     if dist.is_symlink():
         raise RuntimeError("dist must be a real output directory, not a symlink.")
@@ -53,7 +63,6 @@ def build(root=ROOT):
         import shutil
         shutil.rmtree(dist)
     dist.mkdir()
-    (dist / "index.html").write_bytes(html)
     # Only these reviewed brand assets accompany the self-contained dashboard.
     import shutil
     for name in ("tejas-preview.png", "tejas-icon.png"):
