@@ -11,12 +11,13 @@ is a separately published copy and is not updated by this deployment.
 3. Keep **Root Directory** at the repository root and **Framework Preset** at
    **Other**. `vercel.json` supplies the build command and output directory:
    `python3 tools/build-site.py`, `dist`. Node 24+ installs the Clerk backend SDK.
-   Configure the required variables and invitation access in [Clerk setup](clerk.md)
+   Configure the required variables and access mode in [Clerk setup](clerk.md)
    before deploying; missing configuration denies access.
 4. Use `main` as the **Production Branch**. Deploy, then share the project's
    production URL with invited investors. Check Deployment Protection allows your
    intended investors to reach Clerk's sign-in flow, then test both signed-out and
-   authorized access. An account without a dashboard grant must receive HTTP 403.
+   authorized access. With `DASHBOARD_ACCESS_MODE=authenticated`, any signed-in
+   account can view the model. Explicitly blocked accounts must receive HTTP 403.
 
 This requires the hosting configuration commit to be on `main` first. If it is on
 a pull-request branch, review and merge that branch before the production import.
@@ -45,8 +46,8 @@ The dashboard HTML is generated into `.private/dashboard.html` and included only
 in the authenticated Node function bundle. Source files, reports, context and
 archives are outside the published directory.
 
-Search indexing is disabled. Clerk session verification and a server-managed
-dashboard grant provide access control; see [Clerk setup](clerk.md). Previous
+Search indexing is disabled. Clerk session verification and the project's
+dashboard access mode provide access control; see [Clerk setup](clerk.md). Previous
 static deployments remain public until retired or protected separately.
 
 ## Local deployment check
@@ -62,7 +63,7 @@ python3 tools/build-site.py
 
 CI also runs the model browser check using a temporary copy served only on
 loopback; it does not publish the private HTML in `dist/`. For a deployed preview,
-verify real Clerk sign-in and invitation access as described in [Clerk setup](clerk.md).
+verify real Clerk sign-in and account blocks as described in [Clerk setup](clerk.md).
 The existing unauthenticated smoke script is a model-rendering check and cannot
 test a protected live deployment without an authenticated browser session.
 `/version.json` identifies the deployed commit and exact dashboard bytes. The dashboard currently

@@ -31,7 +31,12 @@ function settings(env) {
     .split(',').map(value => new URL(value.trim()).origin);
   const allowedEmails = new Set((env.DASHBOARD_ALLOWED_EMAILS || '')
     .split(',').map(value => value.trim().toLowerCase()).filter(Boolean));
-  return { origin: origin.origin, signIn, authorizedParties, publishableKey, allowedEmails };
+  // Opt in per project; other deployments retain their existing access rules.
+  const accessMode = env.DASHBOARD_ACCESS_MODE || 'restricted';
+  if (!['restricted', 'authenticated'].includes(accessMode)) {
+    throw new Error('Invalid dashboard access mode.');
+  }
+  return { origin: origin.origin, signIn, authorizedParties, publishableKey, allowedEmails, accessMode };
 }
 
 function response(body, status, extraHeaders, method = 'GET') {
@@ -82,18 +87,20 @@ export function createDashboardHandler({
       }
 
       // Never trust browser-editable unsafeMetadata or a client-supplied email.
-      // This grant is set on invitations by the administrator, and checked live
-      // so removing it takes effect even for an existing signed-in browser.
+      // Check administrative blocks live, even in open-registration mode.
       const user = await clerk.users.getUser(auth.userId);
       // A server-configured email allowlist can bootstrap owner access without
       // sending an invitation. Match only Clerk's verified primary address.
       // An explicit administrative revocation always overrides this allowlist.
       const primaryEmail = user.emailAddresses?.find(email => email.id === user.primaryEmailAddressId);
-      const allowedEmail = user.publicMetadata?.dashboardAccess !== false
-        && primaryEmail?.verification?.status === 'verified'
+      const allowedEmail = primaryEmail?.verification?.status === 'verified'
         && config.allowedEmails.has(primaryEmail.emailAddress.trim().toLowerCase());
-      if (user.banned || user.locked || !(user.publicMetadata?.dashboardAccess === true || allowedEmail)) {
-        return response('Access is by invitation only. Contact the dashboard owner.', 403, state.headers, request.method);
+      const blocked = user.banned || user.locked || user.publicMetadata?.dashboardAccess === false;
+      const allowed = config.accessMode === 'authenticated' || user.publicMetadata?.dashboardAccess === true || allowedEmail;
+      if (blocked || !allowed) {
+        const message = blocked ? 'Dashboard access is disabled for this account. Contact the dashboard owner.'
+          : 'Access is by invitation only. Contact the dashboard owner.';
+        return response(message, 403, state.headers, request.method);
       }
       const html = await getDashboard();
       const headers = new Headers(state.headers);

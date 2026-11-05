@@ -186,3 +186,65 @@ for (const [name, mutate] of [
     assert.equal(f.reads(), 0);
   });
 }
+
+const openConfig = { ...env, DASHBOARD_ACCESS_MODE: 'authenticated' };
+
+for (const [name, user] of [
+  ['ordinary registered account', { publicMetadata: {} }],
+  ['account without metadata', {}],
+  ['account outside the email allowlist', {
+    primaryEmailAddressId: 'email_new',
+    emailAddresses: [{ id: 'email_new', emailAddress: 'new@example.com', verification: { status: 'verified' } }],
+  }],
+]) {
+  test(`authenticated access mode serves the dashboard to ${name}`, async () => {
+    const f = fixture({ user, config: openConfig });
+    const result = await f.request(token());
+    assert.equal(result.status, 200);
+    assert.match(await result.text(), /PRIVATE FINANCIAL MODEL/);
+    assert.match(result.headers.get('cache-control'), /no-store/);
+  });
+}
+
+for (const [name, user] of [
+  ['explicitly blocked account', { publicMetadata: { dashboardAccess: false } }],
+  ['banned account with a grant', { banned: true, publicMetadata: { dashboardAccess: true } }],
+  ['locked account', { locked: true }],
+  ['blocked account with a browser-editable grant', { publicMetadata: { dashboardAccess: false }, unsafeMetadata: { dashboardAccess: true } }],
+]) {
+  test(`authenticated access mode still denies ${name}`, async () => {
+    const f = fixture({ user, config: openConfig });
+    const result = await f.request(token());
+    assert.equal(result.status, 403);
+    assert.equal(f.reads(), 0);
+  });
+}
+
+for (const [name, jwt] of [
+  ['anonymous visitor', undefined],
+  ['forged signature', token({}, generateKeyPairSync('rsa', { modulusLength: 2048 }).privateKey)],
+  ['expired session', token({ exp: Math.floor(Date.now() / 1000) - 60 })],
+  ['unauthorized origin', token({ azp: 'https://attacker.example' })],
+  ['pending session', token({ sts: 'pending' })],
+]) {
+  test(`authenticated access mode rejects ${name}`, async () => {
+    const f = fixture({ config: openConfig });
+    assert.notEqual((await f.request(jwt)).status, 200);
+    assert.equal(f.reads(), 0);
+  });
+}
+
+test('unrecognized access mode fails closed instead of making the dashboard public', async () => {
+  const f = fixture({ config: { ...env, DASHBOARD_ACCESS_MODE: 'public' } });
+  assert.equal((await f.request(token())).status, 503);
+  assert.equal(f.reads(), 0);
+});
+
+test('blocking a user stops an existing session in authenticated access mode', async () => {
+  const user = { publicMetadata: {} };
+  const f = fixture({ user, config: openConfig });
+  const jwt = token();
+  assert.equal((await f.request(jwt)).status, 200);
+  user.publicMetadata.dashboardAccess = false;
+  assert.equal((await f.request(jwt)).status, 403);
+});
