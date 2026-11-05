@@ -1,4 +1,8 @@
 dist/
+.private/
 .vercel/
 node_modules/
 __pycache__/
+.clerk/
+.env*
+!.env.example
