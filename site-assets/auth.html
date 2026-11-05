@@ -17,32 +17,21 @@
     ::selection{background:#d7e7fb;color:#063e7e}input{caret-color:var(--blue)}
     [hidden]{display:none!important}.skip{position:absolute;top:-80px;left:20px;background:white;padding:10px;z-index:10}.skip:focus{top:12px}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .site-header{max-width:1280px;margin:auto;padding:30px 48px;display:flex;align-items:center;justify-content:space-between;gap:24px}
-    .brand{display:inline-flex;align-items:center}.brand svg{width:100px;height:auto;display:block}
+    .site-header{max-width:480px;margin:0 auto;padding:32px 20px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+    .brand{display:inline-flex;align-items:center}.brand svg{width:92px;height:auto;display:block}
     .site-name{color:var(--secondary);font-size:13px}
-    .auth-layout{max-width:1160px;margin:16px auto 72px;padding:0 48px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);grid-template-areas:'overview form';gap:clamp(40px,7vw,104px);align-items:start}
-    .auth-panel{grid-area:form;background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:32px;min-width:0}
-    .account-nav{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--paper);padding:5px;border-radius:10px;margin-bottom:30px}
-    .account-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;text-decoration:none;font-weight:500;font-size:13px;border-radius:7px;color:var(--secondary);transition:background-color .18s,color .18s}
+    .auth-layout{width:min(100%,480px);margin:0 auto 48px;padding:0 20px}
+    .auth-panel{background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:28px;min-width:0}
+    .account-nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-bottom:1px solid var(--rule);margin-bottom:24px}
+    .account-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 6px;text-decoration:none;font-weight:500;font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--secondary);transition:background-color .18s,color .18s}
     .account-nav a:hover{background:var(--wash);color:var(--blue)}
-    .account-nav a[aria-current=page]{background:var(--blue);color:white}
+    .account-nav a[aria-current=page]{border-bottom-color:var(--blue);color:var(--blue)}
     h1{font-size:25px;line-height:1.3;letter-spacing:-.025em;font-weight:600;margin:0 0 10px;text-wrap:balance}
     #clerk-root{min-width:0}#clerk-root:empty{min-height:80px}
     #loading{color:var(--secondary);font-size:13px;margin:0;padding:18px 0}
     .auth-error{font-size:13px;color:var(--secondary);padding-top:12px}.auth-error strong{display:block;color:var(--ink);font-weight:500;margin-bottom:8px}
     .retry{font:500 13px var(--font);border:0;border-radius:8px;background:var(--blue);color:white;padding:12px 18px;min-height:44px;cursor:pointer;margin:12px 12px 0 0}.retry:hover{background:var(--blue-dark)}
-    .overview{grid-area:overview;padding:50px 0 0;max-width:460px}
-    .overview h2{font-size:clamp(40px,4.5vw,62px);line-height:1.12;letter-spacing:-.035em;font-weight:500;margin:0 0 24px;text-wrap:balance}
-    .overview h2 span{display:block;color:var(--blue)}
-    .overview>p{color:var(--secondary);font-size:15px;line-height:1.8;margin:0;max-width:38ch}
-    .model-topics{margin:38px 0 0;padding:0;list-style:none;border-top:1px solid var(--rule)}
-    .model-topics li{padding:13px 0;border-bottom:1px solid var(--rule);color:var(--secondary);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .model-topics svg{color:var(--blue);flex-shrink:0;width:17px;height:17px}
-    .overview .access-note{font-size:12px;margin-top:28px;max-width:40ch}
-    .site-footer{max-width:1280px;margin:auto;padding:0 48px 24px;color:var(--secondary);font-size:11px}
-    @media(min-width:1500px){.auth-layout{margin-top:60px}}
-    @media(max-width:850px){.site-header{padding:24px}.auth-layout{max-width:500px;padding:0 24px;margin:12px auto 48px;grid-template-columns:minmax(0,1fr);grid-template-areas:'form' 'overview';gap:40px}.auth-panel{padding:26px}.overview{padding:0 4px}.overview h2{font-size:36px}.overview>p{font-size:14px}.model-topics{margin-top:26px}.site-footer{padding:0 24px 24px}.brand svg{width:84px}}
-    @media(max-width:380px){.site-name{font-size:11px}.auth-layout{padding:0 16px}.auth-panel{padding:22px 18px}.site-header{padding:20px}.account-nav a{font-size:12px}h1{font-size:23px}}
+    @media(max-width:380px){.auth-layout{padding:0 16px}.auth-panel{padding:24px 18px}.site-header{padding-top:24px}.account-nav a{font-size:12px}h1{font-size:23px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -69,18 +58,7 @@
       </div>
       <noscript><p>Please enable JavaScript to create your account or sign in.</p></noscript>
     </section>
-    <section class="overview" aria-labelledby="overview-title">
-      <h2 id="overview-title">Growth &amp; funding,<span>in focus.</span></h2>
-      <p>Explore the Tejas growth plan, from revenue and capital to funding rounds and investor returns.</p>
-      <ul class="model-topics">
-        <li>Revenue &amp; growth<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
-        <li>Capital &amp; funding<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
-        <li>Investor returns<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
-      </ul>
-      <p class="access-note">Sign up once. Use your account across all Tejas dashboards.</p>
-    </section>
   </main>
-  <footer class="site-footer">Tejas · Growth &amp; funding model</footer>
   <script id="auth-config" type="application/json">{{CONFIG}}</script>
   <script>
     (async function () {
@@ -121,8 +99,9 @@
               headerSubtitle: { color: '#536071', fontSize: '13px' },
               footerAction: { display: 'none' }, footer: { background: 'transparent' },
               formFieldInput: { minHeight: '44px', fontSize: '16px' },
-              formButtonPrimary: { minHeight: '44px', fontWeight: '500', textTransform: 'none' },
-              socialButtonsBlockButton: { minHeight: '46px', borderColor: '#b8c1cd' }
+              formButtonPrimary: { minHeight: '44px', fontWeight: '500', textTransform: 'none', backgroundColor: '#eef2f6', color: '#25344a', border: '1px solid #d8dce1' },
+              socialButtonsBlockButton: { minHeight: '56px', backgroundColor: '#ffffff', border: '1px solid #0851a3', borderRadius: '8px' },
+              socialButtonsBlockButtonText: { fontSize: '15px', fontWeight: '500', color: '#17202a' }
             }
           }
         });
