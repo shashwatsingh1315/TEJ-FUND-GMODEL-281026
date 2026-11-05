@@ -11,7 +11,7 @@ const privateHeaders = {
   'Referrer-Policy': 'same-origin',
 };
 
-function settings(env) {
+export function dashboardSettings(env) {
   // Vercel supplies this deployment hostname. Never use a request header to
   // decide where an authentication redirect may return.
   const origin = new URL(env.VERCEL_ENV === 'preview' && env.VERCEL_URL
@@ -58,7 +58,7 @@ export function createDashboardHandler({
       return response('Method not allowed.', 405, { Allow: 'GET, HEAD' });
     }
     try {
-      const config = settings(env);
+      const config = dashboardSettings(env);
       const clerk = client ?? createClerkClient({
         secretKey: env.CLERK_SECRET_KEY,
         publishableKey: config.publishableKey,
@@ -79,8 +79,7 @@ export function createDashboardHandler({
       }
       const auth = state.toAuth();
       if (!state.isAuthenticated || !auth?.userId || !auth?.sessionId) {
-        const location = new URL(config.signIn);
-        location.searchParams.set('redirect_url', `${config.origin}/`);
+        const location = new URL('/sign-up', config.origin);
         const headers = new Headers(state.headers);
         headers.set('Location', location.href);
         return response(null, 303, headers, request.method);

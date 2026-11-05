@@ -66,8 +66,9 @@ test('anonymous visitors receive no financial model and return only to the confi
   assert.doesNotMatch(await result.text(), /PRIVATE FINANCIAL MODEL/);
   if (result.status === 303) {
     const location = new URL(result.headers.get('location'));
-    assert.equal(location.origin, 'https://accounts.example.com');
-    assert.equal(location.searchParams.get('redirect_url'), `${origin}/`);
+    assert.equal(location.origin, origin);
+    assert.equal(location.pathname, '/sign-up');
+    assert.equal(location.search, '');
   }
 });
 

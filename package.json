@@ -5,7 +5,7 @@
   "engines": { "node": "24.x" },
   "scripts": {
     "build": "python3 tools/build-site.py",
-    "test:auth": "node tools/test-dashboard-auth.mjs"
+    "test:auth": "node tools/test-dashboard-auth.mjs && node tools/test-auth-page.mjs"
   },
   "dependencies": { "@clerk/backend": "3.26.6" }
 }

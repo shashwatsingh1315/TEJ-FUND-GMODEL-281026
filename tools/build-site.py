@@ -7,6 +7,7 @@ Refuse to build when the checked-in dashboard and its sources disagree.
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -54,6 +55,16 @@ def build(root=ROOT):
         shutil.rmtree(private)
     private.mkdir()
     (private / "dashboard.html").write_bytes(html)
+
+    # Auth branding uses existing assets; no model data appears on this page.
+    auth = (root / "site-assets/auth.html").read_text(encoding="utf-8")
+    base = (root / WORKSPACE / "src/base/dashboard-base.html").read_text(encoding="utf-8")
+    fonts = re.findall(r"@font-face\{font-family:'Poppins';[^}]+\}", base)
+    if not fonts:
+        raise RuntimeError("Missing dashboard fonts for the account page.")
+    logo = (root / WORKSPACE / "src/brand/tejas-logo.svg").read_text(encoding="utf-8")
+    auth = auth.replace("{{FONT_FACES}}", "\n".join(fonts)).replace("{{LOGO}}", logo)
+    (private / "auth.html").write_text(auth, encoding="utf-8")
 
     # Replace the entire public output so no dashboard copy or stale file ships.
     dist = root / "dist"
