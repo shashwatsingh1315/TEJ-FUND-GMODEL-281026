@@ -156,3 +156,33 @@ test('previews accept sessions only for their Vercel-supplied deployment origin'
   assert.notEqual((await f.request(token())).status, 200);
   assert.equal(f.reads(), 1);
 });
+
+const emailUser = {
+  primaryEmailAddressId: 'email_primary',
+  emailAddresses: [{
+    id: 'email_primary', emailAddress: 'owner@example.com',
+    verification: { status: 'verified' },
+  }],
+};
+
+test('an allowlisted verified primary email can open the model without a metadata grant', async () => {
+  const f = fixture({ user: structuredClone(emailUser), config: { ...env, DASHBOARD_ALLOWED_EMAILS: ' OWNER@EXAMPLE.COM ' } });
+  assert.equal((await f.request(token())).status, 200);
+});
+
+for (const [name, mutate] of [
+  ['unverified email', user => { user.emailAddresses[0].verification.status = 'unverified'; }],
+  ['unlisted email', user => { user.emailAddresses[0].emailAddress = 'outsider@example.com'; }],
+  ['secondary email', user => { user.primaryEmailAddressId = 'different_primary'; }],
+  ['explicit revocation', user => { user.publicMetadata = { dashboardAccess: false }; }],
+  ['banned owner', user => { user.banned = true; }],
+  ['locked owner', user => { user.locked = true; }],
+]) {
+  test(`email allowlist denies ${name}`, async () => {
+    const user = structuredClone(emailUser);
+    mutate(user);
+    const f = fixture({ user, config: { ...env, DASHBOARD_ALLOWED_EMAILS: 'owner@example.com' } });
+    assert.equal((await f.request(token())).status, 403);
+    assert.equal(f.reads(), 0);
+  });
+}

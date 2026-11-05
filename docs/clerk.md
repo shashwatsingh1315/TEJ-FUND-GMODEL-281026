@@ -32,6 +32,7 @@ Use a Clerk application owned by your account; no framework migration is needed.
    | `CLERK_SIGN_IN_URL` | Full hosted Clerk Account Portal sign-in URL |
    | `CLERK_AUTHORIZED_PARTIES` | Optional comma-separated permitted session origins; defaults to `APP_ORIGIN` |
    | `CLERK_JWT_KEY` | Optional PEM public key for networkless signature verification |
+   | `DASHBOARD_ALLOWED_EMAILS` | Optional comma-separated exact viewer emails; only Clerk-verified primary addresses qualify |
 
    Production requires production keys and Clerk's production domain setup.
    Use a separate development instance and test keys for previews, with the exact
@@ -40,6 +41,9 @@ Use a Clerk application owned by your account; no framework migration is needed.
    to use that exact origin. Never add a wildcard or derive trusted origins
    from a user-provided redirect parameter.
 5. Grant your own Clerk user access before testing, then invite investors as below.
+   Alternatively, add your email to `DASHBOARD_ALLOWED_EMAILS` and create/sign in
+   to the Clerk account using that address. Clerk must verify it as the account's
+   primary email before the model is served. This does not send an invitation.
 6. Deploy a preview and verify the complete signed-out → sign-in → dashboard
    flow with real Clerk credentials before promoting production. Confirm an
    ordinary signed-in account without a grant receives HTTP 403.
@@ -71,6 +75,8 @@ For invitations created in the Clerk Dashboard instead, include
 with the command above. An invitation alone without this metadata does not
 authorize the financial model. Browser-editable `unsafeMetadata` is ignored.
 Revoke pending invitations separately in Clerk so they cannot later be accepted.
+An explicit `dashboardAccess:false` user metadata flag also overrides email
+allowlist access. Remove retired viewers from `DASHBOARD_ALLOWED_EMAILS` too.
 
 Viewers sign in through Clerk's hosted portal and can manage/sign out of their
 session there. Clerk's server handshake handles session cookie synchronization.

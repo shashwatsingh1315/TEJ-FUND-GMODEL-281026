@@ -29,7 +29,9 @@ function settings(env) {
   if (!env.CLERK_SECRET_KEY || !publishableKey) throw new Error('Missing Clerk keys.');
   const authorizedParties = (env.CLERK_AUTHORIZED_PARTIES || origin.origin)
     .split(',').map(value => new URL(value.trim()).origin);
-  return { origin: origin.origin, signIn, authorizedParties, publishableKey };
+  const allowedEmails = new Set((env.DASHBOARD_ALLOWED_EMAILS || '')
+    .split(',').map(value => value.trim().toLowerCase()).filter(Boolean));
+  return { origin: origin.origin, signIn, authorizedParties, publishableKey, allowedEmails };
 }
 
 function response(body, status, extraHeaders, method = 'GET') {
@@ -83,7 +85,14 @@ export function createDashboardHandler({
       // This grant is set on invitations by the administrator, and checked live
       // so removing it takes effect even for an existing signed-in browser.
       const user = await clerk.users.getUser(auth.userId);
-      if (user.banned || user.locked || user.publicMetadata?.dashboardAccess !== true) {
+      // A server-configured email allowlist can bootstrap owner access without
+      // sending an invitation. Match only Clerk's verified primary address.
+      // An explicit administrative revocation always overrides this allowlist.
+      const primaryEmail = user.emailAddresses?.find(email => email.id === user.primaryEmailAddressId);
+      const allowedEmail = user.publicMetadata?.dashboardAccess !== false
+        && primaryEmail?.verification?.status === 'verified'
+        && config.allowedEmails.has(primaryEmail.emailAddress.trim().toLowerCase());
+      if (user.banned || user.locked || !(user.publicMetadata?.dashboardAccess === true || allowedEmail)) {
         return response('Access is by invitation only. Contact the dashboard owner.', 403, state.headers, request.method);
       }
       const html = await getDashboard();
