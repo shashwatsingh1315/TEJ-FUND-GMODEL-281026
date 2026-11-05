@@ -77,7 +77,9 @@ After Clerk's handshake, an unauthenticated dashboard request redirects to
 alongside it. `api/auth.mjs` and `server/auth-page.mjs` serve `/sign-up/:path*`
 and `/sign-in/:path*` through Vercel rewrites. `tools/build-site.py` assembles
 `site-assets/auth.html` into `.private/auth.html`, using the existing Tejas logo,
-Poppins fonts, blue `#0851a3`, and cream branding in a responsive, form-first layout.
+Poppins fonts, blue `#0851a3`, and cream branding in a responsive, centered account
+form. The promotional side panel is omitted. Google is the prominent top action;
+email remains available below it as a secondary option.
 
 The pages load official ClerkJS 6 and UI 1 prebuilt widgets for sign-up, sign-in,
 verification, and recovery. Only public configuration (the publishable key and
@@ -92,9 +94,7 @@ the top with `appearance.options.socialButtonsPlacement`. In the Clerk Dashboard
 select the correct Development instance, then **SSO connections → Add connection
 → For all users → Google**, enable sign-up and sign-in, and **Save**. Development
 uses Clerk's shared credentials; no Google client keys are needed for this step.
-The latest public Frontend API `user_settings.social` check returned `{}`, so
-Google availability has not been verified. Recheck that instance and confirm the
-button and completed Google return flow on each project after saving.
+Confirm the Google button and completed return flow on each project after saving.
 
 ## Fix the development Account Portal return
 
