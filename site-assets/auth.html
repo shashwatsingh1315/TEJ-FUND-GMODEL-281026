@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0851a3">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{TITLE}} · Tejas</title>
+  <link rel="icon" href="/tejas-icon.png">
+  <style>
+    {{FONT_FACES}}
+    :root{color-scheme:light;--paper:#faf9f6;--white:#fff;--ink:#17202a;--secondary:#536071;--blue:#0851a3;--blue-dark:#063e7e;--rule:#d8dce1;--wash:#edf3fa;--font:'Poppins',sans-serif}
+    *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:#a1afbd var(--paper)}
+    body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+    a{color:var(--blue);text-underline-offset:4px}a:hover{color:var(--blue-dark)}
+    a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+    ::selection{background:#d7e7fb;color:#063e7e}input{caret-color:var(--blue)}
+    [hidden]{display:none!important}.skip{position:absolute;top:-80px;left:20px;background:white;padding:10px;z-index:10}.skip:focus{top:12px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .site-header{max-width:1280px;margin:auto;padding:30px 48px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:inline-flex;align-items:center}.brand svg{width:100px;height:auto;display:block}
+    .site-name{color:var(--secondary);font-size:13px}
+    .auth-layout{max-width:1160px;margin:16px auto 72px;padding:0 48px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);grid-template-areas:'overview form';gap:clamp(40px,7vw,104px);align-items:start}
+    .auth-panel{grid-area:form;background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:32px;min-width:0}
+    .account-nav{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--paper);padding:5px;border-radius:10px;margin-bottom:30px}
+    .account-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;text-decoration:none;font-weight:500;font-size:13px;border-radius:7px;color:var(--secondary);transition:background-color .18s,color .18s}
+    .account-nav a:hover{background:var(--wash);color:var(--blue)}
+    .account-nav a[aria-current=page]{background:var(--blue);color:white}
+    h1{font-size:25px;line-height:1.3;letter-spacing:-.025em;font-weight:600;margin:0 0 10px;text-wrap:balance}
+    #clerk-root{min-width:0}#clerk-root:empty{min-height:80px}
+    #loading{color:var(--secondary);font-size:13px;margin:0;padding:18px 0}
+    .auth-error{font-size:13px;color:var(--secondary);padding-top:12px}.auth-error strong{display:block;color:var(--ink);font-weight:500;margin-bottom:8px}
+    .retry{font:500 13px var(--font);border:0;border-radius:8px;background:var(--blue);color:white;padding:12px 18px;min-height:44px;cursor:pointer;margin:12px 12px 0 0}.retry:hover{background:var(--blue-dark)}
+    .overview{grid-area:overview;padding:50px 0 0;max-width:460px}
+    .overview h2{font-size:clamp(40px,4.5vw,62px);line-height:1.12;letter-spacing:-.035em;font-weight:500;margin:0 0 24px;text-wrap:balance}
+    .overview h2 span{display:block;color:var(--blue)}
+    .overview>p{color:var(--secondary);font-size:15px;line-height:1.8;margin:0;max-width:38ch}
+    .model-topics{margin:38px 0 0;padding:0;list-style:none;border-top:1px solid var(--rule)}
+    .model-topics li{padding:13px 0;border-bottom:1px solid var(--rule);color:var(--secondary);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .model-topics svg{color:var(--blue);flex-shrink:0;width:17px;height:17px}
+    .overview .access-note{font-size:12px;margin-top:28px;max-width:40ch}
+    .site-footer{max-width:1280px;margin:auto;padding:0 48px 24px;color:var(--secondary);font-size:11px}
+    @media(min-width:1500px){.auth-layout{margin-top:60px}}
+    @media(max-width:850px){.site-header{padding:24px}.auth-layout{max-width:500px;padding:0 24px;margin:12px auto 48px;grid-template-columns:minmax(0,1fr);grid-template-areas:'form' 'overview';gap:40px}.auth-panel{padding:26px}.overview{padding:0 4px}.overview h2{font-size:36px}.overview>p{font-size:14px}.model-topics{margin-top:26px}.site-footer{padding:0 24px 24px}.brand svg{width:84px}}
+    @media(max-width:380px){.site-name{font-size:11px}.auth-layout{padding:0 16px}.auth-panel{padding:22px 18px}.site-header{padding:20px}.account-nav a{font-size:12px}h1{font-size:23px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#account">Skip to account form</a>
+  <header class="site-header">
+    <a class="brand" href="/sign-up" aria-label="Tejas investor dashboard">{{LOGO}}</a>
+    <span class="site-name">Investor dashboard</span>
+  </header>
+  <main class="auth-layout">
+    <section class="auth-panel" id="account" aria-labelledby="account-title">
+      <nav class="account-nav" aria-label="Account access">
+        <a href="/sign-up" {{SIGNUP_CURRENT}}>Create account</a>
+        <a href="/sign-in" {{SIGNIN_CURRENT}}>Sign in</a>
+      </nav>
+      <h1 id="account-title" class="sr-only">{{TITLE}}</h1>
+      <div id="clerk-root" aria-busy="true"></div>
+      <p id="loading" role="status">Loading your account form…</p>
+      <div id="auth-error" class="auth-error" role="alert" hidden>
+        <strong>Your account form couldn’t load.</strong>
+        <p>Please try again, or use our secure account page.</p>
+        <button class="retry" id="retry" type="button">Try again</button>
+        <a href="{{HOSTED_URL}}">Continue to account access</a>
+      </div>
+      <noscript><p>Please enable JavaScript to create your account or sign in.</p></noscript>
+    </section>
+    <section class="overview" aria-labelledby="overview-title">
+      <h2 id="overview-title">Growth &amp; funding,<span>in focus.</span></h2>
+      <p>Explore the Tejas growth plan, from revenue and capital to funding rounds and investor returns.</p>
+      <ul class="model-topics">
+        <li>Revenue &amp; growth<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
+        <li>Capital &amp; funding<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
+        <li>Investor returns<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></li>
+      </ul>
+      <p class="access-note">Sign up once. Use your account across all Tejas dashboards.</p>
+    </section>
+  </main>
+  <footer class="site-footer">Tejas · Growth &amp; funding model</footer>
+  <script id="auth-config" type="application/json">{{CONFIG}}</script>
+  <script>
+    (async function () {
+      const config = JSON.parse(document.getElementById('auth-config').textContent);
+      const root = document.getElementById('clerk-root');
+      const loading = document.getElementById('loading');
+      document.getElementById('retry').addEventListener('click', () => location.reload());
+      function loadScript(src, publishableKey) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          const timeout = setTimeout(() => reject(new Error('Account form timed out')), 20000);
+          script.src = src;
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+          if (publishableKey) script.dataset.clerkPublishableKey = publishableKey;
+          script.onload = () => { clearTimeout(timeout); resolve(); };
+          script.onerror = () => { clearTimeout(timeout); reject(new Error('Account form unavailable')); };
+          document.head.appendChild(script);
+        });
+      }
+      try {
+        await loadScript(config.uiScriptUrl);
+        await loadScript(config.scriptUrl, config.publishableKey);
+        await window.Clerk.load({
+          ui: { ClerkUI: window.__internal_ClerkUICtor },
+          signInUrl: config.signInUrl,
+          signUpUrl: config.signUpUrl,
+          signInForceRedirectUrl: config.returnUrl,
+          signUpForceRedirectUrl: config.returnUrl,
+          allowedRedirectOrigins: [new URL(config.returnUrl).origin],
+          appearance: {
+            options: { elevation: 'flush', socialButtonsPlacement: 'top', socialButtonsVariant: 'blockButton', autoFocus: false },
+            variables: { colorPrimary: '#0851a3', colorForeground: '#17202a', colorMutedForeground: '#536071', colorBackground: '#ffffff', colorInput: '#ffffff', colorInputForeground: '#17202a', colorRing: '#0851a3', borderRadius: '0.5rem', fontFamily: 'Poppins, sans-serif', fontSize: '0.8125rem' },
+            elements: {
+              rootBox: { width: '100%' }, cardBox: { width: '100%', boxShadow: 'none', border: 'none' },
+              card: { padding: '0', boxShadow: 'none', border: 'none', background: 'transparent' },
+              headerTitle: { fontSize: '25px', fontWeight: '600', letterSpacing: '-0.025em' },
+              headerSubtitle: { color: '#536071', fontSize: '13px' },
+              footerAction: { display: 'none' }, footer: { background: 'transparent' },
+              formFieldInput: { minHeight: '44px', fontSize: '16px' },
+              formButtonPrimary: { minHeight: '44px', fontWeight: '500', textTransform: 'none' },
+              socialButtonsBlockButton: { minHeight: '46px', borderColor: '#b8c1cd' }
+            }
+          }
+        });
+        if (window.Clerk.session?.status === 'active') {
+          location.replace(config.returnUrl);
+          return;
+        }
+        const options = { routing: 'path', path: config.flow === 'sign-up' ? '/sign-up' : '/sign-in',
+          signInUrl: config.signInUrl, signUpUrl: config.signUpUrl,
+          forceRedirectUrl: config.returnUrl, signInForceRedirectUrl: config.returnUrl, signUpForceRedirectUrl: config.returnUrl };
+        if (config.flow === 'sign-up') window.Clerk.mountSignUp(root, options);
+        else window.Clerk.mountSignIn(root, options);
+        loading.hidden = true;
+        root.setAttribute('aria-busy', 'false');
+      } catch {
+        loading.hidden = true;
+        root.setAttribute('aria-busy', 'false');
+        document.getElementById('auth-error').hidden = false;
+      }
+    })();
+  </script>
+</body>
+</html>

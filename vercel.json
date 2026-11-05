@@ -5,9 +5,12 @@
   "installCommand": "npm ci --omit=dev",
   "outputDirectory": "dist",
   "functions": {
-    "api/dashboard.mjs": { "includeFiles": ".private/dashboard.html" }
+    "api/dashboard.mjs": { "includeFiles": ".private/dashboard.html" },
+    "api/auth.mjs": { "includeFiles": ".private/auth.html" }
   },
   "rewrites": [
+    { "source": "/sign-up/:path*", "destination": "/api/auth?flow=sign-up" },
+    { "source": "/sign-in/:path*", "destination": "/api/auth?flow=sign-in" },
     { "source": "/", "destination": "/api/dashboard" },
     { "source": "/index.html", "destination": "/api/dashboard" }
   ],

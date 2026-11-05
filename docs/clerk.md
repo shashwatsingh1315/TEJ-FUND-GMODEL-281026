@@ -31,7 +31,8 @@ Use a Clerk application owned by your account; no framework migration is needed.
    choose Clerk's **Invite-only** access mode and use `restricted` dashboard access.
 3. Configure the hosted **Account Portal** sign-in page and set the application's
    **Home URL** to the dashboard origin. Use the portal's real sign-in URL for
-   `CLERK_SIGN_IN_URL`; there is no local `/sign-in` page.
+   `CLERK_SIGN_IN_URL`; it remains the recovery fallback and backend SDK setting.
+   The project's local `/sign-up` and `/sign-in` pages handle normal account access.
 4. Add these variables to each Vercel project using this repository. A template is
    in `.env.example`. Keep the secret key in Vercel or a git-ignored env file.
 
@@ -40,7 +41,7 @@ Use a Clerk application owned by your account; no framework migration is needed.
    | `CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | The selected Clerk instance's publishable key; either name is supported |
    | `CLERK_SECRET_KEY` | Its secret key; server-only |
    | `APP_ORIGIN` | That project's stable HTTPS origin, without a path |
-   | `CLERK_SIGN_IN_URL` | Full hosted Clerk Account Portal sign-in URL |
+   | `CLERK_SIGN_IN_URL` | Full hosted Clerk Account Portal sign-in URL, used for recovery fallback and backend SDK configuration |
    | `CLERK_AUTHORIZED_PARTIES` | Optional comma-separated permitted session origins; defaults to `APP_ORIGIN` |
    | `CLERK_JWT_KEY` | Optional PEM public key for networkless signature verification |
    | `DASHBOARD_ALLOWED_EMAILS` | Optional comma-separated exact viewer emails; only Clerk-verified primary addresses qualify |
@@ -59,7 +60,7 @@ Use a Clerk application owned by your account; no framework migration is needed.
    allowlist entries are needed. In `restricted` mode, grant the Clerk user access
    or add its verified primary email to `DASHBOARD_ALLOWED_EMAILS`. The dashboard
    allowlist does not bypass Clerk's sign-up restrictions.
-6. Deploy a preview and verify the complete signed-out → sign-in → dashboard
+6. Deploy a preview and verify the complete signed-out → create account/sign-in → dashboard
    flow with real Clerk credentials before promoting production. An ordinary
    signed-in account must receive HTTP 200 in `authenticated` mode and HTTP 403
    in `restricted` mode. Explicitly blocked accounts must receive HTTP 403 in both.
@@ -69,10 +70,36 @@ closed with HTTP 503. Unrecognized access modes also fail closed. This change al
 older deployment. Retire or protect earlier public deployments and other aliases
 that still publish the old static HTML.
 
+## Branded account pages and Google sign-in
+
+After Clerk's handshake, an unauthenticated dashboard request redirects to
+`/sign-up` on the same project, with **Create account** first and **Sign in**
+alongside it. `api/auth.mjs` and `server/auth-page.mjs` serve `/sign-up/:path*`
+and `/sign-in/:path*` through Vercel rewrites. `tools/build-site.py` assembles
+`site-assets/auth.html` into `.private/auth.html`, using the existing Tejas logo,
+Poppins fonts, blue `#0851a3`, and cream branding in a responsive, form-first layout.
+
+The pages load official ClerkJS 6 and UI 1 prebuilt widgets for sign-up, sign-in,
+verification, and recovery. Only public configuration (the publishable key and
+script URLs) and canonical project return URLs are injected; the secret key and
+financial model HTML remain server-side. The account pages retain private/no-store,
+noindex, nosniff, and same-origin referrer headers. Keep each project's existing
+`APP_ORIGIN` so successful account access returns to that project's dashboard.
+
+Google buttons appear automatically when the Google social connection is enabled
+for the shared Clerk Development instance. The widgets place social buttons at
+the top with `appearance.options.socialButtonsPlacement`. In the Clerk Dashboard,
+select the correct Development instance, then **SSO connections → Add connection
+→ For all users → Google**, enable sign-up and sign-in, and **Save**. Development
+uses Clerk's shared credentials; no Google client keys are needed for this step.
+The latest public Frontend API `user_settings.social` check returned `{}`, so
+Google availability has not been verified. Recheck that instance and confirm the
+button and completed Google return flow on each project after saving.
+
 ## Fix the development Account Portal return
 
-The dashboard does not load ClerkJS, so do not depend on Clerk's browser SDK
-automatically discovering the development home origin. On 2026-11-05, the
+The hosted recovery fallback still needs the correct development home origin;
+do not depend on Clerk's browser SDK automatically discovering it. On 2026-11-05, the
 existing instance's effective Home URL, after-sign-in URL, and after-sign-up URL
 all pointed at `https://rare-weevil-5017.accounts.dev/default-redirect`.
 The handler's `redirect_url` and `afterSignInUrl` do not persist these
@@ -153,8 +180,9 @@ An explicit `dashboardAccess:false` user metadata flag overrides both access
 modes and email allowlist access. In restricted mode, remove retired viewers
 from `DASHBOARD_ALLOWED_EMAILS` too.
 
-Viewers sign in through Clerk's hosted portal and can manage/sign out of their
-session there. Clerk's server handshake handles session cookie synchronization.
+Viewers create an account or sign in on the project's branded account pages;
+the hosted portal remains available for recovery and session management.
+Clerk's server handshake handles session cookie synchronization.
 Once delivered, dashboard content can be saved by an authorized viewer; access
 revocation governs subsequent requests.
 
