@@ -1,4 +1,4 @@
-# Tejas reading deck: 4 slides (story strip + chart)
+# Tejas reading deck: 5 slides (story strip + chart)
 
 **How to use it:** paste the **Global style** block plus **one** slide block into the image model, one slide at a time. Then check every number in the image against this document.
 
@@ -7,7 +7,7 @@
 2. **The evidence**: one chart.
 3. **The conclusion**: a ribbon.
 
-**The deck's arc** (shown at the top of every slide): **1 What we sell → 2 What we keep → 3 What we need → 4 What you get**
+**The deck's arc** (shown at the top of every slide): **0 How it's built → 1 What we sell → 2 What we keep → 3 What we need → 4 What you get**
 
 **What the reader should conclude without being told:**
 - *They know the ground:* every assumption has a measured counterpart in today's accounts.
@@ -29,7 +29,7 @@ Headline font: Poppins SemiBold. Body: IBM Plex Sans. Subheadline: Lora serif.
 
 LAYOUT OF EVERY SLIDE, top to bottom (approximate share of slide height):
 1. TOP BAR (5%): at the far left a small empty rounded rectangle (logo space, leave blank).
-   At the right four small pills: "1 What we sell" → "2 What we keep" → "3 What we need" → "4 What you get".
+   At the right five small pills: "0 How it's built" → "1 What we sell" → "2 What we keep" → "3 What we need" → "4 What you get".
    The current slide's pill is filled terracotta #D97757 with white text; the others are outlined grey.
 2. HEADLINE (13%): large, left-aligned, with a short vertical terracotta bar to its left. Subheadline below in Lora.
 3. STORY STRIP (20%): three small cards in one row, labelled with terracotta circles "A", "B", "C",
@@ -54,12 +54,87 @@ Quarter labels for time axes: Q1 Dec 26 · Q2 Mar 27 · Q3 Jun 27 · Q4 Sep 27 �
 
 ---
 
+## Slide 0: How the model is built (opening slide)
+
+**The story:** **A** today's four markets set the market size → **B** each product line is sized against tile adhesive using national markets → **C** new cities use the same sizes and the same share curve. **Main area:** on the left, the formula worked through for Raipur; on the right, the share curve with Nagpur and Vidarbha plotted on it. **Ribbon:** why the recipe repeats.
+
+**Why this slide comes first:** it answers "where does every number come from?" before the VC sees a single forecast. Every later slide uses this formula.
+
+```
+SLIDE 0 OF 5 — pill "0 How it's built" active.
+
+HEADLINE: "Every rupee of the plan is built from what four markets sell today"
+SUBHEADLINE: "One formula for every city and every product: markets open × market size × product size × share."
+
+STORY STRIP — three compact cards joined by terracotta arrows.
+Card A — title "MEASURED IN TODAY'S MARKETS"
+  Mini-visual: four small blue map pins.
+  Bold number: "₹1.44 Cr ÷ 30% = ₹4.8 Cr"
+  Caption: "Today's tile-adhesive sales set the market"
+  Small grey line under the caption: "Raipur, Nagpur ₹1.37 Cr each · Vidarbha, Chhattisgarh ₹1.03 Cr each"
+Arrow A→B, word: "size each line"
+Card B — title "SIZED BY PRODUCT"
+  Mini-visual: five thin horizontal blue bars of different lengths, labelled
+  "Tile 1×", "Wood 1×", "uPVC 1.72×", "Waterproofing 1×", "Bondure 0.25×".
+  Bold number: "5 lines = 4.97× tile adhesive"
+  Caption: "Each line sized by its national market"
+Arrow B→C, word: "extend"
+Card C — title "EXTENDED TO NEW CITIES"
+  Mini-visual: one small blue square, one very large blue square (ten times the area), one small light-blue square.
+  Bold number: "Medium city ₹1.00 Cr · Large city ₹10 Cr"
+  Caption: "New cities sized 27% below today's"
+  Small grey line under the caption: "A metro has several times the contractors and floor area"
+
+MAIN AREA — two white cards side by side, equal width.
+
+LEFT CARD — title "The formula, worked for Raipur"
+  A large equation made of four rounded boxes joined by big "×" and "=" signs:
+    Box 1 (light blue, city icon): label "Market size", number "₹1.37 Cr", small text "Raipur tile-adhesive market, a month"
+    ×
+    Box 2 (light blue, stacked-lines icon): label "Product size", number "4.97×", small text "five lines against tile adhesive"
+    ×
+    Box 3 (light blue, pie icon with a 30% slice): label "Share", number "30%", small text "once fully ramped"
+    =
+    Box 4 (solid blue, white text, larger): number "₹2.04 Cr a month", small text "Raipur, all five lines"
+  Under the equation, a second, smaller row in the same style:
+    "A new medium city:  ₹1.00 Cr × 4.97 × 30% = ₹1.49 Cr a month"
+  Under that, a thin grey strip titled "National markets behind the product sizes":
+    "Tile adhesive ₹8,041 Cr · Wood adhesive ₹8,572 Cr · Windows & façades ₹14,700 Cr · Waterproofing ₹7,200 Cr · Specialty adhesive ₹4,000 Cr"
+
+RIGHT CARD — title "Share grows with every quarter a line sells in a market"
+  Line chart. X-axis: "Quarters a line has been selling in the market" with ticks 1, 2, 3, 4, 5, 6. Y-axis: 0% to 40%.
+  Solid dark-blue line with dots, "Medium markets": 8%, 15%, 20%, 25%, 28%, 30% — each point labelled; label at the end "30%".
+  Dashed light-blue line, "Large cities": 3%, 7%, 11%, 14%, 17%, 21% — label at the end "21%".
+  Three terracotta evidence dots with short labels:
+    at quarter 1, 8%: "Nagpur · month 3 · 8%"
+    at quarter 2, 15%: "Nagpur · month 4 · ₹20.4 L"
+    at quarter 3, 37% (above the line): "Vidarbha · month 7 · ₹37.9 L"
+  Small legend: "Model curve" (solid line), "Large cities" (dashed line), "Tejas actuals" (terracotta dot).
+
+RESULT RIBBON — small title at the left "Why the recipe repeats", then three white rounded pills, each with a small icon:
+  Pill 1 (handshake icon): "A new line sells through a relationship already won"
+  Pill 2 (circular repeat-arrows icon): "Contractors trial, repeat, then move their wallet: 84% of revenue is repeat"
+  Pill 3 (map-with-pin icon): "A city is mapped in under 2 months"
+Right tag: "→ next: what we sell"
+
+FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 5"
+```
+
+**The numbers behind this slide, from the model:**
+- Raipur: 1.37 × 4.97 × 30% = 2.04
+- New medium city: 1.00 × 4.97 × 30% = 1.49. Both match the Cities page at Q16.
+- 4.97 = 1 + 1 + 1.72 + 1 + 0.25.
+- Nagpur ₹20.4 L ÷ ₹1.37 Cr = 15%, the curve's quarter-2 value.
+- Vidarbha ₹37.9 L ÷ ₹1.03 Cr = 37%.
+
+---
+
 ## Slide 1: What we sell
 
 **The story:** **A** four markets already earn ₹1.6 Cr a month → **B** in one market, five product lines take Raipur from ₹0.46 to ₹2.04 Cr → **C** we open 7 markets in year 1, rising to 26 in year 4. **Chart:** revenue by product line. **Ribbon:** live-market share, the share curve every new market follows, repeat revenue.
 
 ```
-SLIDE 1 OF 4 — pill "1 What we sell" active.
+SLIDE 1 OF 5 — pill "1 What we sell" active.
 
 HEADLINE (two lines, exactly):
 "Building on 20% MoM growth, strengthening already robust margins:
@@ -92,12 +167,12 @@ Three small launch flags on the bars where each line first appears: "Wood · Q4"
 Legend under the chart with the five line names.
 
 RESULT RIBBON — three white rounded pills in a row, each with a small icon:
-  Pill 1 (pie icon, blue slice): "All 4 live markets at 30% tile-adhesive share"
-  Pill 2 (tiny rising blue line with six dots): "Every new market follows the same curve: 8% → 15% → 20% → 25% → 28% → 30%"
-  Pill 3 (circular repeat-arrows icon): "84% of revenue is repeat"
+  Pill 1 (small factory icon): "80% made in-house"
+  Pill 2 (flask icon): "16 formulations, 4 patents in 9 months"
+  Pill 3 (small rising blue line): "Bondure reached ~10% of sales in 3 months"
 Right tag: "→ next: what we keep"
 
-FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 4"
+FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "2 / 5"
 ```
 
 ---
@@ -107,7 +182,7 @@ FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 4"
 **The story:** each card is one margin lever, showing what has *already happened* in Tejas's accounts next to what the plan assumes. **Chart:** the margin bridge from −15% to +16%. Cards A, B and C sit directly above the bridge's three steps, in the same left-to-right order.
 
 ```
-SLIDE 2 OF 4 — pill "2 What we keep" active.
+SLIDE 2 OF 5 — pill "2 What we keep" active.
 
 HEADLINE (exactly): "PBT margin expands from -10% to 16% by Q16, while delivering ~15% MoM hypergrowth"
 SUBHEADLINE (exactly): "Revenue split into product costs, selling costs, fixed costs and profit."
@@ -146,7 +221,7 @@ RESULT RIBBON — three white rounded pills in a row, each with a small icon:
   Pill 3 (rupee-coin-before-truck icon): "59% of orders paid before dispatch"
 Right tag: "→ next: what we need"
 
-FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "2 / 4"
+FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "3 / 5"
 ```
 
 ---
@@ -156,7 +231,7 @@ FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "2 / 4"
 **The story:** **A** ₹40 Cr buys capacity → **B** capacity grows ARR 7.7× → **C** round 2 raises ₹200 Cr → a loop arrow back to A for rounds 3 and 4. **Chart:** ARR bars with the four rounds marked by amount raised (no valuations). **Ribbon:** capital efficiency, plants ahead of demand, rounds 3–4.
 
 ```
-SLIDE 3 OF 4 — pill "3 What we need" active.
+SLIDE 3 OF 5 — pill "3 What we need" active.
 
 HEADLINE (exactly): "Building India's leading capital magnet to attract and deploy ₹100–1,000 Cr over the next 4 years."
 SUBHEADLINE (exactly): "Continuing 20% MoM growth to ₹144Cr ARR in 14M, targeting next raise at ~₹1,500 Cr (6x current)"
@@ -189,7 +264,7 @@ RESULT RIBBON — three white rounded pills in a row, each with a small icon:
   Pill 3 (network-nodes icon): "Rounds 3–4 bring regional brands and plants into the network"
 Right tag: "→ next: what you get"
 
-FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "3 / 4"
+FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "4 / 5"
 ```
 
 ---
@@ -199,7 +274,7 @@ FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "3 / 4"
 **The story:** **A** ₹25 Cr goes in → **B** each round marks it up → **C** at the 2030 exit it's worth ₹1,256 Cr (50.2×). **Chart:** the value of the ₹25 Cr across 16 quarters. **Ribbon:** the ROCE engine.
 
 ```
-SLIDE 4 OF 4 — pill "4 What you get" active.
+SLIDE 4 OF 5 — pill "4 What you get" active.
 
 HEADLINE (exactly): "₹30Cr today returns 6x TVPI (₹180Cr) in 5 quarters & 40x DPI (~₹1,000Cr -approx. realisable) by Q16."
 SUBHEADLINE (exactly): "Value at an exit in each quarter, after the rounds closed by then. Equity value includes cash on hand."
@@ -229,7 +304,7 @@ Left (wider), small title (exactly): "Building a high-ROCE machine, rapidly scal
   [green rounded box "16% margin"] × [brown rounded box "3.6 capital turns"] = [large green circle "59% ROCE"]
 Right: one white rounded pill with a small green calendar-tick icon: "ROCE positive within a year"
 
-FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "4 / 4"
+FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "5 / 5"
 ```
 
 ---
