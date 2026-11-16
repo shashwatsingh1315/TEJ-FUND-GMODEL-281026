@@ -56,76 +56,73 @@ Quarter labels for time axes: Q1 Dec 26 · Q2 Mar 27 · Q3 Jun 27 · Q4 Sep 27 �
 
 ## Slide 0: How the model is built (opening slide)
 
-**The story:** **A** today's four markets set the market size → **B** each product line is sized against tile adhesive using national markets → **C** new cities use the same sizes and the same share curve. **Main area:** on the left, the formula worked through for Raipur; on the right, the share curve with Nagpur and Vidarbha plotted on it. **Ribbon:** why the recipe repeats.
+**The logic, left to right:**
+1. **What we saw.** Our four markets each climbed fast, then levelled at about 30% of their tile-adhesive market.
+2. **The formula we took from it.** Market size × share for the quarter × product size.
+3. **How we extend it.** The same formula and curve, applied to more lines in the same markets and to new markets.
 
-**Why this slide comes first:** it answers "where does every number come from?" before the VC sees a single forecast. Every later slide uses this formula.
+This slide has no separate story strip. The three columns are the story, and column 1 holds the chart.
 
 ```
 SLIDE 0 OF 5 — pill "0 How it's built" active.
 
-HEADLINE: "Every rupee of the plan is built from what four markets sell today"
-SUBHEADLINE: "One formula for every city and every product: markets open × market size × product size × share."
+HEADLINE: "Built from how our four markets actually grew"
+SUBHEADLINE: "We read the pattern in Raipur, Nagpur, Vidarbha and Chhattisgarh, turned it into one formula, and extended it to more lines and more cities."
 
-STORY STRIP — three compact cards joined by terracotta arrows.
-Card A — title "MEASURED IN TODAY'S MARKETS"
-  Mini-visual: four small blue map pins.
-  Bold number: "₹1.44 Cr ÷ 30% = ₹4.8 Cr"
-  Caption: "Today's tile-adhesive sales set the market"
-  Small grey line under the caption: "Raipur, Nagpur ₹1.37 Cr each · Vidarbha, Chhattisgarh ₹1.03 Cr each"
-Arrow A→B, word: "size each line"
-Card B — title "SIZED BY PRODUCT"
-  Mini-visual: five thin horizontal blue bars of different lengths, labelled
-  "Tile 1×", "Wood 1×", "uPVC 1.72×", "Waterproofing 1×", "Bondure 0.25×".
-  Bold number: "5 lines = 4.97× tile adhesive"
-  Caption: "Each line sized by its national market"
-Arrow B→C, word: "extend"
-Card C — title "EXTENDED TO NEW CITIES"
-  Mini-visual: one small blue square, one very large blue square (ten times the area), one small light-blue square.
-  Bold number: "Medium city ₹1.00 Cr · Large city ₹10 Cr"
-  Caption: "New cities sized 27% below today's"
-  Small grey line under the caption: "A metro has several times the contractors and floor area"
+BODY — three tall white cards side by side (widths about 40% / 25% / 35%), each with a big terracotta circle "1", "2", "3"
+at its top-left, joined by thick terracotta arrows. Word on arrow 1→2: "becomes". Word on arrow 2→3: "extends to".
 
-MAIN AREA — two white cards side by side, equal width.
+CARD 1 — title "WHAT WE SAW"
+  Line chart, title "Share of a market's tile-adhesive use, by quarter since we entered"
+  X-axis: quarters since entry 1, 2, 3, 4, 5, 6 (small grey "month 3, 6, 9, 12, 15, 18" under them). Y-axis 0% to 40%.
+  Thin dark-blue line with small dots through 8%, 15%, 20%, 25%, 28%, 30%, labelled at its end "The curve we use".
+  Three large terracotta dots, our actual results, each labelled:
+    quarter 1 at 8%: "Nagpur · month 3 · 8%"
+    quarter 2 at 15%: "Nagpur · month 4 · ₹20.4 L"
+    quarter 3 at 37%: "Vidarbha · month 7 · ₹37.9 L"
+  A flat terracotta band at 30% across quarters 5–6, labelled "All four markets today: 30%".
+  Legend: terracotta dot "Our markets", dark line "The curve we use".
+  Under the chart, one bold line: "₹1.6 Cr a month today: ₹1.44 Cr tile adhesive + ₹0.16 Cr Bondure"
+  Caption: "Every market climbs fast, then levels at about 30%."
 
-LEFT CARD — title "The formula, worked for Raipur"
-  A large equation made of four rounded boxes joined by big "×" and "=" signs:
-    Box 1 (light blue, city icon): label "Market size", number "₹1.37 Cr", small text "Raipur tile-adhesive market, a month"
+CARD 2 — title "THE FORMULA WE TOOK FROM IT"
+  Three light-blue rounded boxes stacked vertically, joined by large "×" signs, ending with "=" and a solid-blue result box:
+    Box 1, city icon — "Market size" — big "₹1.37 Cr a month" — small "₹1.44 Cr of tile sales at 30% share = ₹4.8 Cr across the four markets"
     ×
-    Box 2 (light blue, stacked-lines icon): label "Product size", number "4.97×", small text "five lines against tile adhesive"
+    Box 2, pie icon — "Share" — big "8% → 30%" — small "the curve from card 1, by quarter since entry"
     ×
-    Box 3 (light blue, pie icon with a 30% slice): label "Share", number "30%", small text "once fully ramped"
+    Box 3, stacked-lines icon — "Product size" — big "1× tile adhesive" — small "every other line sized against it"
     =
-    Box 4 (solid blue, white text, larger): number "₹2.04 Cr a month", small text "Raipur, all five lines"
-  Under the equation, a second, smaller row in the same style:
-    "A new medium city:  ₹1.00 Cr × 4.97 × 30% = ₹1.49 Cr a month"
-  Under that, a thin grey strip titled "National markets behind the product sizes":
-    "Tile adhesive ₹8,041 Cr · Wood adhesive ₹8,572 Cr · Windows & façades ₹14,700 Cr · Waterproofing ₹7,200 Cr · Specialty adhesive ₹4,000 Cr"
+    Result box (solid blue, white text) — "Revenue of one line in one market, each quarter"
+  Caption: "Three factors, each read from our own markets."
 
-RIGHT CARD — title "Share grows with every quarter a line sells in a market"
-  Line chart. X-axis: "Quarters a line has been selling in the market" with ticks 1, 2, 3, 4, 5, 6. Y-axis: 0% to 40%.
-  Solid dark-blue line with dots, "Medium markets": 8%, 15%, 20%, 25%, 28%, 30% — each point labelled; label at the end "30%".
-  Dashed light-blue line, "Large cities": 3%, 7%, 11%, 14%, 17%, 21% — label at the end "21%".
-  Three terracotta evidence dots with short labels:
-    at quarter 1, 8%: "Nagpur · month 3 · 8%"
-    at quarter 2, 15%: "Nagpur · month 4 · ₹20.4 L"
-    at quarter 3, 37% (above the line): "Vidarbha · month 7 · ₹37.9 L"
-  Small legend: "Model curve" (solid line), "Large cities" (dashed line), "Tejas actuals" (terracotta dot).
+CARD 3 — title "HOW WE EXTEND IT"
+  Two mini-panels stacked, separated by a thin rule.
+  Mini-panel A, heading "More lines in the same market":
+    a short pale-blue column labelled "Raipur today ₹0.46 Cr" next to a tall column of five blue floors, bottom to top:
+    "Tile adhesive 0.41", "Bondure 0.10", "Wood adhesive 0.41", "uPVC 0.71", "Waterproofing 0.41", total label "₹2.04 Cr".
+    Small grey line: "Sized by national markets: wood 1× · uPVC 1.72× · waterproofing 1× · Bondure 0.25× tile adhesive"
+  Mini-panel B, heading "More markets":
+    three squares drawn to scale with labels:
+    small blue square "Medium city ₹1.00 Cr · 27% below today's"
+    very large blue square (ten times the small one) "Large city ₹10 Cr · a metro, curve stops at 21%"
+    small light-blue square "Dealer zone ₹0.75 Cr"
+  Caption: "Same formula, same curve, more lines and more markets."
 
-RESULT RIBBON — small title at the left "Why the recipe repeats", then three white rounded pills, each with a small icon:
+RESULT RIBBON — small title at the left "Why the pattern repeats", then three white rounded pills, each with a small icon:
   Pill 1 (handshake icon): "A new line sells through a relationship already won"
   Pill 2 (circular repeat-arrows icon): "Contractors trial, repeat, then move their wallet: 84% of revenue is repeat"
-  Pill 3 (map-with-pin icon): "A city is mapped in under 2 months"
+  Pill 3 (map-with-pin icon): "Hiring sets the pace: a city is mapped in under 2 months"
 Right tag: "→ next: what we sell"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 5"
 ```
 
 **The numbers behind this slide, from the model:**
-- Raipur: 1.37 × 4.97 × 30% = 2.04
-- New medium city: 1.00 × 4.97 × 30% = 1.49. Both match the Cities page at Q16.
-- 4.97 = 1 + 1 + 1.72 + 1 + 0.25.
-- Nagpur ₹20.4 L ÷ ₹1.37 Cr = 15%, the curve's quarter-2 value.
-- Vidarbha ₹37.9 L ÷ ₹1.03 Cr = 37%.
+- Nagpur ₹20.4 L ÷ ₹1.37 Cr = 15%. Vidarbha ₹37.9 L ÷ ₹1.03 Cr = 37%.
+- ₹1.44 Cr ÷ 30% = ₹4.8 Cr. That splits into ₹1.37 Cr each for Raipur and Nagpur, and ₹1.03 Cr each for Vidarbha and Chhattisgarh.
+- Raipur fully ramped: 1.37 × 30% × (1 + 0.25 + 1 + 1.72 + 1) = ₹2.04 Cr. Its floors: 0.41 + 0.10 + 0.41 + 0.71 + 0.41.
+- Medium dealer zone ₹0.75 Cr is 27% below ₹1.03 Cr.
 
 ---
 
