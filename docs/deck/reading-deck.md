@@ -9,7 +9,7 @@
 - **No orphan numbers.** Each number either comes from today's sales or follows from a number shown earlier on the same slide.
 - **No pill rows.** Each slide ends with one plain sentence.
 
-**Headline numbers, aligned to the model:** growth is **~10% MoM**. That matches the 3.75× revenue growth of the last 15 months (~9% a month) and the plan's four-year average (~10% a month), so no model number or valuation changes. Margins use VC terms: **gross margin** (revenue − cost of goods), **contribution margin** (gross margin − selling costs), **EBITDA** (contribution − fixed costs).
+**Headlines and subheadlines** are the founders' originals, word for word. Margins in slide bodies use VC terms: **gross margin** (revenue − cost of goods), **contribution margin** (gross margin − selling costs), **EBITDA** (contribution − fixed costs).
 
 ---
 
@@ -138,104 +138,107 @@ FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 5"
 
 ## Slide 1: What we sell
 
-Same layout as the version you generated. Only the changes are listed in the notes after the block.
+**What a reader should get at a peek:** three growth engines on top that multiply into the chart. More markets × more revenue per market (because each market takes more products) = the last bar.
 
 ```
 SLIDE 1 OF 5 — pill "1 What we sell" active.
 
-HEADLINE (two lines):
-"Building on ~10% MoM growth, strengthening already robust margins:
-₹148Cr ARR (6% EBITDA) by M18 & ₹1,500Cr ARR (~16% EBITDA) by M48."
+HEADLINE (two lines, exactly):
+"Building on 20% MoM growth, strengthening already robust margins:
+₹144Cr ARR (2% PBT) by M14 & ₹1,500Cr ARR (~16% PBT) by M48."
 SUBHEADLINE: "One market's recipe, proven today, repeated market by market."
 
-STORY STRIP (three compact cards, terracotta arrows):
-Card A — four small blue map pins. Bold: "₹1.6 Cr a month". Caption: "Raipur, Nagpur, Vidarbha, Chhattisgarh — live today"
-Arrow "deepen"
-Card B — a short pale column next to a tall column of five blue floors. Bold: "One new city: ₹30 L → ₹1.5 Cr". Caption: "Five products in the same market"
-Arrow "replicate"
-Card C — four groups of small squares labelled "Y1 7", "Y2 13", "Y3 19", "Y4 26". Bold: "7 → 26 new markets a year". Caption: "Paced by hiring relationship managers"
+THREE GROWTH ENGINES (compact cards in one row). Each card: a small icon, a short label in bold caps, a big "today → Sep 2030" figure in blue, one caption.
+Between card A and card B a large "×" sign; between card B and card C a small terracotta arrow with the word "so".
+Card A — icon: map pins multiplying. Label "MORE MARKETS". Big: "4 → 69 markets". Caption: "7, 13, 19, 26 opened each year"
+Card B — icon: five stacked product boxes. Label "MORE PRODUCTS IN EACH". Big: "2 → 5 products". Caption: "Wood Q4 · uPVC Q6 · waterproofing Q10"
+Card C — icon: one tall bar beside a short bar. Label "MORE REVENUE PER MARKET". Big: "₹0.4 → ₹1.9 Cr a month". Caption: "Each product builds over six quarters"
 
 CHART (full width) — title "Revenue a month by product line (₹ Cr)"
-Stacked vertical bars, 16 quarters with quarter labels. Use five clearly different colours so every line is visible:
+Stacked vertical bars, 16 quarters with quarter labels. Five clearly different colours so every line is visible:
   Tile adhesive (dark navy #1D3F72): 1.6, 2.0, 2.5, 3.3, 4.3, 5.7, 7.2, 9.0, 10.9, 13.3, 15.8, 18.5, 21.4, 24.7, 27.9, 31.0
   Bondure (mid blue #3976B9): 0.2, 0.2, 0.4, 0.7, 0.9, 1.3, 1.7, 2.2, 2.7, 3.3, 3.9, 4.6, 5.4, 6.2, 7.0, 7.8
   Wood adhesive (sky blue #7FB0E0): 0, 0, 0, 0.9, 2.1, 3.4, 5.0, 6.8, 9.0, 10.9, 13.3, 15.8, 18.5, 21.4, 24.7, 27.9
   uPVC (teal #2E8B9A): 0, 0, 0, 0, 0, 2.0, 4.6, 7.4, 10.8, 14.4, 18.8, 22.8, 27.1, 31.7, 36.8, 42.5
-  Waterproofing (pale blue #BCD6EE with thin outline): 0,0,0,0,0,0,0,0,0, 1.8, 4.2, 6.5, 9.2, 12.2, 15.8, 18.5
+  Waterproofing (pale blue #BCD6EE with a thin outline): 0,0,0,0,0,0,0,0,0, 1.8, 4.2, 6.5, 9.2, 12.2, 15.8, 18.5
 Totals on top: 1.8, 2.2, 2.9, 4.9, 7.3, 12, 19, 25, 33, 44, 56, 68, 82, 96, 112, 128
-Launch flags: "Wood · Q4", "uPVC · Q6", "Waterproofing · Q10". Legend below.
+Launch flags: "Wood · Q4", "uPVC · Q6", "Waterproofing · Q10". Legend below. No tooltips or stray labels.
 
-BOTTOM BAND — one sentence:
-  "About 70% of Sep 2030 revenue comes from products we launch after today — sold to dealers we already have."
+BOTTOM BAND — one sentence, large:
+  "₹1.6 Cr → ₹128 Cr a month = 17× more markets × 4.7× more revenue per market"
   Right tag: "→ next: what we keep"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "2 / 5"
 ```
 
-**Changes from your generated version:**
-- The headline numbers now match the model: ~10% MoM, ₹148 Cr ARR at M18, and EBITDA instead of PBT.
-- Card B now reads "One new city: ₹30 L → ₹1.5 Cr". It used to say "Raipur ₹0.46 → ₹2.04 Cr", which clashed with slide 0's actual Raipur figure of ₹50 L.
-- The chart uses five distinct colours, so uPVC and waterproofing are now visible.
-- The pill row is replaced with one sentence.
-- Remove the stray "Plot Area" tooltip from the chart.
+**Numbers, from the model:**
+- Markets: 4 today → 69 by Q16. Openings each year: 7, 13, 19, 26.
+- Revenue per market: ₹1.6 Cr ÷ 4 = ₹0.4 Cr today, and ₹128.3 Cr ÷ 69 = ₹1.86 Cr in Q16.
+- The takeaway multiplies: 69 ÷ 4 = 17.25 and 1.86 ÷ 0.4 = 4.65, and 17.25 × 4.65 = 80, which is ₹1.6 Cr → ₹128 Cr.
 
 ---
 
 ## Slide 2: What we keep
 
-**What a reader should get at a peek:** three margins, the standard VC ladder, all widening. Each one has a proof from today's accounts.
+**What a reader should get at a peek:** three standard margins, each widening. Each box says *why* it widens, and the bridge underneath adds them up.
 
 ```
 SLIDE 2 OF 5 — pill "2 What we keep" active.
 
-HEADLINE: "EBITDA margin expands from -15% to 16% by Q16, while delivering ~10% MoM hypergrowth"
-SUBHEADLINE: "Revenue split into cost of goods, selling costs, fixed costs and EBITDA."
+HEADLINE (exactly): "PBT margin expands from -10% to 16% by Q16, while delivering ~15% MoM hypergrowth"
+SUBHEADLINE (exactly): "Revenue split into product costs, selling costs, fixed costs and profit."
 
-STORY STRIP — three cards, one per margin, joined by arrows with the word "less". Each card has: the margin name, its definition in small grey,
-a big "Q1 → Q16" figure, and one "Today's proof" line with a small tick icon.
-Card A — "Gross margin" · small grey "revenue − cost of goods"
-  Big: "47% → 51%"
-  Today's proof: "Inbound freight cut from 8.4% to 1.0% of revenue in nine months"
+THREE MARGIN CARDS in one row, joined by small terracotta arrows with the word "less". Each card has three parts, top to bottom:
+  1. Header: margin name in bold caps + its definition in small grey.
+  2. Visual: a mini pair of horizontal bars, "Q1" (shorter) and "Q16" (longer), with the % at the end of each bar, in the card's colour.
+  3. "WHY" (small caps, terracotta) with one or two short lines, each led by a small icon; then, where given, "TODAY" (small caps, grey) with a proof line led by a tick icon.
+
+Card A (light grey accent #D6D3C8) — "GROSS MARGIN" · grey "revenue − cost of goods"
+  Bars: "Q1 47%" → "Q16 51%"
+  WHY: [box icon] "Volume buying and our own formulations" · [factory icon] "Fuller plants as volume grows"
+  TODAY: [tick] "Already 46.5% gross margin"
 Arrow "less selling costs"
-Card B — "Contribution margin" · small grey "gross margin − selling costs"
-  Big: "20% → 30%"
-  Today's proof: "Last-mile cost cut from 10.2% to 6.3% in four months"
+Card B (mid grey accent #9C998F) — "CONTRIBUTION MARGIN" · grey "gross margin − selling costs"
+  Bars: "Q1 20%" → "Q16 30%"
+  WHY: [person icon] "One relationship manager sells five products, not two" · [truck icon] "Denser routes: each delivery carries more"
+  TODAY: [tick] "Last-mile cost 10.2% → 6.3% of revenue in four months · best RMs already bring ₹38 L a month"
 Arrow "less fixed costs"
-Card C — "EBITDA margin" · small grey "contribution margin − fixed costs"
-  Big: "−15% → +16%"
-  Today's proof: "Revenue grew 3.75× while fixed costs grew 1.49× (Apr 25 → Jul 26)"
+Card C (dark grey accent #3D3C38) — "EBITDA MARGIN" · grey "contribution margin − fixed costs"
+  Bars: "Q1 −15%" (red, extending left of zero) → "Q16 +16%" (green)
+  WHY: [building icon] "Salaries, office and software grow far slower than revenue" · [down-arrow icon] "Fixed costs fall from 34% to 14% of revenue"
 
-CHART (full width) — title "Three margins, Q1 to Q16 (% of revenue)"
-Line chart, 16 quarters, y-axis −20% to 60%, zero line drawn.
-  Gross margin (dark blue line): 46.8, 47.3, 48.6, 49.9, 50.8, 47.8, 46.5, 46.2, 46.1, 46.6, 47.1, 47.8, 48.6, 49.3, 50.0, 50.6
-  Contribution margin (mid blue line): 19.5, 20.1, 22.2, 23.7, 24.8, 23.6, 23.2, 23.5, 23.9, 24.7, 25.4, 26.3, 27.3, 28.2, 29.1, 29.9
-  EBITDA margin (green line, red where below zero): −14.9, −8.2, −3.4, 0.6, 4.2, 5.6, 6.4, 7.8, 8.7, 9.9, 11.0, 12.1, 13.2, 14.3, 15.3, 16.2
-Label each line's value only at Q1 and Q16 (47% → 51%, 20% → 30%, −15% → 16%).
-Shade the band between gross margin and contribution margin in mid grey #9C998F at 30% opacity, labelled inside "Selling costs 27% → 21%".
-Shade the band between contribution margin and EBITDA in dark grey #3D3C38 at 25% opacity, labelled inside "Fixed costs 34% → 14%".
-One small callout at Q6: "uPVC launch: lower-margin line, absorbed by Q12".
-One small callout at Q4: "EBITDA positive".
+CHART (full width) — title "From −15% to +16% EBITDA margin: what moves it (Q1 → Q16)"
+A waterfall of five vertical bars with a zero line, y-axis −20% to 25%:
+  1. "Q1 EBITDA" — red bar from 0 down to −15, labelled "−15%"
+  2. Green floating step up, labelled "+4", caption under it: "Cost of goods · gross margin 47% → 51%"
+  3. Green floating step up, labelled "+7", caption: "Selling costs · contribution margin 20% → 30%"
+  4. Green floating step up (the tallest), labelled "+21", caption: "Fixed costs · 34% → 14% of revenue"
+  5. "Q16 EBITDA" — dark green bar from 0 up to 16, labelled "16%"
+Thin dashed connectors join each step to the next. No other tags on the bars.
 
-BOTTOM BAND — one sentence:
-  "Planned conservatively: fixed costs grow at 0.55× revenue in the plan against 0.30× measured, and influencer payouts are 10% of revenue against 5.5% today."
+BOTTOM BAND — one sentence, large:
+  "Every rupee we sell already makes 20% contribution margin; scale turns that into 16% EBITDA."
   Right tag: "→ next: what we need"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "3 / 5"
 ```
 
+**Numbers, from the model:**
+- Gross margin goes from 46.8% to 50.6%, contribution margin from 19.5% to 29.9%, and EBITDA from −14.9% to 16.2%.
+- The bridge steps are +3.8, +6.6 and +20.7. Fixed costs go from 34.5% to 13.8% of revenue.
+- The proof lines are the ones you confirmed as true.
+
 ---
 
 ## Slide 3: What we need
-
-The headline is unchanged. Only the numbers in the subheadline are aligned with the model.
 
 ```
 SLIDE 3 OF 5 — pill "3 What we need" active.
 
 HEADLINE (exactly): "Building India's leading capital magnet to attract and deploy ₹100–1,000 Cr over the next 4 years."
-SUBHEADLINE: "Continuing ~10% MoM growth to ₹148Cr ARR in 18M, targeting next raise at ~₹1,500 Cr (6x current)"
+SUBHEADLINE (exactly): "Continuing 20% MoM growth to ₹144Cr ARR in 14M, targeting next raise at ~₹1,500 Cr (6x current)"
 
-STORY STRIP — three cards joined by arrows; a thin curved arrow from card C back toward card A labelled "rounds 3 and 4 scale it further".
+STORY STRIP — three cards joined by arrows; a thin curved terracotta arrow from card C back toward card A labelled "rounds 3 and 4 scale it further".
 Card A — icons: small brown factory, flask, stacked boxes. Bold: "₹40 Cr". Caption: "Starts the build: first plants, labs and working capital"
 Arrow "builds"
 Card B — a short blue bar and a tall blue bar. Bold: "ARR ₹19 → ₹148 Cr". Caption: "7.7× by round 2 (Q6)"
@@ -245,31 +248,20 @@ Card C — an orange coin stack with an up-arrow. Bold: "Round 2 raises ₹200 C
 CHART (full width) — title "ARR each quarter, and when each round lands (₹ Cr, log scale)"
 Blue vertical bars = ARR, 16 quarters, labelled on top:
   21, 26, 35, 58, 88, 148, 223, 305, 401, 525, 672, 818, 979, 1,154, 1,346, 1,532
-Rounds are drawn as FLAGS ON THE TIMELINE, not as values on the axis: a thin vertical dashed line rising from the x-axis at each round's quarter,
-topped by a small flag with the amount raised:
+Rounds as FLAGS ON THE TIMELINE (not values on the axis): a thin vertical dashed line rising from the x-axis at each round's quarter,
+topped by a flag showing the amount raised:
   Q1 orange flag "Round 1 · ₹40 Cr"; Q6 orange flag "Round 2 · ₹200 Cr";
   Q10 navy flag "Round 3 · ₹500 Cr"; Q15 navy flag "Round 4 · ₹1,750 Cr".
 No line connects the flags. Under the x-axis, small brackets between flags: "15 months", "12 months", "15 months".
-Two bands under the axis labels:
-  Q1–Q9, light orange tint, label "Organic growth · rounds 1–2"
-  Q10–Q16, light navy tint, label "Acquisition-led growth · rounds 3–4"
+Two bands under the axis labels: Q1–Q9 light orange tint "Organic growth · rounds 1–2"; Q10–Q16 light navy tint "Acquisition-led growth · rounds 3–4".
 Legend: blue square "ARR", orange flag "Rounds 1–2", navy flag "Rounds 3–4".
 
-BOTTOM BAND — one sentence:
-  "₹1 of capital builds ₹3.6 of yearly revenue — plants go in a quarter before sales need them."
+BOTTOM BAND — one sentence, large:
+  "₹1 of capital builds ₹3.6 of yearly revenue."
   Right tag: "→ next: what you get"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "4 / 5"
 ```
-
-**Changes from your generated version:**
-- The subheadline numbers are aligned: ~10% MoM, ₹148 Cr in 18 months.
-- Card A's caption says "starts the build".
-- The arrow word "prices" is now "unlocks".
-- The loop label now reads "rounds 3 and 4 scale it further".
-- Rounds are drawn as flags on the timeline, not as dots on the ARR axis: orange for rounds 1–2, navy for rounds 3–4.
-- The second band is now labelled "Acquisition-led growth".
-- The pill row is replaced with one sentence.
 
 ---
 
@@ -304,15 +296,3 @@ FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "5 / 5"
 ```
 
 ---
-
-## Headline changes at a glance
-
-| Slide | Was | Now | Why |
-|---|---|---|---|
-| 1 | 20% MoM | ~10% MoM | Matches 15-month history (~9%) and the plan's four-year average (~10%); no model number moves |
-| 1 | ₹144Cr ARR (2% PBT) by M14 | ₹148Cr ARR (6% EBITDA) by M18 | ARR at M14 is ₹88 Cr; ₹148 Cr arrives at the end of Q6 (M18), at a 5.6% margin |
-| 1 | ~16% PBT | ~16% EBITDA | The model's profit line is before depreciation, interest and tax |
-| 2 | PBT margin from -10% | EBITDA margin from -15% | Q1 margin is −14.9% |
-| 2 | ~15% MoM | ~10% MoM | One growth rate across the deck |
-| 3 | 20% MoM to ₹144Cr ARR in 14M | ~10% MoM to ₹148Cr ARR in 18M | Same as slide 1 |
-| 3 | headline | unchanged | Your call |
