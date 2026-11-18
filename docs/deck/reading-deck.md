@@ -152,9 +152,9 @@ THREE GROWTH ENGINES (compact cards in one row). Each card: a small icon, a shor
 Between card A and card B a large "×" sign; between card B and card C a small terracotta arrow with the word "so".
 Card A — icon: map pins multiplying. Label "MORE MARKETS". Big: "4 → 69 markets". Caption: "7, 13, 19, 26 opened each year"
 Card B — icon: five stacked product boxes. Label "MORE PRODUCTS IN EACH". Big: "2 → 5 products". Caption: "Wood Q4 · uPVC Q6 · waterproofing Q10"
-Card C — icon: one tall bar beside a short bar. Label "MORE REVENUE PER MARKET". Big: "₹0.4 → ₹1.9 Cr a month". Caption: "Each product builds over six quarters"
+Card C — icon: one tall bar beside a short bar. Label "MORE REVENUE PER MARKET". Big: "₹0.4 → ₹1.9 Cr MRR". Caption: "Each product builds over six quarters"
 
-CHART (full width) — title "Revenue a month by product line (₹ Cr)"
+CHART (full width) — title "Monthly revenue (MRR) by product line, ₹ Cr"
 Stacked vertical bars, 16 quarters with quarter labels. Five clearly different colours so every line is visible:
   Tile adhesive (dark navy #1D3F72): 1.6, 2.0, 2.5, 3.3, 4.3, 5.7, 7.2, 9.0, 10.9, 13.3, 15.8, 18.5, 21.4, 24.7, 27.9, 31.0
   Bondure (mid blue #3976B9): 0.2, 0.2, 0.4, 0.7, 0.9, 1.3, 1.7, 2.2, 2.7, 3.3, 3.9, 4.6, 5.4, 6.2, 7.0, 7.8
@@ -165,7 +165,7 @@ Totals on top: 1.8, 2.2, 2.9, 4.9, 7.3, 12, 19, 25, 33, 44, 56, 68, 82, 96, 112,
 Launch flags: "Wood · Q4", "uPVC · Q6", "Waterproofing · Q10". Legend below. No tooltips or stray labels.
 
 BOTTOM BAND — one sentence, large:
-  "₹1.6 Cr → ₹128 Cr a month = 17× more markets × 4.7× more revenue per market"
+  "₹1.6 Cr → ₹128 Cr MRR = 17× more markets × 4.7× more revenue per market"
   Right tag: "→ next: what we keep"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "2 / 5"
@@ -190,34 +190,34 @@ SUBHEADLINE (exactly): "Revenue split into product costs, selling costs, fixed c
 
 THREE MARGIN CARDS in one row, joined by small terracotta arrows with the word "less". Each card has three parts, top to bottom:
   1. Header: margin name in bold caps + its definition in small grey.
-  2. Visual: a mini pair of horizontal bars, "Q1" (shorter) and "Q16" (longer), with the % at the end of each bar, in the card's colour.
+  2. Visual: a mini pair of horizontal bars, "MRR Dec 26" (shorter) and "MRR Sep 30" (longer), with the % at the end of each bar, in the card's colour.
   3. "WHY" (small caps, terracotta) with one or two short lines, each led by a small icon; then, where given, "TODAY" (small caps, grey) with a proof line led by a tick icon.
 
 Card A (light grey accent #D6D3C8) — "GROSS MARGIN" · grey "revenue − cost of goods"
-  Bars: "Q1 47%" → "Q16 51%"
+  Bars: "MRR Dec 26 · 47%" → "MRR Sep 30 · 51%"
   WHY: [box icon] "Volume buying and our own formulations" · [factory icon] "Fuller plants as volume grows"
   TODAY: [tick] "Already 46.5% gross margin"
 Arrow "less selling costs"
 Card B (mid grey accent #9C998F) — "CONTRIBUTION MARGIN" · grey "gross margin − selling costs"
-  Bars: "Q1 20%" → "Q16 30%"
+  Bars: "MRR Dec 26 · 20%" → "MRR Sep 30 · 30%"
   WHY: [person icon] "One relationship manager sells five products, not two" · [truck icon] "Denser routes: each delivery carries more"
   TODAY: [tick] "Last-mile cost 10.2% → 6.3% of revenue in four months · best RMs already bring ₹38 L a month"
 Arrow "less fixed costs"
 Card C (dark grey accent #3D3C38) — "EBITDA MARGIN" · grey "contribution margin − fixed costs"
-  Bars: "Q1 −15%" (red, extending left of zero) → "Q16 +16%" (green)
+  Bars: "MRR Dec 26 · −15%" (red, extending left of zero) → "MRR Sep 30 · +16%" (green)
   WHY: [building icon] "Salaries, office and software grow far slower than revenue" · [down-arrow icon] "Fixed costs fall from 34% to 14% of revenue"
 
-CHART (full width) — title "From −15% to +16% EBITDA margin: what moves it (Q1 → Q16)"
+CHART (full width) — title "EBITDA margin on monthly revenue (MRR): Dec 2026 → Sep 2030, and what moves it"
 A waterfall of five vertical bars with a zero line, y-axis −20% to 25%:
-  1. "Q1 EBITDA" — red bar from 0 down to −15, labelled "−15%"
+  1. "MRR Dec 26" — red bar from 0 down to −15, labelled "−15% EBITDA"
   2. Green floating step up, labelled "+4", caption under it: "Cost of goods · gross margin 47% → 51%"
   3. Green floating step up, labelled "+7", caption: "Selling costs · contribution margin 20% → 30%"
   4. Green floating step up (the tallest), labelled "+21", caption: "Fixed costs · 34% → 14% of revenue"
-  5. "Q16 EBITDA" — dark green bar from 0 up to 16, labelled "16%"
+  5. "MRR Sep 30" — dark green bar from 0 up to 16, labelled "16% EBITDA"
 Thin dashed connectors join each step to the next. No other tags on the bars.
 
 BOTTOM BAND — one sentence, large:
-  "Every rupee we sell already makes 20% contribution margin; scale turns that into 16% EBITDA."
+  "Every rupee of MRR already makes 20% contribution margin; scale turns that into 16% EBITDA."
   Right tag: "→ next: what we need"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "3 / 5"
