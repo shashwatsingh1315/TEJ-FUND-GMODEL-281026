@@ -45,96 +45,94 @@ Quarter labels: Q1 Dec 26 · Q2 Mar 27 · Q3 Jun 27 · Q4 Sep 27 · Q5 Dec 27 ·
 
 ## Slide 0: How it's built
 
-**What a reader should get at a peek:** the model is built from the ground up in two rows.
-- **Where we sell:** what one market buys, and how much of it we win.
-- **What we sell:** how many products each market takes.
+**What a reader should get at a peek:**
+- The formula banner gives the whole model in one line.
+- Two columns, *where we sell* and *what we sell*, explain its factors, each read top to bottom.
+- The two columns meet at the bottom: ₹30 L of tile adhesive becomes ₹1.5 Cr with five products.
 
-Each row is four questions, read left to right. Each answer comes from the previous one or from today's sales.
-
-**The two chains in plain words:**
-- **Where we sell:**
-  - (G1) Our four markets sell ₹1.4 Cr of tile adhesive a month.
-  - (G2) That is about 30% of what they buy, so a city buys ~₹1.5 Cr a month.
-  - (G3) A new market builds from 8% to 30% share over six quarters.
-  - (G4) We size the next cities smaller than ours, and metros bigger but with a lower share cap.
-- **What we sell:**
-  - (P1) A new city's tile adhesive earns ₹30 L a month.
-  - (P2) Each other product is sized against tile adhesive using its national market.
-  - (P3) Each starts on the same dealers, after tile adhesive.
-  - (P4) One city with all five products earns ₹1.5 Cr a month.
+**How the share is handled:**
+- No market shows a percentage.
+- Nothing says "ceiling" or "levels off".
+- The live markets sit high on the curve, and the curve continues upward past them, so it reads as headroom.
+- The only share number is Nagpur's 8% in 3 months, which is the evidence.
 
 ```
 SLIDE 0 OF 5 — pill "0 How it's built" active.
 
-HEADLINE: "Built from the ground up: what one market buys, how much we win, how many products we sell"
-SUBHEADLINE: "Every number starts from what our four live markets sell today."
+HEADLINE: "Built bottom-up from our live markets"
 
-BODY — two horizontal rows, each with a narrow vertical label tab at the far left and four step cards joined by terracotta arrows.
-Each step card has: a small step code in a terracotta circle (G1…G4, P1…P4), a QUESTION in bold dark text at the top,
-a small simple visual, ONE big answer in blue, and one or two short lines explaining it. Cards are equal size.
+FORMULA BANNER (directly under the headline, full width): four rounded chips joined by large "×" signs:
+  [grey outlined chip "Markets open" with a tiny tag "→ slide 1"]
+  × [blue chip #3976B9, white text, "What each market buys"]
+  × [teal chip #2E8B9A, white text, "Our share as it grows"]
+  × [indigo chip #5B6BBF, white text, "Products sold"]
+  = [dark chip "Monthly revenue"]
 
-ROW 1 — left tab, vertical text: "WHERE WE SELL"
+BODY — two equal columns side by side. Each column has a header bar at its top and four step cards stacked vertically,
+joined by small downward terracotta arrows. Each card has: a thin left edge in the colour of the factor it explains
+(blue / teal / indigo), a short LABEL in bold caps (never a question), a small visual, ONE big number in that colour,
+and one short line. No question marks anywhere on the slide.
 
-  G1 — Question: "What do our markets sell today?"
-    Visual: four horizontal blue bars with labels:
-      "Raipur ₹50 L" (longest), "Nagpur ₹40 L", "Vidarbha ₹35 L", "Chhattisgarh ₹15 L" (shortest).
-    Big answer: "₹1.4 Cr a month"
-    Line: "Tile adhesive sold across our four live markets."
-  arrow →
-  G2 — Question: "How much of each market is that?"
-    Visual: a pie with a 30% blue slice.
-    Big answer: "About 30%"
-    Lines: "Sales have levelled at about 3 in 10 tile-adhesive jobs."
-           "So a live city buys ~₹1.5 Cr of tile adhesive a month; a dealer zone ~₹0.8 Cr."
-  arrow →
-  G3 — Question: "How does a new market build up?"
-    Visual: a small clean line rising over six quarter ticks, labelled 8%, 15%, 20%, 25%, 28%, 30%,
-      with one terracotta dot on the first point labelled "Nagpur: 8% in 3 months".
-    Big answer: "8% → 30% in six quarters"
+LEFT COLUMN — header bar: "WHERE WE SELL"
+  Card G1 (blue edge) — label "ONE LIVE MARKET TODAY"
+    Visual: four small blue map pins labelled "Raipur", "Nagpur", "Vidarbha", "Chhattisgarh".
+    Big number: "City ~₹1.4 Cr · dealer zone ~₹1.0 Cr"
+    Line: "Tile adhesive bought in each market, every month."
+  ↓
+  Card G2 (teal edge, slightly taller than the others) — label "HOW WE WIN A MARKET"
+    Visual: a smooth teal curve rising from left to right over six quarter ticks labelled "Q1 … Q6 since entry". NO percentage axis.
+      One terracotta dot at the very start, labelled "Nagpur: 8% in 3 months".
+      Four small dark dots placed high on the curve, around the fifth and sixth ticks, labelled "Raipur", "Nagpur", "Vidarbha", "Chhattisgarh".
+      Past those dots the curve continues as a dotted teal line still rising, off toward the top-right corner of the card.
+    Big number: "Six quarters to build"
     Line: "Contractors trial, repeat, then move their wallet: 84% of revenue is repeat."
-  arrow →
-  G4 — Question: "How big are the next markets?"
+  ↓
+  Card G3 (blue edge) — label "THE NEXT MARKETS"
     Visual: three squares drawn to scale: a small blue square, a slightly smaller light-blue square, a very large blue square (ten times the small one).
-    Big answer: "New city: ₹1.0 Cr a month"
-    Lines: "A third smaller than Raipur and Nagpur · new dealer zone ₹0.75 Cr"
-           "Metro ₹10 Cr — but we cap our share there at 21%"
-
-ROW 2 — left tab, vertical text: "WHAT WE SELL"
-
-  P1 — Question: "What does a new city earn from tile adhesive?"
+    Big number: "New city ₹1.0 Cr a month"
+    Line: "A bit smaller than Raipur and Nagpur · new dealer zone ₹0.75 Cr · metro ₹10 Cr, ten cities' worth, won on a slower curve"
+  ↓
+  Card G4 (blue edge) — label "ONE NEW CITY · TILE ADHESIVE"
     Visual: one blue block.
-    Big answer: "₹30 L a month"
-    Line: "₹1.0 Cr market × 30% share, once fully built."
-  arrow →
-  P2 — Question: "How big is each other product?"
-    Visual: five horizontal bars measured against a dashed line marked "tile adhesive = 1":
-      "Wood adhesive 1×", "uPVC windows 1.7×", "Waterproofing 1×", "Bondure ¼".
-    Big answer: "Sized by national market"
-    Lines: "Wood ₹8,572 Cr vs tile ₹8,041 Cr · uPVC ₹14,700 Cr by 2030"
-           "Waterproofing ₹7,200 Cr · Bondure: ₹4,000 Cr market, we count only ¼"
-  arrow →
-  P3 — Question: "When does each product start?"
-    Visual: a short horizontal timeline Q1 to Q10 with three markers: "Wood Q4", "uPVC Q6", "Waterproofing Q10".
-    Big answer: "Same dealers, same curve"
-    Line: "Each sells to contractors we already serve, once tile adhesive is in: wood 1 quarter later, uPVC 2, waterproofing 4."
-  arrow →
-  P4 — Question: "What does one city earn with all five?"
-    Visual: one stacked blue column, bottom to top:
-      "Tile adhesive ₹30 L", "Wood ₹30 L", "uPVC ₹52 L", "Waterproofing ₹30 L", "Bondure ₹7 L".
-    Big answer: "₹1.5 Cr a month"
-    Line: "Five times what tile adhesive alone earns."
+    Big number: "₹30 L a month"
+    Line: "Once the city is built."
 
-BOTTOM BAND — one sentence, with each term in bold blue:
-  "Monthly revenue = **markets open** × **what each market buys** × **our share for its age** × **products sold**"
-  Right tag: "→ next: how many markets we open"
+RIGHT COLUMN — header bar: "WHAT WE SELL"
+  Card P1 (indigo edge) — label "SIZE OF EACH PRODUCT"
+    Visual: four horizontal indigo bars measured against a dashed line marked "tile adhesive = 1":
+      "Wood adhesive 1×", "uPVC windows 1.7×", "Waterproofing 1×", "Bondure ¼".
+    Big number: "Sized by national market"
+    Line: "Wood ₹8,572 Cr vs tile ₹8,041 Cr · uPVC ₹14,700 Cr by 2030 · waterproofing ₹7,200 Cr · Bondure: ₹4,000 Cr market, we count ¼"
+  ↓
+  Card P2 (indigo edge) — label "LAUNCH TIMING"
+    Visual: a short horizontal timeline Q1 to Q10 with three markers: "Wood Q4", "uPVC Q6", "Waterproofing Q10".
+    Big number: "Q4 · Q6 · Q10"
+    Line: "In each new market: wood 1 quarter after tile adhesive, uPVC 2, waterproofing 4."
+  ↓
+  Card P3 (teal edge) — label "SAME DEALERS, SAME CURVE"
+    Visual: two small curves of identical shape side by side, the second starting a little later, labelled "tile adhesive" and "next product".
+    Big number: "Same six-quarter build"
+    Line: "Each new product sells to contractors we already serve."
+  ↓
+  Card P4 (indigo edge, slightly emphasised with a solid light-indigo fill) — label "ONE CITY · ALL FIVE PRODUCTS"
+    Visual: one stacked column, bottom to top: "Tile adhesive ₹30 L", "Wood ₹30 L", "uPVC ₹52 L", "Waterproofing ₹30 L", "Bondure ₹7 L".
+    Big number: "₹1.5 Cr a month"
+    Line: "Five times tile adhesive alone."
+
+CONNECTOR: a thick horizontal terracotta arrow from card G4 (bottom of the left column) to card P4 (bottom of the right column), labelled on the arrow "× five products".
+
+BOTTOM BAND — one sentence:
+  "A new product sells through a relationship already won, so every market takes all five."
+  Right tag: "→ next: what we sell"
 
 FOOTER: "Tejas model projections · Q1 = Oct–Dec 2026 · ₹ Cr" · "1 / 5"
 ```
 
-**Arithmetic check:**
-- G2: (₹50 L + ₹40 L) ÷ 2 ÷ 30% = ₹1.5 Cr, and (₹35 L + ₹15 L) ÷ 2 ÷ 30% = ₹0.8 Cr.
-- G4: ₹1.0 Cr is a third below ₹1.5 Cr.
-- P4: 30 + 30 + 52 + 30 + 7 ≈ ₹1.5 Cr. That matches the model's ₹1.49 Cr for a fully built medium city.
+**Numbers, from the model:**
+- Live market sizes: ₹1.37 Cr per city and ₹1.03 Cr per dealer zone.
+- Next markets: new city ₹1.00 Cr, new dealer zone ₹0.75 Cr, metro ₹10 Cr.
+- One new city, tile adhesive: ₹1.00 Cr × 30% = ₹30 L.
+- One new city, all five products: 30 + 30 + 51.6 + 30 + 7.5 = ₹149 L ≈ ₹1.5 Cr, which matches the model's ₹1.49 Cr.
 
 ---
 
